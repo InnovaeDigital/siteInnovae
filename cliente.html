@@ -843,9 +843,11 @@
       </div>
     </main>
 
-    <script>
+    <script type="module">
+      import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+      import { db } from "./firebase-client.js";
+
       const quotesStorageKey = "innovae.savedQuotes";
-      const jsonBinBaseUrl = "https://api.jsonbin.io/v3/b";
       const company = {
         providerName: "David P. Tomé",
         phone: "(61) 93300-4316",
@@ -972,21 +974,20 @@
         document.getElementById("notFound").hidden = true;
       }
 
-      async function loadCloudQuote(binId) {
-        const response = await fetch(`${jsonBinBaseUrl}/${encodeURIComponent(binId)}/latest?meta=false`);
-        if (!response.ok) {
-          throw new Error("Orçamento não encontrado no JSONBin.");
+      async function loadCloudQuote(quoteId) {
+        const snapshot = await getDoc(doc(db, "quotes", quoteId));
+        if (!snapshot.exists()) {
+          throw new Error("Orçamento não encontrado na nuvem.");
         }
-        return response.json();
+        return snapshot.data();
       }
 
       async function init() {
         const params = new URLSearchParams(window.location.search);
-        const binId = params.get("bin");
         const quoteId = params.get("orcamento");
-        if (binId) {
+        if (quoteId) {
           try {
-            const quote = await loadCloudQuote(binId);
+            const quote = await loadCloudQuote(quoteId);
             renderQuote(quote);
           } catch (error) {
             console.error(error);
@@ -994,12 +995,7 @@
           }
           return;
         }
-        const quote = loadSavedQuotes().find((item) => item.id === quoteId);
-        if (quote) {
-          renderQuote(quote);
-        } else {
-          showNotFound();
-        }
+        showNotFound();
       }
 
       init();

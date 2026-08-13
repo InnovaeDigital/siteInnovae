@@ -2910,19 +2910,59 @@
       function renderReferencePhotos() {
         const target = byId("referencePreview");
         if (!target) return;
-        target.innerHTML = referencePhotos.map((photo, index) => `<div class="reference-photo"><img src="${escapeHtml(photo.url)}" alt="ReferÃªncia ${index + 1}" /><button type="button" data-remove-reference="${index}" aria-label="Remover foto">Ã—</button></div>`).join("");
+        target.innerHTML = referencePhotos.map((photo, index) => `<div class="reference-photo"><img src="${escapeHtml(photo.url)}" alt="Referência ${index + 1}" /><button type="button" data-remove-reference="${index}" aria-label="Remover foto">×</button></div>`).join("");
+      }
+
+      async function compressReferenceImage(file) {
+        const source = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(String(reader.result || ""));
+          reader.onerror = () => reject(new Error(`Não foi possível ler ${file.name}.`));
+          reader.readAsDataURL(file);
+        });
+
+        const image = await new Promise((resolve, reject) => {
+          const img = new Image();
+          img.onload = () => resolve(img);
+          img.onerror = () => reject(new Error(`Não foi possível processar ${file.name}.`));
+          img.src = source;
+        });
+
+        const maxSide = 1600;
+        const scale = Math.min(1, maxSide / Math.max(image.width, image.height));
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.max(1, Math.round(image.width * scale));
+        canvas.height = Math.max(1, Math.round(image.height * scale));
+        const context = canvas.getContext("2d");
+        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+        return await new Promise((resolve) => {
+          canvas.toBlob((blob) => {
+            if (!blob) {
+              resolve({ name: file.name, url: source });
+              return;
+            }
+            const reader = new FileReader();
+            reader.onload = () => resolve({ name: file.name, url: String(reader.result || ""), compressed: true, size: blob.size });
+            reader.readAsDataURL(blob);
+          }, "image/jpeg", 0.82);
+        });
       }
 
       async function addReferencePhotos(files) {
         const selected = [...files].filter((file) => file.type.startsWith("image/")).slice(0, Math.max(0, 3 - referencePhotos.length));
         if (!selected.length) return;
-        const photos = await Promise.all(selected.map((file) => new Promise((resolve, reject) => {
-          if (file.size > 900 * 1024) return reject(new Error(`${file.name} ultrapassa o limite de 900 KB.`));
-          const reader = new FileReader();
-          reader.onload = () => resolve({ name:file.name, url:reader.result });
-          reader.onerror = () => reject(new Error(`NÃ£o foi possÃ­vel ler ${file.name}.`));
-          reader.readAsDataURL(file);
-        })));
+        const firebase = await import("./firebase-client.js");
+        const storage = firebase.storage;
+        const storageApi = await import("https://www.gstatic.com/firebasejs/12.17.1/firebase-storage.js");
+        const photos = [];
+        for (const file of selected) {
+          const safeName = file.name.replace(/[^\w.\-]+/g, "-").toLowerCase();
+          const fileRef = storageApi.ref(storage, `quote-references/${Date.now()}-${Math.random().toString(36).slice(2)}-${safeName}`);
+          const snapshot = await storageApi.uploadBytes(fileRef, file);
+          const url = await storageApi.getDownloadURL(snapshot.ref);
+          photos.push({ name: file.name, url, path: snapshot.ref.fullPath });
+        }
         referencePhotos = [...referencePhotos, ...photos];
         renderReferencePhotos();
         renderPreview();
@@ -3053,13 +3093,6 @@
         renderClientLinks(quotes);
       }
 
-      async function saveQuotesRegistryToCloud() {
-        return;
-      }
-
-      async function syncQuotesFromCloud() {
-        renderDbStats();
-      }
 
       function getClientLink(record) {
         const url = new URL("cliente.html", window.location.href);
@@ -3071,14 +3104,8 @@
         return url.href;
       }
 
-      async function saveQuoteToCloud(data) {
-        return data.id;
-      }
-
-      async function deleteQuoteFromCloud(record) {
-        return record?.binId || record?.id;
-      }
-
+      async function saveQuoteToCloud(data) {`r`n        const quoteModule = await import("./assets/quote-module.js");`r`n        return quoteModule.saveQuote(data);`r`n      }`r`n
+      async function deleteQuoteFromCloud(record) {`r`n        const quoteModule = await import("./assets/quote-module.js");`r`n        if (record?.id) await quoteModule.deleteQuote(record.id);`r`n      }`r`n
       async function copyText(value) {
         if (navigator.clipboard && window.isSecureContext) {
           await navigator.clipboard.writeText(value);
@@ -3175,24 +3202,22 @@
         const data = getFormData();
         if (!validateQuoteData(data, "criar o link")) return;
         try {
-          setStatus("Salvando orÃ§amento localmente...");
-          const previousRecord = loadSavedQuotes().find((quote) => (
-            (editingQuoteId && quote.id === editingQuoteId) ||
-            quote.invoiceNumber === data.invoiceNumber
-          ));
+          setStatus("Enviando orçamento para a nuvem...");
+          const uploadedReferences = [];
+          for (const photo of referencePhotos) {
+            uploadedReferences.push(photo);
+          }
+          data.references = uploadedReferences;
           data.cloudSavedAt = new Date().toISOString();
-          const binId = await saveQuoteToCloud(data, previousRecord);
-          const record = saveQuoteRecord({ ...data, binId });
-          await saveQuotesRegistryToCloud(loadSavedQuotes());
-          const link = getClientLink(record);
+          const binId = await saveQuoteToCloud(data);`r`n          const record = saveQuoteRecord({ ...data, binId });`r`n          const link = getClientLink(record);
           await copyText(link);
           editingQuoteId = record.id;
           updateEditState(record);
           setStatus(`Link do cliente copiado: ${link}`);
         } catch (error) {
           console.error(error);
-          alert("NÃ£o foi possÃ­vel criar o link do orÃ§amento. Tente novamente.");
-          setStatus("Falha ao criar link do orÃ§amento.");
+          alert("Não foi possível criar o link do orçamento. Tente novamente.");
+          setStatus("Falha ao criar link do orçamento.");
         }
       }
 
@@ -3253,8 +3278,7 @@
         renderMaterialPresets();
         renderDbStats();
         try {
-          await saveQuotesRegistryToCloud([]);
-          setStatus("Banco de dados limpo e sincronizado. A numeraÃ§Ã£o atual foi mantida.");
+                    setStatus("Banco de dados limpo e sincronizado. A numeraÃ§Ã£o atual foi mantida.");
         } catch {
           setStatus("Banco local limpo. NÃ£o foi possÃ­vel sincronizar a nuvem agora.");
         }
@@ -3984,14 +4008,13 @@
               await deleteQuoteFromCloud(record);
             } catch (error) {
               console.error(error);
-              alert("NÃ£o foi possÃ­vel excluir no JSONBin. Tente novamente.");
+              alert("NÃ£o foi possÃ­vel excluir neste momento. Tente novamente.");
               return;
             }
             const updatedQuotes = quotes.filter((quote) => quote.id !== deleteId);
             localStorage.setItem(quotesStorageKey, JSON.stringify(updatedQuotes));
             try {
-              await saveQuotesRegistryToCloud(updatedQuotes);
-            } catch (error) {
+                          } catch (error) {
               console.error(error);
               setStatus("Link removido localmente, mas a sincronizaÃ§Ã£o da lista falhou.");
               renderDbStats();
@@ -4059,10 +4082,9 @@
       renderItems();
       renderPreview();
       renderDbStats();
-      syncQuotesFromCloud();
-      usersSyncPromise = syncUsersFromCloud();
+            usersSyncPromise = syncUsersFromCloud();
       usersSyncPromise.then(() => {
-        // JSONBin nÃ£o envia eventos em tempo real ao navegador; esta checagem
+        // O painel atualiza a interface com a cópia local logo após qualquer alteração.
         // curta atualiza outros dispositivos abertos sem exigir recarregamento.
         window.setInterval(() => {
           if (document.visibilityState === "visible") syncUsersFromCloud();
@@ -4083,3 +4105,4 @@
     </script>
   </body>
 </html>
+
