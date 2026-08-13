@@ -3104,8 +3104,16 @@
         return url.href;
       }
 
-      async function saveQuoteToCloud(data) {`r`n        const quoteModule = await import("./assets/quote-module.js");`r`n        return quoteModule.saveQuote(data);`r`n      }`r`n
-      async function deleteQuoteFromCloud(record) {`r`n        const quoteModule = await import("./assets/quote-module.js");`r`n        if (record?.id) await quoteModule.deleteQuote(record.id);`r`n      }`r`n
+      async function saveQuoteToCloud(data) {
+        const quoteModule = await import("./assets/quote-module.js");
+        return quoteModule.saveQuote(data);
+      }
+
+      async function deleteQuoteFromCloud(record) {
+        const quoteModule = await import("./assets/quote-module.js");
+        if (record?.id) await quoteModule.deleteQuote(record.id);
+      }
+
       async function copyText(value) {
         if (navigator.clipboard && window.isSecureContext) {
           await navigator.clipboard.writeText(value);
