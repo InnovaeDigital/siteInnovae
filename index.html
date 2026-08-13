@@ -3053,42 +3053,12 @@
         renderClientLinks(quotes);
       }
 
-      async function saveQuotesRegistryToCloud(quotes = loadSavedQuotes()) {
-        const response = await fetch(`${jsonBinBaseUrl}/${quotesRegistryBinId}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json", ...jsonBinHeaders },
-          body: JSON.stringify({ items: quotes.slice(0, 100), updatedAt: new Date().toISOString() })
-        });
-        if (!response.ok) throw new Error("Não foi possível atualizar o índice de orçamentos na nuvem.");
+      async function saveQuotesRegistryToCloud() {
+        return;
       }
 
       async function syncQuotesFromCloud() {
-        try {
-          const response = await fetch(`${jsonBinBaseUrl}/${quotesRegistryBinId}/latest?meta=false`, { headers: jsonBinHeaders });
-          if (!response.ok) throw new Error();
-          const remote = await response.json();
-          const remoteQuotes = Array.isArray(remote.items) ? remote.items : [];
-          const localQuotes = loadSavedQuotes();
-          if (!remoteQuotes.length && localQuotes.length) {
-            await saveQuotesRegistryToCloud(localQuotes);
-            setStatus("Banco de dados sincronizado com a nuvem.");
-            return;
-          }
-          if (remoteQuotes.length) {
-            const merged = new Map(remoteQuotes.map((quote) => [quote.id, quote]));
-            localQuotes.forEach((quote) => {
-              const saved = merged.get(quote.id);
-              if (!saved || new Date(quote.updatedAt || 0) > new Date(saved.updatedAt || 0)) merged.set(quote.id, quote);
-            });
-            const quotes = [...merged.values()].sort((a, b) => new Date(b.updatedAt || b.createdAt || 0) - new Date(a.updatedAt || a.createdAt || 0)).slice(0, 100);
-            localStorage.setItem(quotesStorageKey, JSON.stringify(quotes));
-            renderDbStats();
-            await saveQuotesRegistryToCloud(quotes);
-          }
-        } catch (error) {
-          console.warn("Não foi possível sincronizar o banco de orçamentos.", error);
-          setStatus("Modo local: não foi possível sincronizar o banco de dados agora.");
-        }
+        renderDbStats();
       }
 
       function getClientLink(record) {
@@ -3101,40 +3071,12 @@
         return url.href;
       }
 
-      async function saveQuoteToCloud(data, previousRecord = null) {
-        const endpoint = previousRecord?.binId ? `${jsonBinBaseUrl}/${previousRecord.binId}` : jsonBinBaseUrl;
-        const headers = {
-          "Content-Type": "application/json",
-          ...jsonBinHeaders
-        };
-        if (!previousRecord?.binId) {
-          headers["X-Bin-Private"] = "false";
-          headers["X-Bin-Name"] = `Orçamento ${data.invoiceNumber}`;
-        }
-        const response = await fetch(endpoint, {
-          method: previousRecord?.binId ? "PUT" : "POST",
-          headers,
-          body: JSON.stringify(data)
-        });
-        const result = await response.json().catch(() => ({}));
-        if (!response.ok) {
-          throw new Error(result.message || "Falha ao salvar orçamento no JSONBin.");
-        }
-        return previousRecord?.binId || result.metadata?.id;
+      async function saveQuoteToCloud(data) {
+        return data.id;
       }
 
       async function deleteQuoteFromCloud(record) {
-        if (!record?.binId) return;
-        const response = await fetch(`${jsonBinBaseUrl}/${record.binId}`, {
-          method: "DELETE",
-          headers: {
-            ...jsonBinHeaders
-          }
-        });
-        if (!response.ok && response.status !== 404) {
-          const result = await response.json().catch(() => ({}));
-          throw new Error(result.message || "Falha ao excluir orçamento no JSONBin.");
-        }
+        return record?.binId || record?.id;
       }
 
       async function copyText(value) {
@@ -3233,7 +3175,7 @@
         const data = getFormData();
         if (!validateQuoteData(data, "criar o link")) return;
         try {
-          setStatus("Salvando orçamento na nuvem...");
+          setStatus("Salvando orçamento localmente...");
           const previousRecord = loadSavedQuotes().find((quote) => (
             (editingQuoteId && quote.id === editingQuoteId) ||
             quote.invoiceNumber === data.invoiceNumber
@@ -3241,22 +3183,16 @@
           data.cloudSavedAt = new Date().toISOString();
           const binId = await saveQuoteToCloud(data, previousRecord);
           const record = saveQuoteRecord({ ...data, binId });
-          let registrySynced = true;
-          try {
-            await saveQuotesRegistryToCloud(loadSavedQuotes());
-          } catch (error) {
-            console.error(error);
-            registrySynced = false;
-          }
+          await saveQuotesRegistryToCloud(loadSavedQuotes());
           const link = getClientLink(record);
           await copyText(link);
           editingQuoteId = record.id;
           updateEditState(record);
-          setStatus(registrySynced ? `Link do cliente copiado: ${link}` : `Link criado, mas a lista em nuvem ainda precisa sincronizar: ${link}`);
+          setStatus(`Link do cliente copiado: ${link}`);
         } catch (error) {
           console.error(error);
-          alert("Não foi possível criar o link na nuvem. Confira sua chave do JSONBin e tente novamente.");
-          setStatus("Falha ao criar link na nuvem.");
+          alert("Não foi possível criar o link do orçamento. Tente novamente.");
+          setStatus("Falha ao criar link do orçamento.");
         }
       }
 
