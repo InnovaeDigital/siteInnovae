@@ -1,0 +1,11 @@
+{
+  "name": "innovae-site",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Innovae Digital site",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "firebase": "^12.17.1"
+  }
+}
