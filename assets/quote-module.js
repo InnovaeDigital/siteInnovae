@@ -24,7 +24,9 @@ export async function saveQuote(data) {
 }
 
 export async function listQuotes(ownerId) {
-  const snapshot = await getDocs(query(collection(db, quotesCollection), where("ownerId", "==", ownerId)));
+  const snapshot = ownerId
+    ? await getDocs(query(collection(db, quotesCollection), where("ownerId", "==", ownerId)))
+    : await getDocs(collection(db, quotesCollection));
   return snapshot.docs
     .map((item) => item.data())
     .sort((a, b) => String(b.updatedAt || "").localeCompare(String(a.updatedAt || "")));

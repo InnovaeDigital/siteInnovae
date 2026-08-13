@@ -974,6 +974,17 @@
 
       async function init() {
         const params = new URLSearchParams(window.location.search);
+        const embeddedData = params.get("dados");
+        if (embeddedData) {
+          try {
+            const quote = JSON.parse(decodeURIComponent(escape(atob(embeddedData))));
+            renderQuote(quote);
+          } catch (error) {
+            console.error(error);
+            showNotFound();
+          }
+          return;
+        }
         const quoteId = params.get("orcamento");
         if (quoteId) {
           try {

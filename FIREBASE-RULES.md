@@ -9,16 +9,15 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
   match /quotes/{quoteId} {
-      // O cliente abre somente um orçamento pelo link recebido.
+      // O cliente abre o orcamento pelo link recebido.
       allow get: if true;
-      // A lista do painel só retorna orçamentos da própria conta.
-      allow list: if request.auth != null
-        && request.query.where.ownerId == request.auth.uid;
-      allow create: if request.auth != null
-        && request.resource.data.ownerId == request.auth.uid;
-      allow update, delete: if request.auth != null
-        && resource.data.ownerId == request.auth.uid
-        && request.resource.data.ownerId == request.auth.uid;
+      // O painel lista e salva orcamentos sem Firebase Auth.
+      allow list: if true;
+      allow create, update: if request.resource.data.id == quoteId
+        && request.resource.data.ownerId is string
+        && request.resource.data.clientName is string
+        && request.resource.data.items is list;
+      allow delete: if true;
     }
 
     match /users/{userId} {
