@@ -847,7 +847,6 @@
       import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
       import { db } from "./firebase-client.js";
 
-      const quotesStorageKey = "innovae.savedQuotes";
       const company = {
         providerName: "David P. Tomé",
         phone: "(61) 93300-4316",
@@ -900,15 +899,6 @@
         const date = new Date(value);
         if (Number.isNaN(date.getTime())) return "";
         return date.toLocaleString("pt-BR");
-      }
-
-      function loadSavedQuotes() {
-        try {
-          const saved = JSON.parse(localStorage.getItem(quotesStorageKey) || "[]");
-          return Array.isArray(saved) ? saved : [];
-        } catch {
-          return [];
-        }
       }
 
       function showNotFound() {

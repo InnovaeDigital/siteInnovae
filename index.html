@@ -157,100 +157,8 @@
       .quote-references strong { display:block; margin-bottom:9px; font-size:12px; letter-spacing:.05em; }
       .quote-references-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }.quote-references-grid img { width:100%; max-height:180px; object-fit:cover; }
 
-      .portfolio-section {
-        padding: 42px clamp(18px, 5vw, 72px) 56px;
-        background: #ffffff;
-        color: #050505;
-      }
-
-      .portfolio-head {
-        display: flex;
-        justify-content: space-between;
-        gap: 18px;
-        align-items: end;
-        margin-bottom: 20px;
-      }
-
-      .portfolio-head h2 {
-        margin: 0;
-        font-size: clamp(28px, 4vw, 48px);
-      }
-
-      .portfolio-head p {
-        max-width: 520px;
-        margin: 0;
-        color: #555;
-        line-height: 1.5;
-      }
-
-      .portfolio-grid {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 14px;
-      }
-
-      .portfolio-card {
-        border: 1px solid #e0e0e0;
-        border-radius: 8px;
-        overflow: hidden;
-        background: #fff;
-        box-shadow: 0 12px 28px rgba(0, 0, 0, .08);
-      }
-
-      .portfolio-card img {
-        width: 100%;
-        aspect-ratio: 4 / 3;
-        object-fit: cover;
-        display: block;
-        background: #050505;
-      }
-
-      .portfolio-card-body {
-        padding: 14px;
-      }
-
-      .portfolio-category {
-        display: inline-flex;
-        margin-bottom: 8px;
-        padding: 5px 8px;
-        border-radius: 999px;
-        background: var(--yellow);
-        color: #050505;
-        font-size: 11px;
-        font-weight: 900;
-        text-transform: uppercase;
-      }
-
-      .portfolio-card h3 {
-        margin: 0 0 8px;
-        font-size: 18px;
-      }
-
-      .portfolio-card p {
-        margin: 0;
-        color: #555;
-        line-height: 1.45;
-        font-size: 14px;
-      }
-
-      .portfolio-card a {
-        display: inline-flex;
-        margin-top: 12px;
-        color: #050505;
-        font-weight: 800;
-      }
-
-      .portfolio-empty {
-        border: 1px dashed #b8b8b8;
-        border-radius: 8px;
-        padding: 18px;
-        color: #555;
-        background: #fafafa;
-      }
-
       .login-panel,
-      .user-admin,
-      .portfolio-admin {
+      .user-admin {
         border: 1px solid #d9d9d9;
         border-radius: 8px;
         background: #fff;
@@ -259,8 +167,7 @@
       }
 
       .login-panel h2,
-      .user-admin h2,
-      .portfolio-admin h2 {
+      .user-admin h2 {
         margin: 0 0 10px;
         font-size: 18px;
       }
@@ -280,24 +187,6 @@
         border-radius: 6px;
         padding: 8px;
         background: #fafafa;
-      }
-
-      .portfolio-list {
-        display: grid;
-        gap: 8px;
-        margin-top: 10px;
-      }
-
-      .portfolio-admin-card {
-        border: 1px solid #e3e3e3;
-        border-radius: 8px;
-        padding: 10px;
-        background: #fafafa;
-      }
-
-      .portfolio-admin-card strong {
-        display: block;
-        margin-bottom: 4px;
       }
 
       button,
@@ -1650,12 +1539,6 @@
       .faq-list details[open] summary::after { content:"−"; }
       .faq-list p { max-width:620px; margin:13px 32px 0 0; color:#aaa; line-height:1.55; }
       @media (max-width:700px) { .home-process, .home-faq { padding-top:64px; padding-bottom:64px; } .home-process-head { display:block; } .home-process-head p { margin-top:22px; } .process-grid, .home-faq-grid { grid-template-columns:1fr; } .process-step { min-height:auto; } .process-step span { margin-bottom:20px; } }
-      .home-portfolio-call { position: relative; z-index: 1; display: grid; grid-template-columns: 1.1fr .9fr; gap: 36px; align-items: end; padding: 108px clamp(20px, 5vw, 72px); background: #111; }
-      .home-portfolio-call h2 { margin: 14px 0 0; max-width: 730px; font-size: clamp(36px, 5.6vw, 78px); line-height: .9; letter-spacing: -.055em; }
-      .home-portfolio-call p { color: #aaa; font-size: 17px; line-height: 1.6; }
-      .portfolio-link { display: inline-flex; align-items: center; gap: 22px; margin-top: 20px; padding-bottom: 12px; border-bottom: 2px solid var(--yellow); color: #fff; font-weight: 800; text-decoration: none; }
-      .portfolio-link span { color: var(--yellow); font-size: 24px; transition: transform .25s ease; }
-      .portfolio-link:hover span { transform: translateX(8px); }
       .home-footer { position: relative; z-index: 1; display: flex; justify-content: space-between; gap: 20px; padding: 24px clamp(20px, 5vw, 72px); color: #777; background: #050505; font-size: 12px; }
       @keyframes revealUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
       @keyframes orbDrift { to { transform: translate3d(-8%, 12%, 0) scale(1.16); } }
@@ -1674,7 +1557,7 @@
       .home-hero > div:first-child,.service-grid { z-index:1; }
       @keyframes gridTurn { to { transform:rotate(360deg) scale(1.14); } } @keyframes ringOrbit { to { transform:rotate(360deg); } } @keyframes logoFloat { 50% { transform:translate(-50%,-54%) rotate(-3deg); } } @keyframes chipFloat { to { transform:translateY(-12px) rotate(4deg); } } @keyframes inkPulse { 50% { transform:scale(1.35); } }
       @media (max-width: 900px) { .home-visual { opacity:.62; right:-60px; top:80px; } }
-      @media (max-width: 700px) { .home-nav-links a { display: none; } .home-hero, .home-statement, .home-portfolio-call { grid-template-columns: 1fr; } .home-hero { min-height: auto; padding-top: 34px; } .home-statement, .home-portfolio-call { padding-top: 64px; padding-bottom: 64px; } .service-card { min-height: 126px; padding: 15px; } .home-footer { flex-direction: column; } .home-visual { width:440px; height:440px; right:-165px; top:0; opacity:.32; } .service-grid { margin-top:14px; } }
+      @media (max-width: 700px) { .home-nav-links a { display: none; } .home-hero, .home-statement { grid-template-columns: 1fr; } .home-hero { min-height: auto; padding-top: 34px; } .home-statement { padding-top: 64px; padding-bottom: 64px; } .service-card { min-height: 126px; padding: 15px; } .home-footer { flex-direction: column; } .home-visual { width:440px; height:440px; right:-165px; top:0; opacity:.32; } .service-grid { margin-top:14px; } }
       /* Acesso interno: mesma atmosfera visual da página institucional. */
       #systemApp.login-view { display:block; position:relative; min-height:100vh; padding:clamp(48px,10vh,110px) 0; overflow:hidden; background:#070707; }
       #systemApp.login-view.login-overlay { position:fixed; z-index:20; inset:0; min-height:100dvh; padding:clamp(42px,8vh,96px) 0; overflow:auto; background:rgba(5,5,5,.64); backdrop-filter:blur(5px); }
@@ -1699,13 +1582,13 @@
       #systemApp:not(.login-view)::before { content:""; position:fixed; z-index:-1; inset:0; pointer-events:none; background:radial-gradient(circle at 8% 9%,rgba(255,242,0,.18),transparent 24%),linear-gradient(90deg,rgba(255,242,0,.045) 1px,transparent 1px),linear-gradient(rgba(255,242,0,.045) 1px,transparent 1px); background-size:auto,32px 32px,32px 32px; }
       #systemApp:not(.login-view) .controls { border-color:rgba(255,242,0,.4); border-radius:0; background:rgba(16,16,16,.96); box-shadow:14px 14px 0 rgba(255,242,0,.78),0 24px 60px rgba(0,0,0,.42); }
       #systemApp:not(.login-view) .control-logo { width:245px; padding:10px; background:#050505; border:1px solid rgba(255,242,0,.45); }
-      #systemApp:not(.login-view) .user-admin,#systemApp:not(.login-view) .portfolio-admin,#systemApp:not(.login-view) .login-panel { border-color:rgba(255,255,255,.18); border-radius:0; background:#151515; }
-      #systemApp:not(.login-view) .user-admin h2,#systemApp:not(.login-view) .portfolio-admin h2 { color:var(--yellow); font-size:14px; letter-spacing:.08em; text-transform:uppercase; }
+      #systemApp:not(.login-view) .user-admin,#systemApp:not(.login-view) .login-panel { border-color:rgba(255,255,255,.18); border-radius:0; background:#151515; }
+      #systemApp:not(.login-view) .user-admin h2 { color:var(--yellow); font-size:14px; letter-spacing:.08em; text-transform:uppercase; }
       #systemApp:not(.login-view) .section-title { color:var(--yellow); border-color:rgba(255,242,0,.35); }
       #systemApp:not(.login-view) label,#systemApp:not(.login-view) .hint,#systemApp:not(.login-view) .client-link-meta { color:#c5c5c5; }
       #systemApp:not(.login-view) input,#systemApp:not(.login-view) select,#systemApp:not(.login-view) textarea { color:#fff; background:#0b0b0b; border-color:rgba(255,255,255,.25); border-radius:0; }
       #systemApp:not(.login-view) input:focus,#systemApp:not(.login-view) select:focus,#systemApp:not(.login-view) textarea:focus { outline:2px solid var(--yellow); outline-offset:1px; }
-      #systemApp:not(.login-view) .item-editor,#systemApp:not(.login-view) .user-row,#systemApp:not(.login-view) .portfolio-admin-card,#systemApp:not(.login-view) .client-link { background:#111; border-color:rgba(255,255,255,.16); border-radius:0; color:#fff; }
+      #systemApp:not(.login-view) .item-editor,#systemApp:not(.login-view) .user-row,#systemApp:not(.login-view) .client-link { background:#111; border-color:rgba(255,255,255,.16); border-radius:0; color:#fff; }
       #systemApp:not(.login-view) .btn { border-radius:0; }
       #systemApp:not(.login-view) .btn.primary { box-shadow:4px 4px 0 rgba(255,242,0,.25); }
       /* A folha é um documento de cliente: nunca deve herdar a cor do painel escuro. */
@@ -1832,18 +1715,16 @@
         .service-card { min-height: 146px; padding: 17px 15px; }
         .service-card strong { margin-bottom: 9px; font-size: 15px; line-height: 1.1; }
         .service-card span { font-size: 13px; line-height: 1.45; color: #d7d7d7; }
-        .home-statement, .home-portfolio-call, .home-process, .home-faq { padding: 58px 20px; }
+        .home-statement, .home-process, .home-faq { padding: 58px 20px; }
         .home-statement { gap: 22px; }
         .home-statement strong { font-size: clamp(34px, 10vw, 48px); }
-        .home-statement p, .home-portfolio-call p { font-size: 16px; }
-        .home-portfolio-call { gap: 24px; }
-        .home-portfolio-call h2, .home-process h2, .home-faq h2 { font-size: clamp(37px, 11vw, 54px); }
+        .home-statement p { font-size: 16px; }
+        .home-process h2, .home-faq h2 { font-size: clamp(37px, 11vw, 54px); }
         .process-grid { grid-template-columns: 1fr; }
         .process-step { min-height: 0; padding: 22px 18px; }
         .faq-list details { padding: 18px 0; }
         .faq-list summary { padding-right: 28px; line-height: 1.35; }
         .faq-list p { margin-right: 0; font-size: 15px; }
-        .portfolio-link { min-height: 46px; margin-top: 12px; }
         .home-footer { padding: 24px 20px calc(24px + env(safe-area-inset-bottom)); line-height: 1.45; }
         #systemApp:not(.login-view) .controls .actions { grid-template-columns: 1fr; }
         #systemApp:not(.login-view) .controls .actions .btn { min-height: 48px; }
@@ -1856,7 +1737,7 @@
         .home-nav { padding-left: 16px; padding-right: 16px; }
         .service-grid { grid-template-columns: 1fr; }
         .service-card { min-height: 0; padding: 18px; }
-        .home-statement, .home-portfolio-call, .home-process, .home-faq { padding-left: 16px; padding-right: 16px; }
+        .home-statement, .home-process, .home-faq { padding-left: 16px; padding-right: 16px; }
         .home-footer { padding-left: 16px; padding-right: 16px; }
       }
 
@@ -1960,8 +1841,8 @@
           <div class="login-brand"><img src="assets/logo-innovae.png" alt="Innovae Digital" /></div>
           <h2>Acesso ao sistema</h2>
           <div class="field">
-            <label for="loginUser">Usuário</label>
-            <select id="loginUser" autocomplete="username" aria-label="Selecione o usuário"></select>
+            <label for="loginUser">E-mail</label>
+            <input id="loginUser" type="email" autocomplete="username" aria-label="Seu e-mail" />
           </div>
           <div class="field">
             <label for="loginPassword">Senha</label>
@@ -1983,23 +1864,23 @@
         </nav>
         <section class="workspace-window is-active" id="windowAdmin" data-window="admin" role="tabpanel">
         <div class="user-admin">
-          <h2>Usuários do sistema</h2>
+          <h2>Conta do sistema</h2>
           <div class="row">
             <div class="field">
-              <label for="newUserLogin">Novo login</label>
-              <input id="newUserLogin" autocomplete="off" />
+              <label for="newUserLogin">E-mail</label>
+              <input id="newUserLogin" type="email" autocomplete="email" />
             </div>
             <div class="field">
-              <label for="newUserPassword">Nova senha</label>
+              <label for="newUserPassword">Senha</label>
               <input id="newUserPassword" type="password" autocomplete="new-password" />
             </div>
           </div>
           <div class="actions">
-            <button class="btn primary" id="saveUser" type="button">Salvar usuário</button>
+            <button class="btn primary" id="saveUser" type="button">Criar conta</button>
             <button class="btn" id="logoutButton" type="button">Sair</button>
           </div>
           <div class="user-list" id="userList"></div>
-          <p class="hint">Os usuários ficam salvos neste navegador. Para trocar a senha de um login existente, cadastre o mesmo login com a nova senha.</p>
+          <p class="hint">A conta e os orçamentos são armazenados com segurança no Firebase e podem ser acessados em qualquer dispositivo.</p>
         </div>
         </section>
         <section class="workspace-window" id="windowBudget" data-window="budget" role="tabpanel" hidden>
@@ -2251,20 +2132,7 @@
     </main>
 
     <script>
-      const storageKey = "innovae.nextInvoiceNumber";
-      const materialStorageKey = "innovae.materialPresets";
-      const quotesStorageKey = "innovae.savedQuotes";
-      const usersStorageKey = "innovae.systemUsers";
-      const usersPendingSyncStorageKey = "innovae.systemUsersPendingSync";
-      const sessionStorageKey = "innovae.activeUser";
       const loginViewStorageKey = "innovae.loginViewOpen";
-      const quotesRegistryBinId = "6a610c32da38895dfe80bcbc";
-      const usersRegistryBinId = "6a610d67da38895dfe80c26b";
-      // Chave de acesso à sincronização JSONBin.
-      const jsonBinApiKey = "$2a$10$kK9lc8wQd0G8RmsiJbXr7OrwRuCeVc6u.ASb7rvLgHfxvUqZo3mhW";
-      const jsonBinBaseUrl = "https://api.jsonbin.io/v3/b";
-      // Chave principal do JSONBin, usada para leitura e atualização dos registros.
-      const jsonBinHeaders = { "X-Master-Key": jsonBinApiKey };
       const fields = {};
       const itemList = document.getElementById("items");
       const clientLinks = document.getElementById("clientLinks");
@@ -2286,15 +2154,8 @@
         return `${Number(match[1]) + 1}${match[2]}`;
       }
 
-      function getInitialInvoiceNumber() {
-        const saved = localStorage.getItem(storageKey);
-        const next = saved ? incrementInvoiceNumber(saved) : "208-2026";
-        localStorage.setItem(storageKey, next);
-        return next;
-      }
-
       const defaults = {
-        invoiceNumber: getInitialInvoiceNumber(),
+        invoiceNumber: "208-2026",
         clientName: "",
         discount: "0"
       };
@@ -2320,110 +2181,20 @@
         "Quadro"
       ];
 
-      let materialPresets = loadMaterialPresets();
+      let materialPresets = [...defaultMaterials];
+      let cloudQuotes = [];
+      let currentUser = null;
 
       let items = [
         { description: "", quantity: 1, unitPrice: 0 }
       ];
       let editingQuoteId = null;
       let referencePhotos = [];
-      let usersSyncPromise = Promise.resolve();
-      let usersSyncInProgress = false;
-
-      function loadUsers() {
-        try {
-          const saved = JSON.parse(localStorage.getItem(usersStorageKey) || "[]");
-          if (Array.isArray(saved) && saved.length) return saved;
-        } catch {}
-        return [];
-      }
-
-      function saveUsers(users) {
-        localStorage.setItem(usersStorageKey, JSON.stringify(users));
-      }
-
-      function hasPendingUsersSync() {
-        return localStorage.getItem(usersPendingSyncStorageKey) === "true";
-      }
-
-      function markUsersPendingSync(isPending) {
-        if (isPending) localStorage.setItem(usersPendingSyncStorageKey, "true");
-        else localStorage.removeItem(usersPendingSyncStorageKey);
-      }
-
-      function mergeUsers(localUsers, remoteUsers) {
-        const users = new Map(remoteUsers.map((user) => [user.login, user]));
-        localUsers.forEach((user) => {
-          const remoteUser = users.get(user.login);
-          if (!remoteUser || new Date(user.updatedAt || 0) > new Date(remoteUser.updatedAt || 0)) {
-            users.set(user.login, user);
-          }
-        });
-        return [...users.values()];
-      }
-
-      async function saveUsersToCloud(users = loadUsers()) {
-        const response = await fetch(`${jsonBinBaseUrl}/${usersRegistryBinId}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json", ...jsonBinHeaders },
-          body: JSON.stringify({ items: users, updatedAt: new Date().toISOString() })
-        });
-        if (!response.ok) throw new Error(`Não foi possível sincronizar os usuários na nuvem (erro ${response.status}).`);
-      }
-
-      async function syncUsersFromCloud() {
-        if (usersSyncInProgress) return;
-        usersSyncInProgress = true;
-        try {
-          const response = await fetch(`${jsonBinBaseUrl}/${usersRegistryBinId}/latest?meta=false&sync=${Date.now()}`, {
-            headers: jsonBinHeaders,
-            cache: "no-store"
-          });
-          if (!response.ok) throw new Error();
-          const remote = await response.json();
-          const remoteUsers = Array.isArray(remote.items) ? remote.items : [];
-          const localUsers = loadUsers();
-          const remoteUpdatedAt = new Date(remote.updatedAt || 0).getTime();
-          const hasNewerLocalChange = localUsers.some((user) => new Date(user.updatedAt || 0).getTime() > remoteUpdatedAt);
-          // A nuvem é a fonte definitiva. Só mesclamos se este próprio
-          // aparelho tiver uma alteração pendente, ou uma edição mais recente
-          // que a versão remota; assim um usuário apagado em outro dispositivo
-          // jamais é recriado por uma cópia antiga.
-          if (hasPendingUsersSync() || hasNewerLocalChange) {
-            const users = mergeUsers(localUsers, remoteUsers);
-            saveUsers(users);
-            await saveUsersToCloud(users);
-            markUsersPendingSync(false);
-          } else {
-            saveUsers(remoteUsers);
-          }
-          renderUsers();
-          renderLoginUsers();
-        } catch (error) {
-          console.warn("Não foi possível sincronizar os usuários.", error);
-        } finally {
-          usersSyncInProgress = false;
-        }
-      }
 
       function renderUsers() {
         const list = byId("userList");
         if (!list) return;
-        const users = loadUsers();
-        list.innerHTML = users.map((user) => `
-          <div class="user-row">
-            <strong>${escapeHtml(user.login)}</strong>
-            <button class="btn danger" type="button" data-remove-user="${escapeHtml(user.login)}">Remover</button>
-          </div>
-        `).join("");
-      }
-
-      function renderLoginUsers(selectedLogin = byId("loginUser")?.value || "") {
-        const select = byId("loginUser");
-        if (!select) return;
-        const users = loadUsers();
-        select.innerHTML = `<option value="">Selecione seu usuário</option>${users.map((user) => `<option value="${escapeHtml(user.login)}">${escapeHtml(user.login)}</option>`).join("")}`;
-        select.value = selectedLogin || "";
+        list.innerHTML = currentUser ? `<div class="user-row"><strong>${escapeHtml(currentUser.email || "Conta autenticada")}</strong></div>` : "";
       }
 
       function showPublicSite() {
@@ -2431,7 +2202,6 @@
         byId("systemApp").hidden = true;
         byId("systemApp").classList.remove("login-view", "login-overlay");
         document.body.classList.remove("login-active");
-        sessionStorage.removeItem(loginViewStorageKey);
         byId("loginPanel").hidden = false;
         byId("systemContent").hidden = true;
       }
@@ -2441,9 +2211,7 @@
         byId("systemApp").hidden = false;
         byId("systemApp").classList.add("login-view", "login-overlay");
         document.body.classList.add("login-active");
-        sessionStorage.setItem(loginViewStorageKey, "true");
         window.scrollTo({ top: 0, behavior: "smooth" });
-        renderLoginUsers(byId("loginUser").value);
         byId("loginPanel").hidden = false;
         byId("systemContent").hidden = true;
         byId("loginUser").focus();
@@ -2454,24 +2222,24 @@
         byId("systemApp").hidden = false;
         byId("systemApp").classList.remove("login-view", "login-overlay");
         document.body.classList.remove("login-active");
-        sessionStorage.removeItem(loginViewStorageKey);
         byId("loginPanel").hidden = true;
         byId("systemContent").hidden = false;
         renderUsers();
       }
 
-      function login() {
+      async function login() {
         const loginValue = byId("loginUser").value.trim();
         const passwordValue = byId("loginPassword").value;
-        const user = loadUsers().find((item) => item.login === loginValue && item.password === passwordValue);
-        if (!user) {
-          byId("loginMessage").textContent = "Login ou senha inválidos.";
-          return;
+        try {
+          const authApi = await import("https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js");
+          const { auth } = await import("./firebase-client.js");
+          await authApi.signInWithEmailAndPassword(auth, loginValue, passwordValue);
+          byId("loginPassword").value = "";
+          byId("loginMessage").textContent = "";
+        } catch (error) {
+          console.error(error);
+          byId("loginMessage").textContent = "E-mail ou senha inválidos.";
         }
-        sessionStorage.setItem(sessionStorageKey, user.login);
-        byId("loginPassword").value = "";
-        byId("loginMessage").textContent = "";
-        showSystem();
       }
 
       async function saveUserFromForm() {
@@ -2481,27 +2249,16 @@
           alert("Informe login e senha para salvar o usuário.");
           return;
         }
-        await usersSyncPromise;
-        const users = loadUsers();
-        const existing = users.find((user) => user.login === loginValue);
-        if (existing) {
-          existing.password = passwordValue;
-        } else {
-          users.push({ login: loginValue, password: passwordValue, updatedAt: new Date().toISOString() });
-        }
-        if (existing) existing.updatedAt = new Date().toISOString();
-        saveUsers(users);
-        markUsersPendingSync(true);
-        renderLoginUsers(loginValue);
-        byId("newUserLogin").value = "";
-        byId("newUserPassword").value = "";
-        renderUsers();
         try {
-          await saveUsersToCloud(users);
-          markUsersPendingSync(false);
-          setStatus(`Usuário ${loginValue} salvo e sincronizado.`);
-        } catch {
-          setStatus(`Usuário ${loginValue} salvo neste dispositivo, mas a nuvem não respondeu.`);
+          const authApi = await import("https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js");
+          const { auth } = await import("./firebase-client.js");
+          await authApi.createUserWithEmailAndPassword(auth, loginValue, passwordValue);
+          byId("newUserLogin").value = "";
+          byId("newUserPassword").value = "";
+          setStatus("Conta criada e conectada à nuvem.");
+        } catch (error) {
+          console.error(error);
+          alert("Não foi possível criar a conta. Verifique o e-mail, use uma senha com pelo menos 6 caracteres e confirme se o provedor E-mail/Senha está ativado no Firebase.");
         }
       }
 
@@ -2566,21 +2323,21 @@
       function renderReferencePhotos() {
         const target = byId("referencePreview");
         if (!target) return;
-        target.innerHTML = referencePhotos.map((photo, index) => `<div class="reference-photo"><img src="${escapeHtml(photo.url)}" alt="Refer�ncia ${index + 1}" /><button type="button" data-remove-reference="${index}" aria-label="Remover foto">�</button></div>`).join("");
+        target.innerHTML = referencePhotos.map((photo, index) => `<div class="reference-photo"><img src="${escapeHtml(photo.url)}" alt="Referência ${index + 1}" /><button type="button" data-remove-reference="${index}" aria-label="Remover foto">×</button></div>`).join("");
       }
 
       async function compressReferenceImage(file) {
         const source = await new Promise((resolve, reject) => {
           const reader = new FileReader();
           reader.onload = () => resolve(String(reader.result || ""));
-          reader.onerror = () => reject(new Error(`N�o foi poss�vel ler ${file.name}.`));
+          reader.onerror = () => reject(new Error(`Não foi possível ler ${file.name}.`));
           reader.readAsDataURL(file);
         });
 
         const image = await new Promise((resolve, reject) => {
           const img = new Image();
           img.onload = () => resolve(img);
-          img.onerror = () => reject(new Error(`N�o foi poss�vel processar ${file.name}.`));
+          img.onerror = () => reject(new Error(`Não foi possível processar ${file.name}.`));
           img.src = source;
         });
 
@@ -2614,7 +2371,7 @@
         const photos = [];
         for (const file of selected) {
           const safeName = file.name.replace(/[^\w.\-]+/g, "-").toLowerCase();
-          const fileRef = storageApi.ref(storage, `quote-references/${Date.now()}-${Math.random().toString(36).slice(2)}-${safeName}`);
+          const fileRef = storageApi.ref(storage, `quote-references/${crypto.randomUUID()}-${safeName}`);
           const snapshot = await storageApi.uploadBytes(fileRef, file);
           const url = await storageApi.getDownloadURL(snapshot.ref);
           photos.push({ name: file.name, url, path: snapshot.ref.fullPath });
@@ -2654,20 +2411,6 @@
         statusMessage.textContent = message;
       }
 
-      function loadMaterialPresets() {
-        try {
-          const saved = JSON.parse(localStorage.getItem(materialStorageKey) || "[]");
-          const list = Array.isArray(saved) ? saved : [];
-          return [...new Set([...defaultMaterials, ...list].map((item) => String(item).trim()).filter(Boolean))];
-        } catch {
-          return [...defaultMaterials];
-        }
-      }
-
-      function saveMaterialPresets() {
-        localStorage.setItem(materialStorageKey, JSON.stringify(materialPresets));
-      }
-
       function renderMaterialPresets(selected = "") {
         const select = byId("materialPreset");
         select.innerHTML = "";
@@ -2691,7 +2434,6 @@
         if (!exists) {
           materialPresets.push(material);
           materialPresets.sort((a, b) => a.localeCompare(b, "pt-BR"));
-          saveMaterialPresets();
         }
         renderMaterialPresets(material);
         input.value = "";
@@ -2699,70 +2441,29 @@
         setStatus(`${material} salvo como tipo de material.`);
       }
 
-      function loadSavedQuotes() {
-        try {
-          const saved = JSON.parse(localStorage.getItem(quotesStorageKey) || "[]");
-          return Array.isArray(saved) ? saved : [];
-        } catch {
-          return [];
-        }
-      }
-
-      function saveQuoteRecord(data) {
-        const quotes = loadSavedQuotes();
-        const existingIndex = quotes.findIndex((quote) => (
-          (editingQuoteId && quote.id === editingQuoteId) ||
-          quote.invoiceNumber === data.invoiceNumber
-        ));
-        const previous = existingIndex >= 0 ? quotes[existingIndex] : null;
-        const record = {
-          id: previous?.id || `${sanitizeFileName(data.invoiceNumber)}-${Date.now()}`,
-          createdAt: previous?.createdAt || new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          invoiceNumber: data.invoiceNumber,
-          clientName: data.clientName,
-          subtotal: data.subtotal,
-          discount: data.discount,
-          total: data.total,
-          items: data.items,
-          binId: data.binId || previous?.binId || null,
-          providerName: data.providerName,
-          phone: data.phone,
-          city: data.city,
-          email: data.email,
-          social: data.social,
-          project: data.project || previous?.project || {}
-        };
-        if (existingIndex >= 0) {
-          quotes.splice(existingIndex, 1);
-        }
-        quotes.unshift(record);
-        localStorage.setItem(quotesStorageKey, JSON.stringify(quotes.slice(0, 500)));
-        renderDbStats();
-        return record;
-      }
-
       function renderDbStats() {
-        const quotes = loadSavedQuotes();
-        byId("savedQuotesCount").textContent = quotes.length;
+        byId("savedQuotesCount").textContent = cloudQuotes.length;
         byId("savedMaterialsCount").textContent = materialPresets.length;
-        renderClientLinks(quotes);
+        renderClientLinks(cloudQuotes);
       }
 
 
       function getClientLink(record) {
         const url = new URL("cliente.html", window.location.href);
-        if (record.binId) {
-          url.searchParams.set("bin", record.binId);
-        } else {
-          url.searchParams.set("orcamento", record.id);
-        }
+        url.searchParams.set("orcamento", record.id);
         return url.href;
       }
 
       async function saveQuoteToCloud(data) {
         const quoteModule = await import("./assets/quote-module.js");
         return quoteModule.saveQuote(data);
+      }
+
+      async function refreshCloudQuotes() {
+        if (!currentUser) return;
+        const quoteModule = await import("./assets/quote-module.js");
+        cloudQuotes = await quoteModule.listQuotes(currentUser.uid);
+        renderDbStats();
       }
 
       async function deleteQuoteFromCloud(record) {
@@ -2786,7 +2487,7 @@
         input.remove();
       }
 
-      function renderClientLinks(quotes = loadSavedQuotes()) {
+      function renderClientLinks(quotes = cloudQuotes) {
         if (!clientLinks) return;
         if (!quotes.length) {
           clientLinks.innerHTML = `<p class="hint">Nenhum link criado ainda.</p>`;
@@ -2799,7 +2500,7 @@
           const createdAt = quote.createdAt ? new Date(quote.createdAt).toLocaleString("pt-BR") : "-";
           card.innerHTML = `
             <strong>${escapeHtml(quote.clientName || "Cliente")} - ${escapeHtml(quote.invoiceNumber || "")}</strong>
-            <div class="client-link-meta">${createdAt} | ${money(quote.total)} | ${quote.binId ? "Link enviado ativo" : "Salvo localmente"}</div>
+            <div class="client-link-meta">${createdAt} | ${money(quote.total)} | Link ativo na nuvem</div>
             <div class="client-link-actions">
               <button class="btn primary" type="button" data-edit-client-link="${escapeHtml(quote.id)}">Editar orçamento</button>
               <button class="btn" type="button" data-copy-client-link="${escapeHtml(quote.id)}">Copiar link</button>
@@ -2837,7 +2538,7 @@
         const banner = byId("editBanner");
         const label = byId("editingQuoteLabel");
         const linkButton = byId("createClientLink");
-        const activeRecord = record || loadSavedQuotes().find((quote) => quote.id === editingQuoteId);
+        const activeRecord = record || cloudQuotes.find((quote) => quote.id === editingQuoteId);
         if (banner) banner.classList.toggle("active", Boolean(editingQuoteId));
         if (label) label.textContent = activeRecord ? `${activeRecord.clientName || "Cliente"} - ${activeRecord.invoiceNumber || ""}` : "";
         if (linkButton) linkButton.textContent = editingQuoteId ? "SALVAR ALTERAÇÕES NO LINK DO CLIENTE" : "CRIAR LINK PARA CLIENTE";
@@ -2866,24 +2567,50 @@
         const data = getFormData();
         if (!validateQuoteData(data, "criar o link")) return;
         try {
-          setStatus("Enviando or�amento para a nuvem...");
+          setStatus("Enviando orçamento para a nuvem...");
           const uploadedReferences = [];
           for (const photo of referencePhotos) {
             uploadedReferences.push(photo);
           }
           data.references = uploadedReferences;
-          data.cloudSavedAt = new Date().toISOString();
-          const binId = await saveQuoteToCloud(data);
-          const record = saveQuoteRecord({ ...data, binId });
+          const previous = cloudQuotes.find((quote) => quote.id === editingQuoteId);
+          const record = {
+            ...data,
+            id: editingQuoteId || crypto.randomUUID(),
+            ownerId: currentUser.uid,
+            createdAt: previous?.createdAt || new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            references: uploadedReferences
+          };
+          await saveQuoteToCloud(record);
+          await refreshCloudQuotes();
           const link = getClientLink(record);
           await copyText(link);
           updateEditState(record);
           setStatus(`Link do cliente copiado: ${link}`);
         } catch (error) {
           console.error(error);
-          alert("N�o foi poss�vel criar o link do or�amento. Tente novamente.");
-          setStatus("Falha ao criar link do or�amento.");
+          alert("Não foi possível criar o link do orçamento. Tente novamente.");
+          setStatus("Falha ao criar link do orçamento.");
         }
+      }
+
+      async function saveCurrentQuote() {
+        const data = getFormData();
+        if (!validateQuoteData(data, "salvar o orçamento")) return null;
+        if (!currentUser) throw new Error("Faça login para salvar na nuvem.");
+        const previous = cloudQuotes.find((quote) => quote.id === editingQuoteId);
+        const record = {
+          ...data,
+          id: editingQuoteId || crypto.randomUUID(),
+          ownerId: currentUser.uid,
+          createdAt: previous?.createdAt || new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          references: referencePhotos
+        };
+        await saveQuoteToCloud(record);
+        await refreshCloudQuotes();
+        return record;
       }
 
       function exportDatabase() {
@@ -2892,7 +2619,7 @@
           exportedAt: new Date().toISOString(),
           nextInvoiceNumber: fields.invoiceNumber.value,
           materialPresets,
-          quotes: loadSavedQuotes()
+          quotes: cloudQuotes
         };
         const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
         const link = document.createElement("a");
@@ -2907,24 +2634,20 @@
 
       function importDatabaseFile(file) {
         const reader = new FileReader();
-        reader.onload = () => {
+        reader.onload = async () => {
           try {
             const payload = JSON.parse(reader.result);
             if (!payload || typeof payload !== "object") throw new Error("Arquivo inválido");
-            if (payload.nextInvoiceNumber) {
-              localStorage.setItem(storageKey, String(payload.nextInvoiceNumber));
-              fields.invoiceNumber.value = String(payload.nextInvoiceNumber);
-            }
+            if (payload.nextInvoiceNumber) fields.invoiceNumber.value = String(payload.nextInvoiceNumber);
             if (Array.isArray(payload.materialPresets)) {
               materialPresets = [...new Set([...defaultMaterials, ...payload.materialPresets].map((item) => String(item).trim()).filter(Boolean))];
-              saveMaterialPresets();
               renderMaterialPresets();
             }
             if (Array.isArray(payload.quotes)) {
-              localStorage.setItem(quotesStorageKey, JSON.stringify(payload.quotes.slice(0, 500)));
-              saveQuotesRegistryToCloud(loadSavedQuotes()).catch(() => setStatus("Backup importado localmente, mas a nuvem não respondeu."));
+              const quoteModule = await import("./assets/quote-module.js");
+              await Promise.all(payload.quotes.slice(0, 500).map((quote) => quoteModule.saveQuote({ ...quote, ownerId: currentUser.uid, updatedAt: new Date().toISOString() })));
             }
-            renderDbStats();
+            await refreshCloudQuotes();
             renderCalculator();
             renderPreview();
             setStatus("Backup importado com sucesso.");
@@ -2936,17 +2659,11 @@
       }
 
       async function clearDatabase() {
-        if (!confirm("Tem certeza que deseja limpar histórico e materiais salvos deste navegador?")) return;
-        localStorage.removeItem(materialStorageKey);
-        localStorage.removeItem(quotesStorageKey);
-        materialPresets = loadMaterialPresets();
-        renderMaterialPresets();
+        if (!confirm("Tem certeza que deseja excluir todos os orçamentos da nuvem?")) return;
+        await Promise.all(cloudQuotes.map((quote) => deleteQuoteFromCloud(quote)));
+        cloudQuotes = [];
         renderDbStats();
-        try {
-                    setStatus("Banco de dados limpo e sincronizado. A numeração atual foi mantida.");
-        } catch {
-          setStatus("Banco local limpo. Não foi possível sincronizar a nuvem agora.");
-        }
+        setStatus("Orçamentos excluídos da nuvem.");
       }
 
       function formatArea(value) {
@@ -3270,33 +2987,19 @@
         return new Blob([Uint8Array.from(pdf, (char) => char.charCodeAt(0))], { type: "application/pdf" });
       }
 
-      function downloadPdf() {
-        const data = getFormData();
-        if (!data.clientName.trim()) {
-          alert("Informe o nome do cliente antes de gerar o PDF.");
-          fields.clientName.focus();
-          return;
-        }
-        if (!data.items.some((item) => item.description !== "-" && item.quantity > 0 && item.unitPrice >= 0)) {
-          alert("Adicione pelo menos um item válido ao orçamento.");
-          return;
-        }
-        saveQuoteRecord(data);
+      async function downloadPdf() {
+        const data = await saveCurrentQuote();
+        if (!data) return;
         window.print();
         const next = incrementInvoiceNumber(data.invoiceNumber);
         fields.invoiceNumber.value = next;
-        localStorage.setItem(storageKey, next);
         renderPreview();
         setStatus(`Orçamento ${data.invoiceNumber} enviado para salvar/imprimir. Próximo número: ${next}.`);
       }
 
-      function printPdf() {
-        const data = getFormData();
-        if (!data.clientName.trim()) {
-          alert("Informe o nome do cliente antes de imprimir/salvar.");
-          fields.clientName.focus();
-          return;
-        }
+      async function printPdf() {
+        const data = await saveCurrentQuote();
+        if (!data) return;
         window.print();
       }
 
@@ -3330,17 +3033,8 @@
       }
 
       async function downloadPdfFile() {
-        const data = getFormData();
-        if (!data.clientName.trim()) {
-          alert("Informe o nome do cliente antes de gerar o PDF.");
-          fields.clientName.focus();
-          return;
-        }
-        if (!data.items.some((item) => item.description !== "-" && item.quantity > 0 && item.unitPrice >= 0)) {
-          alert("Adicione pelo menos um item válido ao orçamento.");
-          return;
-        }
-        saveQuoteRecord(data);
+        const data = await saveCurrentQuote();
+        if (!data) return;
         try {
           const blob = await createPdfBlobFromPreview(document.getElementById("preview"));
           const filename = `${sanitizeFileName(data.clientName)}-${data.invoiceNumber}.pdf`;
@@ -3353,7 +3047,6 @@
           URL.revokeObjectURL(link.href);
           const next = incrementInvoiceNumber(data.invoiceNumber);
           fields.invoiceNumber.value = next;
-          localStorage.setItem(storageKey, next);
           renderPreview();
           setStatus(`PDF ${data.invoiceNumber} gerado para download. Próximo número: ${next}.`);
         } catch (error) {
@@ -3363,17 +3056,8 @@
       }
 
       async function sharePdfToWhatsApp() {
-        const data = getFormData();
-        if (!data.clientName.trim()) {
-          alert("Informe o nome do cliente antes de enviar o PDF.");
-          fields.clientName.focus();
-          return;
-        }
-        if (!data.items.some((item) => item.description !== "-" && item.quantity > 0 && item.unitPrice >= 0)) {
-          alert("Adicione pelo menos um item válido ao orçamento.");
-          return;
-        }
-        saveQuoteRecord(data);
+        const data = await saveCurrentQuote();
+        if (!data) return;
         try {
           const blob = await createPdfBlobFromPreview(document.getElementById("preview"));
           const filename = `${sanitizeFileName(data.clientName)}-${data.invoiceNumber}.pdf`;
@@ -3391,7 +3075,6 @@
           }
           const next = incrementInvoiceNumber(data.invoiceNumber);
           fields.invoiceNumber.value = next;
-          localStorage.setItem(storageKey, next);
           renderPreview();
         } catch (error) {
           alert("Falha ao compartilhar o PDF. Tente novamente ou use o download.");
@@ -3421,17 +3104,8 @@
       }
 
       async function downloadJpegFile() {
-        const data = getFormData();
-        if (!data.clientName.trim()) {
-          alert("Informe o nome do cliente antes de gerar o JPEG.");
-          fields.clientName.focus();
-          return;
-        }
-        if (!data.items.some((item) => item.description !== "-" && item.quantity > 0 && item.unitPrice >= 0)) {
-          alert("Adicione pelo menos um item válido ao orçamento.");
-          return;
-        }
-        saveQuoteRecord(data);
+        const data = await saveCurrentQuote();
+        if (!data) return;
         try {
           const blob = await createJpegBlob(document.getElementById("preview"));
           const filename = `${sanitizeFileName(data.clientName)}-${data.invoiceNumber}.jpg`;
@@ -3444,7 +3118,6 @@
           URL.revokeObjectURL(link.href);
           const next = incrementInvoiceNumber(data.invoiceNumber);
           fields.invoiceNumber.value = next;
-          localStorage.setItem(storageKey, next);
           renderPreview();
           setStatus(`JPEG ${data.invoiceNumber} gerado para download. Próximo número: ${next}.`);
         } catch (error) {
@@ -3511,32 +3184,10 @@
           if (event.key === "Enter") login();
         });
         byId("saveUser").addEventListener("click", saveUserFromForm);
-        byId("logoutButton").addEventListener("click", () => {
-          sessionStorage.removeItem(sessionStorageKey);
-          showPublicSite();
-        });
-        byId("userList").addEventListener("click", async (event) => {
-          const loginToRemove = event.target.dataset.removeUser;
-          if (!loginToRemove) return;
-          await usersSyncPromise;
-          const users = loadUsers();
-          if (users.length === 1) {
-            alert("Mantenha pelo menos um usuário cadastrado.");
-            return;
-          }
-          if (!confirm(`Remover o usuário ${loginToRemove}?`)) return;
-          const updatedUsers = users.filter((user) => user.login !== loginToRemove);
-          saveUsers(updatedUsers);
-          markUsersPendingSync(true);
-          renderUsers();
-          renderLoginUsers();
-          try {
-            await saveUsersToCloud(updatedUsers);
-            markUsersPendingSync(false);
-            setStatus("Usuário removido e sincronizado.");
-          } catch {
-            setStatus("Usuário removido neste dispositivo, mas a nuvem não respondeu.");
-          }
+        byId("logoutButton").addEventListener("click", async () => {
+          const authApi = await import("https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js");
+          const { auth } = await import("./firebase-client.js");
+          await authApi.signOut(auth);
         });
 
         Object.keys(defaults).forEach((key) => {
@@ -3612,10 +3263,6 @@
         byId("sharePdfWhatsApp").addEventListener("click", sharePdfToWhatsApp);
         byId("downloadJpeg").addEventListener("click", downloadJpegFile);
         if (byId("printPdf")) byId("printPdf").addEventListener("click", printPdf);
-        if (byId("saveNumber")) byId("saveNumber").addEventListener("click", () => {
-          localStorage.setItem(storageKey, fields.invoiceNumber.value);
-          setStatus(`Número ${fields.invoiceNumber.value} salvo para o próximo orçamento.`);
-        });
         byId("exportDb").addEventListener("click", exportDatabase);
         byId("importDbButton").addEventListener("click", () => byId("importDb").click());
         byId("importDb").addEventListener("change", (event) => {
@@ -3631,7 +3278,7 @@
           const editId = event.target.dataset.editClientLink;
           const id = copyId || openId || deleteId || editId;
           if (!id) return;
-          const quotes = loadSavedQuotes();
+          const quotes = cloudQuotes;
           const record = quotes.find((quote) => quote.id === id);
           if (!record && !deleteId) return;
           if (editId) {
@@ -3646,7 +3293,7 @@
             window.open(getClientLink(record), "_blank", "noopener");
           }
           if (deleteId) {
-            if (!confirm("Excluir este link de cliente? O cliente não conseguirá mais consultar esse orçamento neste navegador.")) return;
+            if (!confirm("Excluir este link de cliente? O cliente não conseguirá mais consultar esse orçamento.")) return;
             try {
               await deleteQuoteFromCloud(record);
             } catch (error) {
@@ -3654,16 +3301,7 @@
               alert("Não foi possível excluir neste momento. Tente novamente.");
               return;
             }
-            const updatedQuotes = quotes.filter((quote) => quote.id !== deleteId);
-            localStorage.setItem(quotesStorageKey, JSON.stringify(updatedQuotes));
-            try {
-                          } catch (error) {
-              console.error(error);
-              setStatus("Link removido localmente, mas a sincronização da lista falhou.");
-              renderDbStats();
-              return;
-            }
-            renderDbStats();
+            await refreshCloudQuotes();
             setStatus("Link de cliente excluído.");
           }
         });
@@ -3724,24 +3362,26 @@
       renderItems();
       renderPreview();
       renderDbStats();
-      usersSyncPromise = syncUsersFromCloud();
-      usersSyncPromise.then(() => {
-        // O painel atualiza a interface com a c�pia local logo ap�s qualquer altera��o.
-        // curta atualiza outros dispositivos abertos sem exigir recarregamento.
-        window.setInterval(() => {
-          if (document.visibilityState === "visible") syncUsersFromCloud();
-        }, 5000);
-        window.addEventListener("focus", syncUsersFromCloud);
-        document.addEventListener("visibilitychange", () => {
-          if (document.visibilityState === "visible") syncUsersFromCloud();
+      (async () => {
+        const authApi = await import("https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js");
+        const { auth } = await import("./firebase-client.js");
+        authApi.onAuthStateChanged(auth, async (user) => {
+          currentUser = user;
+          if (!user) {
+            cloudQuotes = [];
+            showPublicSite();
+            return;
+          }
+          try {
+            await refreshCloudQuotes();
+            showSystem();
+          } catch (error) {
+            console.error(error);
+            byId("loginMessage").textContent = "Não foi possível carregar os dados da nuvem. Verifique as regras do Firebase.";
+            showLoginOnly();
+          }
         });
-      });
-      // Mantém a tela de login aberta após recarregar, sem abrir o sistema automaticamente.
-      if (sessionStorage.getItem(loginViewStorageKey) === "true") {
-        showLoginOnly();
-      } else {
-        showPublicSite();
-      }
+      })();
     </script>
   </body>
 </html>

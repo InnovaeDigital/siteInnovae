@@ -1,4 +1,4 @@
-import { doc, deleteDoc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+import { doc, deleteDoc, getDoc, getDocs, query, setDoc, where, collection } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 import { getDownloadURL, ref, uploadBytes } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-storage.js";
 import { db, storage } from "../firebase-client.js";
 
@@ -10,7 +10,7 @@ export async function uploadReferencePhotos(files) {
   const photos = [];
   for (const file of selected) {
     const safeName = file.name.replace(/[^\w.\-]+/g, "-").toLowerCase();
-    const fileRef = ref(storage, `${quoteMediaRoot}/${Date.now()}-${Math.random().toString(36).slice(2)}-${safeName}`);
+    const fileRef = ref(storage, `${quoteMediaRoot}/${crypto.randomUUID()}-${safeName}`);
     const snapshot = await uploadBytes(fileRef, file);
     const url = await getDownloadURL(snapshot.ref);
     photos.push({ name: file.name, url, path: snapshot.ref.fullPath });
@@ -21,6 +21,13 @@ export async function uploadReferencePhotos(files) {
 export async function saveQuote(data) {
   await setDoc(doc(db, quotesCollection, data.id), data, { merge: true });
   return data.id;
+}
+
+export async function listQuotes(ownerId) {
+  const snapshot = await getDocs(query(collection(db, quotesCollection), where("ownerId", "==", ownerId)));
+  return snapshot.docs
+    .map((item) => item.data())
+    .sort((a, b) => String(b.updatedAt || "").localeCompare(String(a.updatedAt || "")));
 }
 
 export async function loadQuote(id) {

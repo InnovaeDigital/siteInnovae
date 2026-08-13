@@ -1,15 +1,14 @@
-const CACHE_NAME = "innovae-site-cache-v26";
+const CACHE_NAME = "innovae-site-cache-v27";
 const ASSETS = [
   "/",
   "/index.html",
-  "/portfolio.html",
-  "/portfolio-admin.html",
-  "/instagram.html",
   "/cliente.html",
   "/manifest.webmanifest",
   "/assets/logo-innovae.png",
   "/assets/app-icon.svg",
-  "/assets/analytics.js"
+  "/assets/analytics.js",
+  "/assets/quote-module.js",
+  "/firebase-client.js"
 ];
 
 self.addEventListener("install", (event) => {
