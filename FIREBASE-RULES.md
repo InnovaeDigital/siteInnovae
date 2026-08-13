@@ -8,7 +8,7 @@ Em **Firestore Database > Rules**, publique:
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /quotes/{quoteId} {
+  match /quotes/{quoteId} {
       // O cliente abre somente um orçamento pelo link recebido.
       allow get: if true;
       // A lista do painel só retorna orçamentos da própria conta.
@@ -19,6 +19,17 @@ service cloud.firestore {
       allow update, delete: if request.auth != null
         && resource.data.ownerId == request.auth.uid
         && request.resource.data.ownerId == request.auth.uid;
+    }
+
+    match /users/{userId} {
+      // A tela de login precisa listar apenas os nomes e e-mails cadastrados.
+      allow read: if true;
+      // Somente uma sessão autenticada pode cadastrar o perfil de uma nova conta.
+      allow create: if request.auth != null
+        && request.resource.data.uid == userId
+        && request.resource.data.email is string
+        && request.resource.data.displayName is string;
+      allow update, delete: if request.auth != null && request.auth.uid == userId;
     }
   }
 }

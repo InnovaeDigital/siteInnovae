@@ -1841,8 +1841,10 @@
           <div class="login-brand"><img src="assets/logo-innovae.png" alt="Innovae Digital" /></div>
           <h2>Acesso ao sistema</h2>
           <div class="field">
-            <label for="loginUser">E-mail</label>
-            <input id="loginUser" type="email" autocomplete="username" aria-label="Seu e-mail" />
+            <label for="loginUser">Usuário</label>
+            <select id="loginUser" autocomplete="username" aria-label="Escolha seu usuário">
+              <option value="">Carregando usuários...</option>
+            </select>
           </div>
           <div class="field">
             <label for="loginPassword">Senha</label>
@@ -1866,6 +1868,10 @@
         <div class="user-admin">
           <h2>Conta do sistema</h2>
           <div class="row">
+            <div class="field">
+              <label for="newUserName">Nome do usuário</label>
+              <input id="newUserName" type="text" autocomplete="name" />
+            </div>
             <div class="field">
               <label for="newUserLogin">E-mail</label>
               <input id="newUserLogin" type="email" autocomplete="email" />
@@ -2190,6 +2196,34 @@
       ];
       let editingQuoteId = null;
       let referencePhotos = [];
+      const defaultLoginUsers = [
+        {
+          email: "innovaedigital.media@gmail.com",
+          displayName: "David P. Tomé (Proprietário)"
+        }
+      ];
+      let loginUsers = [];
+
+      async function loadLoginUsers() {
+        const selector = byId("loginUser");
+        try {
+          const { collection, getDocs, query, orderBy } = await import("https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js");
+          const { db } = await import("./firebase-client.js");
+          const snapshot = await getDocs(query(collection(db, "users"), orderBy("displayName")));
+          const cloudUsers = snapshot.docs.map((entry) => ({ id: entry.id, ...entry.data() }));
+          const cloudEmails = new Set(cloudUsers.map((user) => (user.email || "").toLowerCase()));
+          loginUsers = [
+            ...defaultLoginUsers.filter((user) => !cloudEmails.has(user.email.toLowerCase())),
+            ...cloudUsers
+          ];
+        } catch (error) {
+          console.error(error);
+          loginUsers = [...defaultLoginUsers];
+        }
+        selector.innerHTML = loginUsers.length
+          ? `<option value="">Escolha seu usuário...</option>${loginUsers.map((user) => `<option value="${escapeHtml(user.email || "")}">${escapeHtml(user.displayName || user.email || "Usuário")}</option>`).join("")}`
+          : `<option value="">Nenhum usuário cadastrado</option>`;
+      }
 
       function renderUsers() {
         const list = byId("userList");
@@ -2243,16 +2277,31 @@
       }
 
       async function saveUserFromForm() {
+        const nameValue = byId("newUserName").value.trim();
         const loginValue = byId("newUserLogin").value.trim();
         const passwordValue = byId("newUserPassword").value;
-        if (!loginValue || !passwordValue) {
+        if (!nameValue || !loginValue || !passwordValue) {
           alert("Informe login e senha para salvar o usuário.");
           return;
         }
         try {
           const authApi = await import("https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js");
-          const { auth } = await import("./firebase-client.js");
-          await authApi.createUserWithEmailAndPassword(auth, loginValue, passwordValue);
+          const appApi = await import("https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js");
+          const firestoreApi = await import("https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js");
+          const firebase = await import("./firebase-client.js");
+          const secondaryApp = appApi.initializeApp(firebase.firebaseConfig, `user-creation-${Date.now()}`);
+          const secondaryAuth = authApi.getAuth(secondaryApp);
+          const credential = await authApi.createUserWithEmailAndPassword(secondaryAuth, loginValue, passwordValue);
+          await firestoreApi.setDoc(firestoreApi.doc(firebase.db, "users", credential.user.uid), {
+            uid: credential.user.uid,
+            email: loginValue,
+            displayName: nameValue,
+            createdAt: firestoreApi.serverTimestamp()
+          });
+          await authApi.signOut(secondaryAuth);
+          await appApi.deleteApp(secondaryApp);
+          await loadLoginUsers();
+          byId("newUserName").value = "";
           byId("newUserLogin").value = "";
           byId("newUserPassword").value = "";
           setStatus("Conta criada e conectada à nuvem.");
@@ -3358,6 +3407,7 @@
       setupWorkspaceTabs();
       setupBrandTools();
       bind();
+      loadLoginUsers();
       renderCalculator();
       renderItems();
       renderPreview();
