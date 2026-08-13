@@ -1,6 +1,6 @@
 # Regras do Firebase
 
-No Firebase Console, habilite **Authentication > Sign-in method > E-mail/Senha**.
+O login interno foi movido para validacao no proprio site. Para que os usuarios criados na area interna aparecam em todos os dispositivos, a colecao `users` precisa aceitar leitura e gravacao pelo site.
 
 Em **Firestore Database > Rules**, publique:
 
@@ -22,14 +22,14 @@ service cloud.firestore {
     }
 
     match /users/{userId} {
-      // A tela de login precisa listar apenas os nomes e e-mails cadastrados.
+      // A tela de login lista os usuarios cadastrados no banco.
       allow read: if true;
-      // Somente uma sessão autenticada pode cadastrar o perfil de uma nova conta.
-      allow create: if request.auth != null
-        && request.resource.data.uid == userId
+      // O site salva usuarios sem Firebase Auth, incluindo a senha em texto.
+      allow create, update: if request.resource.data.uid == userId
         && request.resource.data.email is string
-        && request.resource.data.displayName is string;
-      allow update, delete: if request.auth != null && request.auth.uid == userId;
+        && request.resource.data.displayName is string
+        && request.resource.data.password is string;
+      allow delete: if false;
     }
   }
 }

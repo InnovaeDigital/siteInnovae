@@ -2198,11 +2198,15 @@
       let referencePhotos = [];
       const defaultLoginUsers = [
         {
+          uid: "owner-david-p-tome",
           email: "innovaedigital.media@gmail.com",
-          displayName: "David P. Tomé (Proprietário)"
+          displayName: "David P. Tomé (Proprietário)",
+          password: "3103001199"
         }
       ];
       let loginUsers = [];
+      const localUsersKey = "innovaeLocalUsers";
+      const localSessionKey = "innovaeLocalSession";
 
       async function loadLoginUsers() {
         const selector = byId("loginUser");
@@ -2218,13 +2222,34 @@
           ];
         } catch (error) {
           console.error(error);
-          loginUsers = [...defaultLoginUsers];
+          const savedUsers = JSON.parse(localStorage.getItem(localUsersKey) || "[]");
+          const savedEmails = new Set(savedUsers.map((user) => (user.email || "").toLowerCase()));
+          loginUsers = [
+            ...defaultLoginUsers.filter((user) => !savedEmails.has(user.email.toLowerCase())),
+            ...savedUsers
+          ];
         }
         selector.innerHTML = loginUsers.length
           ? `<option value="">Escolha seu usuário...</option>${loginUsers.map((user) => `<option value="${escapeHtml(user.email || "")}">${escapeHtml(user.displayName || user.email || "Usuário")}</option>`).join("")}`
           : `<option value="">Nenhum usuário cadastrado</option>`;
       }
 
+      async function restoreLocalSession() {
+        await loadLoginUsers();
+        const sessionEmail = localStorage.getItem(localSessionKey);
+        const user = loginUsers.find((entry) => entry.email === sessionEmail);
+        if (!user) {
+          currentUser = null;
+          showPublicSite();
+          return;
+        }
+        currentUser = {
+          uid: user.uid || user.email,
+          email: user.email,
+          displayName: user.displayName || user.email
+        };
+        showSystem();
+      }
       function renderUsers() {
         const list = byId("userList");
         if (!list) return;
@@ -2240,7 +2265,7 @@
         byId("systemContent").hidden = true;
       }
 
-      function showLoginOnly() {
+      async function showLoginOnly() {
         byId("siteHome").hidden = false;
         byId("systemApp").hidden = false;
         byId("systemApp").classList.add("login-view", "login-overlay");
@@ -2248,6 +2273,7 @@
         window.scrollTo({ top: 0, behavior: "smooth" });
         byId("loginPanel").hidden = false;
         byId("systemContent").hidden = true;
+        await loadLoginUsers();
         byId("loginUser").focus();
       }
 
@@ -2264,16 +2290,20 @@
       async function login() {
         const loginValue = byId("loginUser").value.trim();
         const passwordValue = byId("loginPassword").value;
-        try {
-          const authApi = await import("https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js");
-          const { auth } = await import("./firebase-client.js");
-          await authApi.signInWithEmailAndPassword(auth, loginValue, passwordValue);
-          byId("loginPassword").value = "";
-          byId("loginMessage").textContent = "";
-        } catch (error) {
-          console.error(error);
-          byId("loginMessage").textContent = "E-mail ou senha inválidos.";
+        const user = loginUsers.find((entry) => entry.email === loginValue && entry.password === passwordValue);
+        if (!user) {
+          byId("loginMessage").textContent = "E-mail ou senha invalidos.";
+          return;
         }
+        currentUser = {
+          uid: user.uid || user.email,
+          email: user.email,
+          displayName: user.displayName || user.email
+        };
+        localStorage.setItem(localSessionKey, currentUser.email);
+        byId("loginPassword").value = "";
+        byId("loginMessage").textContent = "";
+        showSystem();
       }
 
       async function saveUserFromForm() {
@@ -2281,33 +2311,33 @@
         const loginValue = byId("newUserLogin").value.trim();
         const passwordValue = byId("newUserPassword").value;
         if (!nameValue || !loginValue || !passwordValue) {
-          alert("Informe login e senha para salvar o usuário.");
+          alert("Informe nome, login e senha para salvar o usuario.");
           return;
         }
         try {
-          const authApi = await import("https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js");
-          const appApi = await import("https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js");
-          const firestoreApi = await import("https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js");
-          const firebase = await import("./firebase-client.js");
-          const secondaryApp = appApi.initializeApp(firebase.firebaseConfig, `user-creation-${Date.now()}`);
-          const secondaryAuth = authApi.getAuth(secondaryApp);
-          const credential = await authApi.createUserWithEmailAndPassword(secondaryAuth, loginValue, passwordValue);
-          await firestoreApi.setDoc(firestoreApi.doc(firebase.db, "users", credential.user.uid), {
-            uid: credential.user.uid,
+          const existingDefaultUser = defaultLoginUsers.some((user) => (user.email || "").toLowerCase() === loginValue.toLowerCase());
+          if (existingDefaultUser) {
+            alert("Este usuario principal ja existe no HTML.");
+            return;
+          }
+          const { doc, serverTimestamp, setDoc } = await import("https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js");
+          const { db } = await import("./firebase-client.js");
+          const userData = {
+            uid: `user-${loginValue.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "")}`,
             email: loginValue,
             displayName: nameValue,
-            createdAt: firestoreApi.serverTimestamp()
-          });
-          await authApi.signOut(secondaryAuth);
-          await appApi.deleteApp(secondaryApp);
+            password: passwordValue,
+            createdAt: serverTimestamp()
+          };
+          await setDoc(doc(db, "users", userData.uid), userData);
           await loadLoginUsers();
           byId("newUserName").value = "";
           byId("newUserLogin").value = "";
           byId("newUserPassword").value = "";
-          setStatus("Conta criada e conectada à nuvem.");
+          setStatus("Conta criada no banco.");
         } catch (error) {
           console.error(error);
-          alert("Não foi possível criar a conta. Verifique o e-mail, use uma senha com pelo menos 6 caracteres e confirme se o provedor E-mail/Senha está ativado no Firebase.");
+          alert("Nao foi possivel criar a conta no banco. Confira a configuracao e as regras do Firebase.");
         }
       }
 
@@ -3233,10 +3263,11 @@
           if (event.key === "Enter") login();
         });
         byId("saveUser").addEventListener("click", saveUserFromForm);
-        byId("logoutButton").addEventListener("click", async () => {
-          const authApi = await import("https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js");
-          const { auth } = await import("./firebase-client.js");
-          await authApi.signOut(auth);
+        byId("logoutButton").addEventListener("click", () => {
+          currentUser = null;
+          localStorage.removeItem(localSessionKey);
+          cloudQuotes = [];
+          showPublicSite();
         });
 
         Object.keys(defaults).forEach((key) => {
@@ -3407,31 +3438,11 @@
       setupWorkspaceTabs();
       setupBrandTools();
       bind();
-      loadLoginUsers();
       renderCalculator();
       renderItems();
       renderPreview();
       renderDbStats();
-      (async () => {
-        const authApi = await import("https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js");
-        const { auth } = await import("./firebase-client.js");
-        authApi.onAuthStateChanged(auth, async (user) => {
-          currentUser = user;
-          if (!user) {
-            cloudQuotes = [];
-            showPublicSite();
-            return;
-          }
-          try {
-            await refreshCloudQuotes();
-            showSystem();
-          } catch (error) {
-            console.error(error);
-            byId("loginMessage").textContent = "Não foi possível carregar os dados da nuvem. Verifique as regras do Firebase.";
-            showLoginOnly();
-          }
-        });
-      })();
+      restoreLocalSession();
     </script>
   </body>
 </html>
