@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Migração de Dados - Innovae Orçador</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, rgba(255, 242, 0, .18), transparent 26%),
+                  linear-gradient(315deg, rgba(5, 5, 5, .08), transparent 32%),
+                  #e7e7e7;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .container {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, .1);
+      max-width: 600px;
+      width: 100%;
+      padding: 40px;
+    }
+    
+    h1 {
+      color: #050505;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+    
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+    
+    .status-box {
+      background: #f7f7f2;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 20px;
+      margin-bottom: 20px;
+      display: none;
+    }
+    
+    .status-box.active {
+      display: block;
+    }
+    
+    .status-box.success {
+      border-color: #4caf50;
+      background: #f1f8f4;
+    }
+    
+    .status-box.error {
+      border-color: #f44336;
+      background: #fef5f5;
+    }
+    
+    .status-icon {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    
+    .status-title {
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #050505;
+    }
+    
+    .status-message {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+    
+    .progress {
+      background: #ddd;
+      border-radius: 4px;
+      height: 8px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+    
+    .progress-bar {
+      background: #4caf50;
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    
+    .data-summary {
+      background: #f0f0f0;
+      border-radius: 4px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 14px;
+    }
+    
+    .data-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .data-item:last-child {
+      border-bottom: none;
+    }
+    
+    button {
+      background: #fff200;
+      color: #050505;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s ease;
+      width: 100%;
+      margin-top: 10px;
+    }
+    
+    button:hover {
+      background: #ffd500;
+    }
+    
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    
+    button.danger {
+      background: #b42318;
+      color: white;
+    }
+    
+    button.danger:hover {
+      background: #a01d13;
+    }
+    
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    
+    .button-group button {
+      flex: 1;
+      margin-top: 0;
+    }
+    
+    .info-box {
+      background: #e3f2fd;
+      border-left: 4px solid #2196f3;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+    }
+    
+    .info-box strong {
+      color: #1976d2;
+    }
+    
+    .warning-box {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+      color: #856404;
+    }
+    
+    .logs {
+      background: #050505;
+      color: #fff;
+      padding: 15px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 12px;
+      max-height: 300px;
+      overflow-y: auto;
+      margin-top: 20px;
+      display: none;
+    }
+    
+    .logs.active {
+      display: block;
+    }
+    
+    .log-entry {
+      padding: 3px 0;
+      border-bottom: 1px solid #333;
+    }
+    
+    .log-entry.success {
+      color: #4caf50;
+    }
+    
+    .log-entry.error {
+      color: #f44336;
+    }
+    
+    .log-entry.info {
+      color: #64b5f6;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔄 Migração de Dados</h1>
+    <p class="subtitle">Transferir dados do localStorage para MongoDB</p>
+    
+    <div id="initialStep">
+      <div class="info-box">
+        <strong>ℹ️ Como funciona:</strong><br>
+        Este processo irá exportar seus dados salvos localmente (orçamentos, materiais e usuários) 
+        e importá-los para o novo banco de dados MongoDB.
+      </div>
+      
+      <div class="warning-box">
+        <strong>⚠️ Importante:</strong><br>
+        1. Faça backup dos seus dados antes de prosseguir<br>
+        2. Certifique-se de que o servidor Node.js está rodando<br>
+        3. Não feche esta página durante o processo
+      </div>
+      
+      <div id="dataPreview" class="data-summary" style="display: none;">
+        <strong>Dados encontrados:</strong>
+        <div class="data-item">
+          <span>📄 Orçamentos:</span>
+          <span id="quotesCount">0</span>
+        </div>
+        <div class="data-item">
+          <span>📦 Materiais:</span>
+          <span id="materialsCount">0</span>
+        </div>
+        <div class="data-item">
+          <span>👥 Usuários:</span>
+          <span id="usersCount">0</span>
+        </div>
+      </div>
+      
+      <button onclick="checkLocalStorage()">1️⃣ Verificar dados locais</button>
+      <button onclick="startMigration()" id="migrateBtn" disabled>2️⃣ Iniciar migração</button>
+    </div>
+    
+    <div id="migrationStep" style="display: none;">
+      <div class="status-box active">
+        <div class="status-icon">⏳</div>
+        <div class="status-title">Migração em andamento...</div>
+        <div class="progress">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="status-message" id="statusMessage">Conectando ao servidor...</div>
+      </div>
+    </div>
+    
+    <div id="successStep" style="display: none;">
+      <div class="status-box success active">
+        <div class="status-icon">✅</div>
+        <div class="status-title">Migração concluída com sucesso!</div>
+        <div class="status-message" id="successMessage"></div>
+        
+        <div class="data-summary">
+          <strong>Resumo da migração:</strong>
+          <div class="data-item">
+            <span>📄 Orçamentos migrados:</span>
+            <span id="migratedQuotes">0</span>
+          </div>
+          <div class="data-item">
+            <span>📦 Materiais migrados:</span>
+            <span id="migratedMaterials">0</span>
+          </div>
+          <div class="data-item">
+            <span>👥 Usuários migrados:</span>
+            <span id="migratedUsers">0</span>
+          </div>
+        </div>
+        
+        <button onclick="clearLocalStorage()" class="danger">3️⃣ Limpar dados antigos do localStorage</button>
+      </div>
+    </div>
+    
+    <div id="errorStep" style="display: none;">
+      <div class="status-box error active">
+        <div class="status-icon">❌</div>
+        <div class="status-title">Erro na migração</div>
+        <div class="status-message" id="errorMessage"></div>
+        <button onclick="resetMigration()">Tentar novamente</button>
+      </div>
+    </div>
+    
+    <div class="logs" id="logs">
+      <div id="logsContent"></div>
+    </div>
+    
+    <div class="button-group" id="finalButtons" style="display: none;">
+      <button onclick="location.href='index.html'">✅ Voltar para o aplicativo</button>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = 'http://localhost:3000/api';
+    let localData = { quotes: [], materials: [], users: [], invoiceNumber: 0 };
+    
+    function log(message, type = 'info') {
+      const logsContent = document.getElementById('logsContent');
+      const logEntry = document.createElement('div');
+      logEntry.className = `log-entry ${type}`;
+      const timestamp = new Date().toLocaleTimeString();
+      logEntry.textContent = `[${timestamp}] ${message}`;
+      logsContent.appendChild(logEntry);
+      logsContent.parentElement.scrollTop = logsContent.parentElement.scrollHeight;
+    }
+    
+    function checkLocalStorage() {
+      log('Verificando dados no localStorage...', 'info');
+      
+      // Recuperar dados do localStorage
+      const quotesStorageKey = "innovae.savedQuotes";
+      const materialStorageKey = "innovae.materialPresets";
+      const usersStorageKey = "innovae.systemUsers";
+      const storageKey = "innovae.nextInvoiceNumber";
+      
+      localData.quotes = JSON.parse(localStorage.getItem(quotesStorageKey) || "[]");
+      localData.materials = JSON.parse(localStorage.getItem(materialStorageKey) || "[]");
+      localData.users = JSON.parse(localStorage.getItem(usersStorageKey) || "[]");
+      localData.invoiceNumber = parseInt(localStorage.getItem(storageKey) || "1001");
+      
+      log(`✓ Encontrados ${localData.quotes.length} orçamentos`, 'success');
+      log(`✓ Encontrados ${localData.materials.length} materiais`, 'success');
+      log(`✓ Encontrados ${localData.users.length} usuários`, 'success');
+      
+      if (localData.quotes.length === 0 && localData.materials.length === 0 && localData.users.length === 0) {
+        log('⚠️ Nenhum dado encontrado no localStorage', 'error');
+        alert('Nenhum dado encontrado no localStorage para migrar.');
+        return;
+      }
+      
+      // Mostrar preview dos dados
+      document.getElementById('quotesCount').textContent = localData.quotes.length;
+      document.getElementById('materialsCount').textContent = localData.materials.length;
+      document.getElementById('usersCount').textContent = localData.users.length;
+      document.getElementById('dataPreview').style.display = 'block';
+      
+      // Habilitar botão de migração
+      document.getElementById('migrateBtn').disabled = false;
+      
+      // Mostrar logs
+      document.getElementById('logs').classList.add('active');
+    }
+    
+    async function startMigration() {
+      document.getElementById('initialStep').style.display = 'none';
+      document.getElementById('migrationStep').style.display = 'block';
+      document.getElementById('logs').classList.add('active');
+      
+      log('Iniciando migração...', 'info');
+      
+      try {
+        updateProgress(20);
+        log('Conectando ao servidor...', 'info');
+        
+        updateProgress(40);
+        const response = await fetch(`${API_URL}/migrate-from-localstorage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(localData)
+        });
+        
+        updateProgress(70);
+        
+        if (!response.ok) {
+          throw new Error(`Erro no servidor: ${response.statusText}`);
+        }
+        
+        const result = await response.json();
+        
+        updateProgress(100);
+        log('✓ Dados importados com sucesso!', 'success');
+        log(`  - ${result.dadosMigrados.quotes} orçamentos`, 'success');
+        log(`  - ${result.dadosMigrados.materials} materiais`, 'success');
+        log(`  - ${result.dadosMigrados.users} usuários`, 'success');
+        
+        // Mostrar resultado
+        setTimeout(() => {
+          document.getElementById('migrationStep').style.display = 'none';
+          document.getElementById('successStep').style.display = 'block';
+          
+          document.getElementById('migratedQuotes').textContent = result.dadosMigrados.quotes;
+          document.getElementById('migratedMaterials').textContent = result.dadosMigrados.materials;
+          document.getElementById('migratedUsers').textContent = result.dadosMigrados.users;
+          document.getElementById('successMessage').textContent = `${result.total} registros foram migrados com sucesso para o MongoDB!`;
+        }, 1000);
+        
+      } catch (error) {
+        log(`✗ Erro: ${error.message}`, 'error');
+        document.getElementById('migrationStep').style.display = 'none';
+        document.getElementById('errorStep').style.display = 'block';
+        document.getElementById('errorMessage').textContent = error.message;
+      }
+    }
+    
+    function updateProgress(percent) {
+      document.getElementById('progressBar').style.width = percent + '%';
+      const messages = {
+        20: 'Validando dados...',
+        40: 'Conectando ao servidor...',
+        70: 'Importando dados...',
+        100: 'Concluído!'
+      };
+      if (messages[percent]) {
+        document.getElementById('statusMessage').textContent = messages[percent];
+      }
+    }
+    
+    async function clearLocalStorage() {
+      if (!confirm('Tem certeza? Esta ação é irreversível!\n\nOs dados foram importados para o MongoDB e agora serão removidos do localStorage.')) {
+        return;
+      }
+      
+      log('Limpando dados do localStorage...', 'info');
+      
+      localStorage.removeItem("innovae.savedQuotes");
+      localStorage.removeItem("innovae.materialPresets");
+      localStorage.removeItem("innovae.systemUsers");
+      
+      log('✓ localStorage limpado com sucesso!', 'success');
+      log('✓ Todos os dados estão agora no MongoDB', 'success');
+      
+      document.getElementById('successStep').style.display = 'none';
+      document.getElementById('finalButtons').style.display = 'flex';
+    }
+    
+    function resetMigration() {
+      location.reload();
+    }
+  </script>
+</body>
+</html>

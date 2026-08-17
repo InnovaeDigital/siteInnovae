@@ -9,7 +9,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Configuração da string de conexão MongoDB
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://innovaedigitalmedia_db_user:XuXjCSu4rypz6Jxx@cluster0.cuhm6bt.mongodb.net/?appName=Cluster0';
+// IMPORTANTE: Certifique-se de que a senha não contém caracteres especiais não codificados
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://innovaedigitalmedia_db_user:XuXjCSu4rypz6Jxx@cluster0.cuhm6bt.mongodb.net/orcadores_innovae?retryWrites=true&w=majority&authSource=admin';
 const DB_NAME = 'orcadores_innovae';
 
 // Middleware
@@ -24,13 +25,42 @@ let database;
 // Função para conectar ao MongoDB
 async function connectToDatabase() {
   try {
-    mongoClient = new MongoClient(MONGODB_URI);
+    console.log('📡 Conectando ao MongoDB...');
+    console.log('🔗 URI:', MONGODB_URI.replace(/(:\/\/.*:)(.*)(@)/, '$1****$3'));
+    
+    const mongoOptions = {
+      maxPoolSize: 10,
+      minPoolSize: 1,
+      retryWrites: true,
+      retryReads: true,
+      serverSelectionTimeoutMS: 20000,
+      socketTimeoutMS: 45000,
+      // TLS settings
+      tls: true,
+      tlsAllowInvalidCertificates: false,
+      tlsAllowInvalidHostnames: false,
+    };
+    
+    mongoClient = new MongoClient(MONGODB_URI, mongoOptions);
+    console.log('🔐 Iniciando handshake SSL...');
     await mongoClient.connect();
+    
+    // Verificar conexão com ping
+    await mongoClient.db('admin').command({ ping: 1 });
+    
     database = mongoClient.db(DB_NAME);
-    console.log('✓ Conectado ao MongoDB com sucesso');
+    console.log('✓ Conectado ao MongoDB com sucesso!');
+    console.log(`✓ Banco de dados: ${DB_NAME}`);
     return database;
   } catch (error) {
-    console.error('✗ Erro ao conectar ao MongoDB:', error.message);
+    console.error('✗ Erro ao conectar ao MongoDB:');
+    console.error('  Mensagem:', error.message);
+    console.error('  Código:', error.code);
+    console.error('\n💡 Possíveis soluções:');
+    console.error('  1. Verifique a string de conexão no .env');
+    console.error('  2. Confirme que o IP está na IP Whitelist do MongoDB Atlas');
+    console.error('  3. Verifique as credenciais de usuário');
+    console.error('  4. Tente usar VPN ou rede diferente se SSL falhar');
     throw error;
   }
 }
@@ -128,6 +158,142 @@ app.delete('/api/orcamentos/:id', async (req, res) => {
     }
     
     res.json({ mensagem: 'Orçamento deletado com sucesso' });
+  } catch (error) {
+    res.status(500).json({ erro: error.message });
+  }
+});
+
+// ===== ENDPOINTS DE MIGRAÇÃO =====
+
+// Importar dados do localStorage (migração do banco antigo)
+app.post('/api/migrate-from-localstorage', async (req, res) => {
+  try {
+    const { quotes, materials, users, invoiceNumber } = req.body;
+    
+    console.log('📦 Iniciando migração de dados...');
+    
+    let migrated = {
+      quotes: 0,
+      materials: 0,
+      users: 0
+    };
+    
+    // Importar orçamentos
+    if (quotes && Array.isArray(quotes) && quotes.length > 0) {
+      const quotesCollection = database.collection('orcamentos');
+      const result = await quotesCollection.insertMany(
+        quotes.map(q => ({
+          ...q,
+          dataCriacao: new Date(q.dataCriacao || Date.now()),
+          dataAtualizacao: new Date(q.dataAtualizacao || Date.now()),
+          status: q.status || 'rascunho',
+          migratedFrom: 'localStorage'
+        }))
+      );
+      migrated.quotes = result.insertedIds.length;
+      console.log(`✓ ${migrated.quotes} orçamentos importados`);
+    }
+    
+    // Importar materiais/presets
+    if (materials && Array.isArray(materials) && materials.length > 0) {
+      const materialsCollection = database.collection('materiais');
+      const result = await materialsCollection.insertMany(
+        materials.map(m => ({
+          ...m,
+          dataCriacao: new Date(),
+          migratedFrom: 'localStorage'
+        }))
+      );
+      migrated.materials = result.insertedIds.length;
+      console.log(`✓ ${migrated.materials} materiais importados`);
+    }
+    
+    // Importar usuários
+    if (users && Array.isArray(users) && users.length > 0) {
+      const usersCollection = database.collection('usuarios');
+      const result = await usersCollection.insertMany(
+        users.map(u => ({
+          ...u,
+          dataCriacao: new Date(),
+          migratedFrom: 'localStorage'
+        }))
+      );
+      migrated.users = result.insertedIds.length;
+      console.log(`✓ ${migrated.users} usuários importados`);
+    }
+    
+    // Salvar número do próximo invoice
+    if (invoiceNumber) {
+      const configCollection = database.collection('config');
+      await configCollection.updateOne(
+        { _id: 'nextInvoiceNumber' },
+        { $set: { value: invoiceNumber } },
+        { upsert: true }
+      );
+      console.log(`✓ Próximo número de invoice: ${invoiceNumber}`);
+    }
+    
+    res.json({
+      mensagem: 'Migração concluída com sucesso',
+      dadosMigrados: migrated,
+      total: migrated.quotes + migrated.materials + migrated.users
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      erro: error.message,
+      detalhes: 'Erro durante a migração dos dados'
+    });
+  }
+});
+
+// Exportar dados para backup (antes de limpar)
+app.get('/api/export-all', async (req, res) => {
+  try {
+    const quotesCollection = database.collection('orcamentos');
+    const materialsCollection = database.collection('materiais');
+    const usersCollection = database.collection('usuarios');
+    
+    const [quotes, materials, users] = await Promise.all([
+      quotesCollection.find({}).toArray(),
+      materialsCollection.find({}).toArray(),
+      usersCollection.find({}).toArray()
+    ]);
+    
+    res.json({
+      timestamp: new Date(),
+      data: {
+        quotes,
+        materials,
+        users,
+        totalRecords: quotes.length + materials.length + users.length
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ erro: error.message });
+  }
+});
+
+// Limpar todos os dados (após migração)
+app.post('/api/clear-all', async (req, res) => {
+  try {
+    const quotesCollection = database.collection('orcamentos');
+    const materialsCollection = database.collection('materiais');
+    const usersCollection = database.collection('usuarios');
+    
+    const [quotesResult, materialsResult, usersResult] = await Promise.all([
+      quotesCollection.deleteMany({}),
+      materialsCollection.deleteMany({}),
+      usersCollection.deleteMany({})
+    ]);
+    
+    res.json({
+      mensagem: 'Todos os dados foram deletados',
+      deletados: {
+        orcamentos: quotesResult.deletedCount,
+        materiais: materialsResult.deletedCount,
+        usuarios: usersResult.deletedCount
+      }
+    });
   } catch (error) {
     res.status(500).json({ erro: error.message });
   }
