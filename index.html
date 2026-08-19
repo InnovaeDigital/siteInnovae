@@ -657,6 +657,32 @@
         margin-bottom: 10px;
       }
 
+      .cloud-storage {
+        margin: 0 0 16px;
+        padding: 12px 14px;
+        border: 1px solid rgba(255, 242, 0, .35);
+        background: #0b0b0b;
+        color: #fff;
+      }
+
+      .cloud-storage-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 8px;
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+      }
+
+      .cloud-storage-value { color: var(--yellow); white-space: nowrap; }
+      .cloud-storage-track { height: 10px; overflow: hidden; background: #252525; border: 1px solid #444; }
+      .cloud-storage-fill { width: 0; height: 100%; background: var(--yellow); transition: width .35s ease, background .2s ease; }
+      .cloud-storage-fill.is-warning { background: #ff9f1c; }
+      .cloud-storage-fill.is-danger { background: #ff4d4d; }
+      .cloud-storage-meta { margin-top: 7px; color: #aaa; font-size: 11px; }
+
       .db-stat {
         background: #050505;
         color: #fff;
@@ -841,7 +867,7 @@
       }
 
       .preview-header {
-        width: 800px;
+        width: min(800px, 100%);
         margin: 0 auto 12px;
         display: flex;
         justify-content: space-between;
@@ -868,7 +894,7 @@
       }
 
       .sheet {
-        width: 800px;
+        width: min(800px, 100%);
         margin: 0 auto;
         background: #fff;
         padding: 0;
@@ -1412,17 +1438,25 @@
 
       @media (max-width: 1100px) {
         .app {
-          grid-template-columns: 1fr;
+          grid-template-columns: minmax(320px, 380px) minmax(0, 1fr);
+          gap: 16px;
+          padding: 16px;
         }
 
         .controls {
           position: static;
           max-height: none;
         }
+
+        .preview-header,
+        .sheet {
+          width: 100%;
+        }
       }
 
       @media (max-width: 840px) {
         .app {
+          grid-template-columns: 1fr;
           padding: 12px;
         }
 
@@ -1761,6 +1795,15 @@
       #systemApp:not(.login-view) .workspace-tab.is-active { border-color:var(--yellow); background:var(--yellow); color:#050505; box-shadow:3px 3px 0 rgba(255,242,0,.22); }
       #systemApp:not(.login-view) .workspace-tab:focus-visible { outline:2px solid #fff; outline-offset:2px; }
       #systemApp:not(.login-view) .workspace-window { animation:windowEnter .28s ease both; }
+      #systemApp:not(.login-view) .workspace-window { min-width:0; }
+      #systemApp:not(.login-view) .workspace-window > h1,
+      #systemApp:not(.login-view) .workspace-window > .hint,
+      #systemApp:not(.login-view) .workspace-window > .section-title,
+      #systemApp:not(.login-view) .workspace-window > .actions,
+      #systemApp:not(.login-view) .workspace-window > .app-splash,
+      #systemApp:not(.login-view) .workspace-window > .db-panel,
+      #systemApp:not(.login-view) .workspace-window > .user-admin,
+      #systemApp:not(.login-view) .workspace-window > .portfolio-admin { width:100%; max-width:100%; }
       #systemApp:not(.login-view) .workspace-window[hidden] { display:none; }
       @keyframes windowEnter { from { opacity:0; transform:translateY(7px); } to { opacity:1; transform:translateY(0); } }
       @media (max-width:760px) {
@@ -2033,6 +2076,11 @@
           <button class="workspace-tab" type="button" role="tab" aria-selected="false" aria-controls="windowBudget" data-window-target="budget">Orçamento</button>
           <button class="workspace-tab" type="button" role="tab" aria-selected="false" aria-controls="windowManage" data-window-target="manage">Gestão e backups</button>
         </nav>
+        <section class="cloud-storage" aria-label="Armazenamento do banco de dados">
+          <div class="cloud-storage-head"><span>Armazenamento em nuvem</span><span class="cloud-storage-value" id="cloudStorageValue">Consultando...</span></div>
+          <div class="cloud-storage-track" role="progressbar" aria-label="Uso do armazenamento" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="cloud-storage-fill" id="cloudStorageFill"></div></div>
+          <div class="cloud-storage-meta" id="cloudStorageMeta">Atualização automática a cada 30 segundos.</div>
+        </section>
         <section class="workspace-window is-active" id="windowAdmin" data-window="admin" role="tabpanel">
         <div class="user-admin">
           <h2>Usuários do sistema</h2>
@@ -2054,7 +2102,8 @@
           <p class="hint">Os usuários ficam salvos neste navegador. Para trocar a senha de um login existente, cadastre o mesmo login com a nova senha.</p>
         </div>
 
-          <div class="field">
+          <div class="portfolio-admin">
+            <div class="field">
             <label for="portfolioTitle">Título do trabalho</label>
             <input id="portfolioTitle" autocomplete="off" placeholder="Ex.: Fachada loja X" />
           </div>
@@ -2413,6 +2462,7 @@
       let savedQuotes = [];
       let usersSyncPromise = Promise.resolve();
       let usersSyncInProgress = false;
+      let cloudStorageTimer = null;
 
       function loadLegacyUsers() {
         try {
@@ -2532,6 +2582,7 @@
         sessionStorage.removeItem(loginViewStorageKey);
         byId("loginPanel").hidden = true;
         byId("systemContent").hidden = false;
+        startCloudStorageUpdates();
         renderUsers();
       }
 
@@ -2677,6 +2728,39 @@
 
       function setStatus(message) {
         statusMessage.textContent = message;
+      }
+
+      async function loadCloudStorageStats() {
+        const value = byId("cloudStorageValue");
+        const fill = byId("cloudStorageFill");
+        const meta = byId("cloudStorageMeta");
+        const progress = fill?.parentElement;
+        if (!value || !fill || !meta || !progress) return;
+        try {
+          const response = await fetch(`${apiBase}/stats`, { cache: "no-store" });
+          if (!response.ok) throw new Error(`API de armazenamento respondeu ${response.status}.`);
+          const stats = await response.json();
+          const percentage = Math.min(100, Math.max(0, Number(stats.percentage || 0)));
+          value.textContent = `${stats.usedMB} MB / ${stats.totalMB} MB`;
+          fill.style.width = `${percentage}%`;
+          fill.classList.toggle("is-warning", percentage >= 70 && percentage < 90);
+          fill.classList.toggle("is-danger", percentage >= 90);
+          progress.setAttribute("aria-valuenow", String(percentage));
+          meta.textContent = `${percentage}% utilizado · atualizado agora`;
+        } catch (error) {
+          console.error(error);
+          value.textContent = "Indisponível";
+          fill.style.width = "0";
+          fill.classList.remove("is-warning", "is-danger");
+          progress.setAttribute("aria-valuenow", "0");
+          meta.textContent = "Não foi possível consultar o armazenamento da nuvem.";
+        }
+      }
+
+      function startCloudStorageUpdates() {
+        loadCloudStorageStats();
+        if (cloudStorageTimer) return;
+        cloudStorageTimer = window.setInterval(loadCloudStorageStats, 30000);
       }
 
       async function loadMaterialPresets() {
@@ -3482,7 +3566,10 @@
           });
         }
 
-        tabs.forEach((tab) => tab.addEventListener("click", () => activateWindow(tab.dataset.windowTarget)));
+        tabs.forEach((tab) => tab.addEventListener("click", () => {
+          activateWindow(tab.dataset.windowTarget);
+          renderPreview();
+        }));
       }
 
       function setupBrandTools() {

@@ -80,6 +80,23 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date() });
 });
 
+app.get('/api/stats', async (req, res) => {
+  try {
+    const stats = await database.stats();
+    const usedBytes = Math.max(Number(stats.storageSize || 0), Number(stats.dataSize || 0) + Number(stats.indexSize || 0));
+    const usedMB = usedBytes / (1024 * 1024);
+    const totalMB = Math.max(1, Number(process.env.MONGODB_STORAGE_LIMIT_MB || 512));
+    res.json({
+      usedMB: Number(usedMB.toFixed(2)),
+      totalMB,
+      percentage: Number(Math.min(100, (usedMB / totalMB) * 100).toFixed(1)),
+      updatedAt: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({ erro: error.message });
+  }
+});
+
 app.get('/api/config/invoice-number', async (req, res) => {
   try {
     const configCollection = database.collection('config');
@@ -389,7 +406,9 @@ app.post('/api/clear-all', async (req, res) => {
   }
 });
 
-// Iniciar servidor
+export { app, connectToDatabase };
+
+// Iniciar servidor local
 async function iniciarServidor() {
   try {
     await connectToDatabase();
@@ -412,4 +431,6 @@ process.on('SIGINT', async () => {
   process.exit(0);
 });
 
-iniciarServidor();
+if (process.env.VERCEL !== '1') {
+  iniciarServidor();
+}
