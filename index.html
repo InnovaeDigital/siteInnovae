@@ -1881,7 +1881,7 @@
       @media (max-width:700px) { .brand-tools { padding:58px 20px; }.brand-tools-head { grid-template-columns:1fr; gap:18px; }.brand-tools-head p { font-size:16px; }.quiz-options { grid-template-columns:1fr; }.diagnostic-item { align-items:flex-start; flex-direction:column; gap:10px; }.brand-tool-panel { min-height:0; }.micro-faq p { margin-right:0; } }
       @media (prefers-reduced-motion:reduce) { .site-home h1,.site-home h2,#systemApp h1,#systemApp h2,.site-home .home-kicker,.site-home .service-card strong,.brand-tool-panel { animation:none!important; } }
     </style>
-    <script src="assets/analytics.js" defer></script>
+    <script src="analytics.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   </head>
@@ -1890,7 +1890,6 @@
       <nav class="home-nav" aria-label="Navegação principal">
         <div class="nav-spacer" aria-hidden="true"></div>
         <div class="home-nav-links">
-          <a href="portfolio.html">Portfólio</a>
           <a href="instagram.html">Instagram</a>
           <a href="https://wa.me/5561933004316?text=Olá%2C%20vim%20pelo%20site%20da%20Innovae%20Digital." target="_blank" rel="noopener noreferrer">Contato</a>
           <button class="system-entry" id="showLogin" type="button">Área interna</button>
@@ -1901,13 +1900,13 @@
           <div class="visual-grid"></div>
           <div class="visual-ring"></div>
           <div class="visual-ring ring-two"></div>
-          <div class="visual-logo"><img src="assets/logo-innovae.png" alt="" /></div>
+          <div class="visual-logo"><img src="logo-innovae.png" alt="" /></div>
           <span class="visual-chip one">Criar · Impactar</span>
           <span class="visual-chip two">Design em movimento</span>
           <div class="visual-cmyk"><i></i><i></i><i></i><i></i></div>
         </div>
         <div class="home-copy">
-          <img class="hero-logo" src="assets/logo-innovae.png" alt="Innovae Digital" />
+          <img class="hero-logo" src="logo-innovae.png" alt="Innovae Digital" />
           <div class="home-kicker">Design gráfico · mídia digital · comunicação visual</div>
           <h1>Sua marca<br />não passa.<br /><em>Ela fica.</em></h1>
           <p>Estratégia, design e presença visual para negócios que querem ser percebidos, lembrados e escolhidos.</p>
@@ -1960,7 +1959,7 @@
     <main class="app" id="systemApp" hidden>
       <section class="controls" aria-label="Dados do orçamento">
         <div class="login-panel" id="loginPanel">
-          <div class="login-brand"><img src="assets/logo-innovae.png" alt="Innovae Digital" /></div>
+          <div class="login-brand"><img src="logo-innovae.png" alt="Innovae Digital" /></div>
           <h2>Acesso ao sistema</h2>
           <div class="field">
             <label for="loginUser">Usuário</label>
@@ -1978,7 +1977,7 @@
         </div>
 
         <div id="systemContent" hidden>
-        <img class="control-logo" src="assets/logo-innovae.png" alt="Innovae Digital" />
+        <img class="control-logo" src="logo-innovae.png" alt="Innovae Digital" />
         <nav class="workspace-tabs" aria-label="Seções do sistema" role="tablist">
           <button class="workspace-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="windowAdmin" data-window-target="admin">Administração</button>
           <button class="workspace-tab" type="button" role="tab" aria-selected="false" aria-controls="windowBudget" data-window-target="budget">Orçamento</button>
@@ -2034,8 +2033,8 @@
           </div>
           <input id="portfolioEditingId" type="hidden" />
           <div class="actions">
-            <button class="btn primary" id="savePortfolioItem" type="button">Salvar trabalho</button>
-            <button class="btn" id="clearPortfolioForm" type="button">Limpar</button>
+            
+            
           </div>
           <div class="portfolio-list" id="portfolioList"></div>
           <p class="hint">As alterações aparecem na página inicial deste navegador. Use imagens com link público para que o cliente consiga visualizar.</p>
@@ -2214,7 +2213,7 @@
         <article class="sheet" id="preview">
           <div class="pdf-header">
             <div class="brand">
-              <img class="brand-logo" src="assets/logo-innovae.png" alt="Innovae Digital" />
+              <img class="brand-logo" src="logo-innovae.png" alt="Innovae Digital" />
               <div>
                 <div class="brand-line" data-preview="phoneCity"></div>
               </div>
@@ -2282,7 +2281,7 @@
           </section>
 
           <div class="footer-logos">
-            <img class="footer-logo" src="assets/logo-innovae.png" alt="Innovae Digital" />
+            <img class="footer-logo" src="logo-innovae.png" alt="Innovae Digital" />
             <div class="footer-note">Design, impressão e comunicação visual</div>
           </div>
         </article>
@@ -2292,7 +2291,6 @@
     <script>
       const storageKey = "innovae.nextInvoiceNumber";
       const materialStorageKey = "innovae.materialPresets";
-      const quotesStorageKey = "innovae.savedQuotes";
       const sessionStorageKey = "innovae.activeUser";
       const loginViewStorageKey = "innovae.loginViewOpen";
 
@@ -2353,387 +2351,45 @@
         "Quadro"
       ];
 
-      let materialPresets = loadMaterialPresets();
+      let materialPresets = [...defaultMaterials];
 
       let items = [
         { description: "", quantity: 1, unitPrice: 0 }
       ];
       let editingQuoteId = null;
       let referencePhotos = [];
+      let savedQuotes = [];
       let usersSyncPromise = Promise.resolve();
       let usersSyncInProgress = false;
 
-      function loadPortfolioItems() {
+      async function loadUsers() {
         try {
-          const saved = JSON.parse(localStorage.getItem(portfolioStorageKey) || "[]");
-          return Array.isArray(saved) ? saved : [];
+          const response = await fetch(`${apiBase}/users`, { cache: "no-store" });
+          if (!response.ok) return [];
+          const users = await response.json().catch(() => []);
+          return Array.isArray(users) ? users : [];
         } catch {
           return [];
         }
       }
 
-      function savePortfolioItems(items) {
-        localStorage.setItem(portfolioStorageKey, JSON.stringify(items));
-      }
-
-      function loadPortfolioCategories() {
-        try {
-          const saved = JSON.parse(localStorage.getItem(portfolioCategoriesStorageKey) || "[]");
-          return Array.isArray(saved) ? saved.filter((category) => typeof category === "string" && category.trim()) : [];
-        } catch { return []; }
-      }
-
-      function savePortfolioCategories(categories) {
-        localStorage.setItem(portfolioCategoriesStorageKey, JSON.stringify(categories));
-      }
-
-      function getPortfolioCategories() {
-        return [...new Set([...loadPortfolioCategories(), ...loadPortfolioItems().map((item) => item.category).filter(Boolean)])]
-          .sort((a, b) => a.localeCompare(b, "pt-BR"));
-      }
-
-      function renderPortfolioCategoryOptions(selected = byId("portfolioCategory")?.value || "") {
-        const field = byId("portfolioCategory");
-        if (!field) return;
-        const categories = getPortfolioCategories();
-        field.innerHTML = `<option value="">Selecione uma categoria</option>${categories.map((category) => `<option value="${escapeHtml(category)}">${escapeHtml(category)}</option>`).join("")}`;
-        field.value = categories.includes(selected) ? selected : "";
-      }
-
-      function setupPortfolioCategoryControl() {
-        const oldField = byId("portfolioCategory");
-        if (!oldField || oldField.tagName === "SELECT") return;
-        const wrapper = document.createElement("div");
-        wrapper.className = "field";
-        wrapper.innerHTML = `<label for="portfolioCategory">Categoria</label><select id="portfolioCategory"><option value="">Selecione uma categoria</option></select><div class="client-link-actions" style="margin-top:8px"><input id="newPortfolioCategory" autocomplete="off" placeholder="Nova categoria" aria-label="Nova categoria" /><button class="btn" id="addPortfolioCategory" type="button">Criar categoria</button></div><div class="portfolio-category-manager" id="portfolioCategoriesList" aria-live="polite"></div>`;
-        oldField.closest(".field").replaceWith(wrapper);
-        byId("addPortfolioCategory").addEventListener("click", addPortfolioCategory);
-        byId("portfolioCategoriesList").addEventListener("click", handlePortfolioCategoryAction);
-        renderPortfolioCategoryOptions();
-        renderPortfolioCategoriesManager();
-      }
-
-      async function addPortfolioCategory() {
-        const field = byId("newPortfolioCategory");
-        const category = field.value.trim();
-        if (!category) return field.focus();
-        const previousCategory = field.dataset.editingCategory || "";
-        const categories = getPortfolioCategories();
-        const duplicate = categories.some((saved) => saved !== previousCategory && saved.localeCompare(category, "pt-BR", { sensitivity: "accent" }) === 0);
-        if (duplicate) {
-          setStatus("Já existe uma categoria com esse nome.");
-          return field.focus();
-        }
-        try {
-          let items = loadPortfolioItems();
-          let updatedCategories = categories;
-          if (previousCategory) {
-            updatedCategories = categories.map((saved) => saved === previousCategory ? category : saved);
-            items = items.map((item) => item.category === previousCategory ? { ...item, category } : item);
-          } else if (!categories.some((saved) => saved.localeCompare(category, "pt-BR", { sensitivity: "accent" }) === 0)) {
-            updatedCategories = [...categories, category];
-          }
-          await savePortfolioItemsToCloud(items, updatedCategories);
-          savePortfolioItems(items);
-          savePortfolioCategories(updatedCategories);
-          field.value = "";
-          delete field.dataset.editingCategory;
-          byId("addPortfolioCategory").textContent = "Criar categoria";
-          renderPortfolioCategoryOptions(category);
-          renderPortfolioCategoriesManager();
-          setStatus(previousCategory ? "Categoria e projetos relacionados atualizados." : "Categoria criada e salva para os próximos trabalhos.");
-        } catch (error) { setStatus(error.message || "Nao foi possivel salvar a categoria na nuvem."); }
-      }
-
-      function renderPortfolioCategoriesManager() {
-        const target = byId("portfolioCategoriesList");
-        if (!target) return;
-        const categories = getPortfolioCategories();
-        target.innerHTML = `<p class="hint" style="margin:12px 0 6px">Gerenciar categorias</p>${categories.length ? categories.map((category) => `<div class="user-row"><strong>${escapeHtml(category)}</strong><div class="client-link-actions"><button class="btn" type="button" data-edit-category="${escapeHtml(category)}">Editar</button><button class="btn danger" type="button" data-delete-category="${escapeHtml(category)}">Apagar</button></div></div>`).join("") : `<p class="hint">Nenhuma categoria criada.</p>`}`;
-      }
-
-      async function handlePortfolioCategoryAction(event) {
-        const categoryToEdit = event.target.dataset.editCategory;
-        const categoryToDelete = event.target.dataset.deleteCategory;
-        if (categoryToEdit) {
-          const field = byId("newPortfolioCategory");
-          field.value = categoryToEdit;
-          field.dataset.editingCategory = categoryToEdit;
-          byId("addPortfolioCategory").textContent = "Salvar edição";
-          field.focus();
-          return;
-        }
-        if (!categoryToDelete) return;
-        const relatedItems = loadPortfolioItems().filter((item) => item.category === categoryToDelete);
-        const message = relatedItems.length
-          ? `Apagar a categoria “${categoryToDelete}”? Ela será removida de ${relatedItems.length} trabalho(s), mas os trabalhos continuarão no portfólio.`
-          : `Apagar a categoria “${categoryToDelete}”?`;
-        if (!confirm(message)) return;
-        try {
-          const items = loadPortfolioItems().map((item) => item.category === categoryToDelete ? { ...item, category: "" } : item);
-          const categories = loadPortfolioCategories().filter((category) => category !== categoryToDelete);
-          await savePortfolioItemsToCloud(items, categories);
-          savePortfolioItems(items);
-          savePortfolioCategories(categories);
-          renderPortfolioCategoryOptions();
-          renderPortfolioCategoriesManager();
-          renderPortfolioAdmin();
-          setStatus("Categoria apagada.");
-        } catch (error) { setStatus(error.message || "Não foi possível apagar a categoria na nuvem."); }
-      }
-
-      async function savePortfolioItemsToCloud(items, categories = getPortfolioCategories()) {
-        const response = await fetch(`${jsonBinBaseUrl}/${portfolioRegistryBinId}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json", ...jsonBinHeaders },
-          body: JSON.stringify({ items, categories, updatedAt: new Date().toISOString() })
+      async function saveUsersToServer(user) {
+        const response = await fetch(`${apiBase}/users`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(user)
         });
-        if (!response.ok) throw new Error("Não foi possível salvar o portfólio na nuvem.");
+        if (!response.ok) throw new Error("N�o foi poss�vel salvar o usu�rio no servidor.");
       }
 
-      async function syncPortfolioFromCloud() {
-        try {
-          const response = await fetch(`${jsonBinBaseUrl}/${portfolioRegistryBinId}/latest?meta=false`, { headers: jsonBinHeaders });
-          if (!response.ok) throw new Error();
-          const data = await response.json();
-          if (Array.isArray(data.items)) {
-            savePortfolioItems(data.items);
-            if (Array.isArray(data.categories)) savePortfolioCategories(data.categories);
-            renderPublicPortfolio();
-            renderPortfolioAdmin();
-            renderPortfolioCategoryOptions();
-          }
-        } catch {
-          console.warn("Portfólio em nuvem indisponível; usando cópia local.");
-        }
+      async function deleteUserFromServer(login) {
+        await fetch(`${apiBase}/users/${encodeURIComponent(login)}`, { method: "DELETE" });
       }
 
-      async function uploadPortfolioMedia(files) {
-        const uploaded = [];
-        for (const file of files) {
-          if (!file.type.startsWith("image/") && !file.type.startsWith("video/")) throw new Error(`${file.name} nao e uma imagem ou video valido.`);
-          if (file.size > 100 * 1024 * 1024) throw new Error(`${file.name} ultrapassa o limite de 100 MB por arquivo.`);
-          const formData = new FormData();
-          formData.append("file", file);
-          formData.append("upload_preset", cloudinaryUploadPresetForUpload);
-          const resourceType = file.type.startsWith("video/") ? "video" : "image";
-          let response;
-          try {
-            response = await fetch(`https://api.cloudinary.com/v1_1/${cloudinaryCloudName}/${resourceType}/upload`, { method: "POST", body: formData });
-          } catch {
-            throw new Error(`Não foi possível conectar ao serviço de mídia para enviar ${file.name}. Verifique sua conexão e tente novamente.`);
-          }
-          if (!response.ok) {
-            let detail = "";
-            try { detail = (await response.json()).error?.message || ""; } catch { /* fallback below */ }
-            throw new Error(`Falha ao enviar ${file.name}${detail ? `: ${detail}` : ` (erro ${response.status})`}.`);
-          }
-          const data = await response.json();
-          uploaded.push({ url: data.secure_url, type: data.resource_type, publicId: data.public_id, name: file.name, duration: data.duration || null });
-        }
-        return uploaded;
-      }
-
-      function getPortfolioFormData() {
-        return {
-          id: byId("portfolioEditingId").value || `portfolio-${Date.now()}`,
-          title: byId("portfolioTitle").value.trim(),
-          category: byId("portfolioCategory").value.trim(),
-          image: byId("portfolioImage").value.trim(),
-          media: [],
-          description: byId("portfolioDescription").value.trim(),
-          link: byId("portfolioLink").value.trim()
-        };
-      }
-
-      function clearPortfolioForm() {
-        ["portfolioEditingId", "portfolioTitle", "portfolioImage", "portfolioDescription", "portfolioLink", "portfolioMedia", "newPortfolioCategory"].forEach((id) => {
-          const field = byId(id);
-          if (field) field.value = "";
-        });
-        byId("savePortfolioItem").textContent = "Salvar trabalho";
-        renderPortfolioCategoryOptions();
-        renderPortfolioCategoriesManager();
-        byId("portfolioMediaMessage").textContent = "Envie imagens ou vídeos para a nuvem. Você pode selecionar vários arquivos.";
-      }
-
-      function renderPublicPortfolio() {
-        const target = byId("publicPortfolio");
-        if (!target) return;
-        const items = loadPortfolioItems();
-        if (!items.length) {
-          target.innerHTML = `<div class="portfolio-empty">O portfólio ainda não possui trabalhos cadastrados.</div>`;
-          return;
-        }
-        target.innerHTML = items.map((item) => {
-          const image = item.image || "assets/logo-innovae.png";
-          const body = `
-            <article class="portfolio-card">
-              <img src="${escapeHtml(image)}" alt="${escapeHtml(item.title || "Trabalho da Innovae Digital")}" loading="lazy" />
-              <div class="portfolio-card-body">
-                <span class="portfolio-category">${escapeHtml(item.category || "Projeto")}</span>
-                <h3>${escapeHtml(item.title || "Trabalho sem título")}</h3>
-                <p>${escapeHtml(item.description || "Projeto desenvolvido pela Innovae Digital.")}</p>
-                ${item.link ? `<a href="${escapeHtml(item.link)}" target="_blank" rel="noopener noreferrer">Ver trabalho</a>` : ""}
-              </div>
-            </article>
-          `;
-          return body;
-        }).join("");
-      }
-
-      function renderPortfolioAdmin() {
-        const target = byId("portfolioList");
-        if (!target) return;
-        const items = loadPortfolioItems();
-        if (!items.length) {
-          target.innerHTML = `<div class="portfolio-empty">Nenhum trabalho cadastrado ainda.</div>`;
-          renderPublicPortfolio();
-          renderPortfolioCategoryOptions();
-          renderPortfolioCategoriesManager();
-          return;
-        }
-        target.innerHTML = items.map((item) => `
-          <div class="portfolio-admin-card">
-            <strong>${escapeHtml(item.title || "Trabalho sem título")}</strong>
-            <div class="client-link-meta">${escapeHtml(item.category || "Projeto")} ${item.image ? "• imagem cadastrada" : "• sem imagem"}</div>
-            <div class="client-link-actions">
-              <button class="btn primary" type="button" data-edit-portfolio="${escapeHtml(item.id)}">Editar</button>
-              <button class="btn danger" type="button" data-delete-portfolio="${escapeHtml(item.id)}">Excluir</button>
-            </div>
-          </div>
-        `).join("");
-        renderPublicPortfolio();
-        renderPortfolioCategoryOptions();
-        renderPortfolioCategoriesManager();
-      }
-
-      async function savePortfolioItem() {
-        const item = getPortfolioFormData();
-        if (!item.title || !item.description) {
-          alert("Informe pelo menos o título e a descrição do trabalho.");
-          return;
-        }
-        const items = loadPortfolioItems();
-        const index = items.findIndex((saved) => saved.id === item.id);
-        const previous = index >= 0 ? items[index] : null;
-        const files = [...byId("portfolioMedia").files];
-        try {
-          if (files.length) {
-            byId("portfolioMediaMessage").textContent = `Enviando ${files.length} arquivo(s) para a nuvem...`;
-            item.media = [...(previous?.media || []), ...await uploadPortfolioMedia(files)];
-          } else {
-            item.media = previous?.media || [];
-          }
-          if (!item.image) item.image = item.media.find((media) => media.type === "image")?.url || previous?.image || "";
-          if (index >= 0) items[index] = item;
-          else items.unshift(item);
-          await savePortfolioItemsToCloud(items);
-          savePortfolioItems(items);
-          savePortfolioCategories(getPortfolioCategories());
-          clearPortfolioForm();
-          byId("portfolioMediaMessage").textContent = "Arquivos salvos na nuvem com sucesso.";
-          renderPortfolioAdmin();
-          setStatus("Trabalho e mídias salvos no portfólio em nuvem.");
-        } catch (error) {
-          byId("portfolioMediaMessage").textContent = error.message || "Falha ao enviar a mídia.";
-          setStatus("O projeto não foi salvo. A mensagem acima indica o motivo do envio.");
-        }
-      }
-
-      function editPortfolioItem(id) {
-        const item = loadPortfolioItems().find((saved) => saved.id === id);
-        if (!item) return;
-        byId("portfolioEditingId").value = item.id;
-        byId("portfolioTitle").value = item.title || "";
-        renderPortfolioCategoryOptions(item.category || "");
-        byId("portfolioImage").value = item.image || "";
-        byId("portfolioMediaMessage").textContent = `${(item.media || []).length} mídia(s) já salva(s) na nuvem. Novos arquivos serão adicionados.`;
-        byId("portfolioDescription").value = item.description || "";
-        byId("portfolioLink").value = item.link || "";
-        byId("savePortfolioItem").textContent = "Salvar alterações";
-      }
-
-      function loadUsers() {
-        try {
-          const saved = JSON.parse(localStorage.getItem(usersStorageKey) || "[]");
-          if (Array.isArray(saved) && saved.length) return saved;
-        } catch {}
-        return [];
-      }
-
-      function saveUsers(users) {
-        localStorage.setItem(usersStorageKey, JSON.stringify(users));
-      }
-
-      function hasPendingUsersSync() {
-        return localStorage.getItem(usersPendingSyncStorageKey) === "true";
-      }
-
-      function markUsersPendingSync(isPending) {
-        if (isPending) localStorage.setItem(usersPendingSyncStorageKey, "true");
-        else localStorage.removeItem(usersPendingSyncStorageKey);
-      }
-
-      function mergeUsers(localUsers, remoteUsers) {
-        const users = new Map(remoteUsers.map((user) => [user.login, user]));
-        localUsers.forEach((user) => {
-          const remoteUser = users.get(user.login);
-          if (!remoteUser || new Date(user.updatedAt || 0) > new Date(remoteUser.updatedAt || 0)) {
-            users.set(user.login, user);
-          }
-        });
-        return [...users.values()];
-      }
-
-      async function saveUsersToCloud(users = loadUsers()) {
-        const response = await fetch(`${jsonBinBaseUrl}/${usersRegistryBinId}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json", ...jsonBinHeaders },
-          body: JSON.stringify({ items: users, updatedAt: new Date().toISOString() })
-        });
-        if (!response.ok) throw new Error(`Não foi possível sincronizar os usuários na nuvem (erro ${response.status}).`);
-      }
-
-      async function syncUsersFromCloud() {
-        if (usersSyncInProgress) return;
-        usersSyncInProgress = true;
-        try {
-          const response = await fetch(`${jsonBinBaseUrl}/${usersRegistryBinId}/latest?meta=false&sync=${Date.now()}`, {
-            headers: jsonBinHeaders,
-            cache: "no-store"
-          });
-          if (!response.ok) throw new Error();
-          const remote = await response.json();
-          const remoteUsers = Array.isArray(remote.items) ? remote.items : [];
-          const localUsers = loadUsers();
-          const remoteUpdatedAt = new Date(remote.updatedAt || 0).getTime();
-          const hasNewerLocalChange = localUsers.some((user) => new Date(user.updatedAt || 0).getTime() > remoteUpdatedAt);
-          // A nuvem é a fonte definitiva. Só mesclamos se este próprio
-          // aparelho tiver uma alteração pendente, ou uma edição mais recente
-          // que a versão remota; assim um usuário apagado em outro dispositivo
-          // jamais é recriado por uma cópia antiga.
-          if (hasPendingUsersSync() || hasNewerLocalChange) {
-            const users = mergeUsers(localUsers, remoteUsers);
-            saveUsers(users);
-            await saveUsersToCloud(users);
-            markUsersPendingSync(false);
-          } else {
-            saveUsers(remoteUsers);
-          }
-          renderUsers();
-          renderLoginUsers();
-        } catch (error) {
-          console.warn("Não foi possível sincronizar os usuários.", error);
-        } finally {
-          usersSyncInProgress = false;
-        }
-      }
-
-      function renderUsers() {
+      async function renderUsers() {
         const list = byId("userList");
         if (!list) return;
-        const users = loadUsers();
+        const users = await loadUsers();
         list.innerHTML = users.map((user) => `
           <div class="user-row">
             <strong>${escapeHtml(user.login)}</strong>
@@ -2742,11 +2398,11 @@
         `).join("");
       }
 
-      function renderLoginUsers(selectedLogin = byId("loginUser")?.value || "") {
+      async function renderLoginUsers(selectedLogin = byId("loginUser")?.value || "") {
         const select = byId("loginUser");
         if (!select) return;
-        const users = loadUsers();
-        select.innerHTML = `<option value="">Selecione seu usuário</option>${users.map((user) => `<option value="${escapeHtml(user.login)}">${escapeHtml(user.login)}</option>`).join("")}`;
+        const users = await loadUsers();
+        select.innerHTML = `<option value="">Selecione seu usu�rio</option>${users.map((user) => `<option value="${escapeHtml(user.login)}">${escapeHtml(user.login)}</option>`).join("")}`;
         select.value = selectedLogin || "";
       }
 
@@ -2760,14 +2416,14 @@
         byId("systemContent").hidden = true;
       }
 
-      function showLoginOnly() {
+      async function showLoginOnly() {
         byId("siteHome").hidden = false;
         byId("systemApp").hidden = false;
         byId("systemApp").classList.add("login-view", "login-overlay");
         document.body.classList.add("login-active");
         sessionStorage.setItem(loginViewStorageKey, "true");
         window.scrollTo({ top: 0, behavior: "smooth" });
-        renderLoginUsers(byId("loginUser").value);
+        await renderLoginUsers(byId("loginUser").value);
         byId("loginPanel").hidden = false;
         byId("systemContent").hidden = true;
         byId("loginUser").focus();
@@ -2782,15 +2438,15 @@
         byId("loginPanel").hidden = true;
         byId("systemContent").hidden = false;
         renderUsers();
-        renderPortfolioAdmin();
       }
 
-      function login() {
+      async function login() {
         const loginValue = byId("loginUser").value.trim();
         const passwordValue = byId("loginPassword").value;
-        const user = loadUsers().find((item) => item.login === loginValue && item.password === passwordValue);
+        const users = await loadUsers();
+        const user = users.find((item) => item.login === loginValue && item.password === passwordValue);
         if (!user) {
-          byId("loginMessage").textContent = "Login ou senha inválidos.";
+          byId("loginMessage").textContent = "Login ou senha inv�lidos.";
           return;
         }
         sessionStorage.setItem(sessionStorageKey, user.login);
@@ -2803,31 +2459,15 @@
         const loginValue = byId("newUserLogin").value.trim();
         const passwordValue = byId("newUserPassword").value;
         if (!loginValue || !passwordValue) {
-          alert("Informe login e senha para salvar o usuário.");
+          alert("Informe login e senha para salvar o usu�rio.");
           return;
         }
-        await usersSyncPromise;
-        const users = loadUsers();
-        const existing = users.find((user) => user.login === loginValue);
-        if (existing) {
-          existing.password = passwordValue;
-        } else {
-          users.push({ login: loginValue, password: passwordValue, updatedAt: new Date().toISOString() });
-        }
-        if (existing) existing.updatedAt = new Date().toISOString();
-        saveUsers(users);
-        markUsersPendingSync(true);
-        renderLoginUsers(loginValue);
+        await saveUsersToServer({ login: loginValue, password: passwordValue });
+        await renderLoginUsers(loginValue);
         byId("newUserLogin").value = "";
         byId("newUserPassword").value = "";
-        renderUsers();
-        try {
-          await saveUsersToCloud(users);
-          markUsersPendingSync(false);
-          setStatus(`Usuário ${loginValue} salvo e sincronizado.`);
-        } catch {
-          setStatus(`Usuário ${loginValue} salvo neste dispositivo, mas a nuvem não respondeu.`);
-        }
+        await renderUsers();
+        setStatus(`Usuário ${loginValue} salvo no MongoDB.`);
       }
 
       function byId(id) {
@@ -2941,7 +2581,7 @@
 
       async function loadMaterialPresets() {
         try {
-          const response = await fetch(`${apiBase}/materials, { cache: 'no-store' });
+          const response = await fetch(`${apiBase}/materials`, { cache: "no-store" });
           const list = response.ok ? await response.json().catch(() => []) : [];
           return [...new Set([...defaultMaterials, ...(Array.isArray(list) ? list : [])].map((item) => String(item).trim()).filter(Boolean))];
         } catch {
@@ -2950,7 +2590,7 @@
       }
 
       async function saveMaterialPresets() {
-        await fetch(`${apiBase}/materials, {
+        await fetch(`${apiBase}/materials`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ items: materialPresets })
@@ -2990,11 +2630,13 @@
 
       async function loadSavedQuotes() {
         try {
-          const response = await fetch(`${apiBase}/orcamentos, { cache: 'no-store' });
+          const response = await fetch(`${apiBase}/orcamentos`, { cache: "no-store" });
           const quotes = response.ok ? await response.json().catch(() => []) : [];
-          return Array.isArray(quotes) ? quotes : [];
+          savedQuotes = Array.isArray(quotes) ? quotes.map((quote) => ({ ...quote, id: quote.id || quote._id })) : [];
+          return savedQuotes;
         } catch {
-          return [];
+          savedQuotes = [];
+          return savedQuotes;
         }
       }
 
@@ -3011,17 +2653,21 @@
           city: data.city,
           email: data.email,
           social: data.social,
-          project: data.project || {}
+          project: data.project || {},
+          references: data.references || []
         };
-        const response = await fetch(`${apiBase}/orcamentos, {
-          method: 'POST',
+        const isEditing = Boolean(editingQuoteId);
+        const response = await fetch(`${apiBase}/orcamentos${isEditing ? `/${encodeURIComponent(editingQuoteId)}` : ""}`, {
+          method: isEditing ? 'PUT' : 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
-        if (!response.ok) throw new Error('N�o foi poss�vel salvar o or�amento no servidor.');
-        const result = await response.json();
+        if (!response.ok) throw new Error('N�o foi poss�vel salvar o or�amento no servidor.');
+        const result = await response.json().catch(() => ({}));
+        const record = { ...payload, id: isEditing ? editingQuoteId : result.id };
+        await loadSavedQuotes();
         renderDbStats();
-        return { ...payload, id: result.id };
+        return record;
       }
 
       async function renderDbStats() {
@@ -3035,17 +2681,6 @@
         const url = new URL('cliente.html', window.location.href);
         url.searchParams.set('orcamento', record.id);
         return url.href;
-      }
-
-      async function saveQuoteToCloud(data) {
-        const response = await fetch(`${apiBase}/orcamentos, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
-        });
-        const result = await response.json().catch(() => ({}));
-        if (!response.ok) throw new Error(result.erro || 'Falha ao salvar or�amento.');
-        return result.id;
       }
 
       async function copyText(value) {
@@ -3064,7 +2699,7 @@
         input.remove();
       }
 
-      function renderClientLinks(quotes = loadSavedQuotes()) {
+      function renderClientLinks(quotes = savedQuotes) {
         if (!clientLinks) return;
         if (!quotes.length) {
           clientLinks.innerHTML = `<p class="hint">Nenhum link criado ainda.</p>`;
@@ -3074,10 +2709,10 @@
         quotes.slice(0, 20).forEach((quote) => {
           const card = document.createElement("div");
           card.className = "client-link-card";
-          const createdAt = quote.createdAt ? new Date(quote.createdAt).toLocaleString("pt-BR") : "-";
+          const createdAt = (quote.createdAt || quote.dataCriacao) ? new Date(quote.createdAt || quote.dataCriacao).toLocaleString("pt-BR") : "-";
           card.innerHTML = `
             <strong>${escapeHtml(quote.clientName || "Cliente")} - ${escapeHtml(quote.invoiceNumber || "")}</strong>
-            <div class="client-link-meta">${createdAt} | ${money(quote.total)} | ${quote.binId ? "Link enviado ativo" : "Salvo localmente"}</div>
+            <div class="client-link-meta">${createdAt} | ${money(quote.total)} | Link ativo</div>
             <div class="client-link-actions">
               <button class="btn primary" type="button" data-edit-client-link="${escapeHtml(quote.id)}">Editar orçamento</button>
               <button class="btn" type="button" data-copy-client-link="${escapeHtml(quote.id)}">Copiar link</button>
@@ -3115,7 +2750,7 @@
         const banner = byId("editBanner");
         const label = byId("editingQuoteLabel");
         const linkButton = byId("createClientLink");
-        const activeRecord = record || loadSavedQuotes().find((quote) => quote.id === editingQuoteId);
+        const activeRecord = record || savedQuotes.find((quote) => quote.id === editingQuoteId);
         if (banner) banner.classList.toggle("active", Boolean(editingQuoteId));
         if (label) label.textContent = activeRecord ? `${activeRecord.clientName || "Cliente"} - ${activeRecord.invoiceNumber || ""}` : "";
         if (linkButton) linkButton.textContent = editingQuoteId ? "SALVAR ALTERAÇÕES NO LINK DO CLIENTE" : "CRIAR LINK PARA CLIENTE";
@@ -3145,39 +2780,27 @@
         if (!validateQuoteData(data, "criar o link")) return;
         try {
           setStatus("Salvando orçamento na nuvem...");
-          const previousRecord = loadSavedQuotes().find((quote) => (
-            (editingQuoteId && quote.id === editingQuoteId) ||
-            quote.invoiceNumber === data.invoiceNumber
-          ));
-          data.cloudSavedAt = new Date().toISOString();
-          const binId = await saveQuoteToCloud(data, previousRecord);
-          const record = saveQuoteRecord({ ...data, binId });
-          let registrySynced = true;
-          try {
-            await saveQuotesRegistryToCloud(loadSavedQuotes());
-          } catch (error) {
-            console.error(error);
-            registrySynced = false;
-          }
+          const record = await saveQuoteRecord(data);
           const link = getClientLink(record);
           await copyText(link);
           editingQuoteId = record.id;
           updateEditState(record);
-          setStatus(registrySynced ? `Link do cliente copiado: ${link}` : `Link criado, mas a lista em nuvem ainda precisa sincronizar: ${link}`);
+          setStatus(`Link do cliente copiado: ${link}`);
         } catch (error) {
           console.error(error);
-          alert("Não foi possível criar o link na nuvem. Confira sua chave do JSONBin e tente novamente.");
-          setStatus("Falha ao criar link na nuvem.");
+          alert("Não foi possível criar o link do cliente. Verifique se o servidor está conectado ao MongoDB.");
+          setStatus("Falha ao criar link do cliente.");
         }
       }
 
-      function exportDatabase() {
+      async function exportDatabase() {
+        await loadSavedQuotes();
         const payload = {
           version: 1,
           exportedAt: new Date().toISOString(),
           nextInvoiceNumber: fields.invoiceNumber.value,
           materialPresets,
-          quotes: loadSavedQuotes()
+          quotes: savedQuotes
         };
         const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
         const link = document.createElement("a");
@@ -3192,7 +2815,7 @@
 
       function importDatabaseFile(file) {
         const reader = new FileReader();
-        reader.onload = () => {
+        reader.onload = async () => {
           try {
             const payload = JSON.parse(reader.result);
             if (!payload || typeof payload !== "object") throw new Error("Arquivo inválido");
@@ -3206,10 +2829,12 @@
               renderMaterialPresets();
             }
             if (Array.isArray(payload.quotes)) {
-              localStorage.setItem(quotesStorageKey, JSON.stringify(payload.quotes.slice(0, 500)));
-              saveQuotesRegistryToCloud(loadSavedQuotes()).catch(() => setStatus("Backup importado localmente, mas a nuvem não respondeu."));
+              editingQuoteId = null;
+              for (const quote of payload.quotes.slice(0, 500)) {
+                await saveQuoteRecord(quote);
+              }
             }
-            renderDbStats();
+            await renderDbStats();
             renderCalculator();
             renderPreview();
             setStatus("Backup importado com sucesso.");
@@ -3221,18 +2846,15 @@
       }
 
       async function clearDatabase() {
-        if (!confirm("Tem certeza que deseja limpar histórico e materiais salvos deste navegador?")) return;
+        if (!confirm("Tem certeza que deseja limpar histórico e materiais salvos no MongoDB?")) return;
         localStorage.removeItem(materialStorageKey);
-        localStorage.removeItem(quotesStorageKey);
-        materialPresets = loadMaterialPresets();
+        await loadSavedQuotes();
+        await Promise.all(savedQuotes.map((quote) => fetch(`${apiBase}/orcamentos/${encodeURIComponent(quote.id)}`, { method: "DELETE" })));
+        savedQuotes = [];
+        materialPresets = await loadMaterialPresets();
         renderMaterialPresets();
-        renderDbStats();
-        try {
-          await saveQuotesRegistryToCloud([]);
-          setStatus("Banco de dados limpo e sincronizado. A numeração atual foi mantida.");
-        } catch {
-          setStatus("Banco local limpo. Não foi possível sincronizar a nuvem agora.");
-        }
+        await renderDbStats();
+        setStatus("Banco de dados limpo. A numeração atual foi mantida.");
       }
 
       function formatArea(value) {
@@ -3556,7 +3178,7 @@
         return new Blob([Uint8Array.from(pdf, (char) => char.charCodeAt(0))], { type: "application/pdf" });
       }
 
-      function downloadPdf() {
+      async function downloadPdf() {
         const data = getFormData();
         if (!data.clientName.trim()) {
           alert("Informe o nome do cliente antes de gerar o PDF.");
@@ -3567,7 +3189,7 @@
           alert("Adicione pelo menos um item válido ao orçamento.");
           return;
         }
-        saveQuoteRecord(data);
+        await saveQuoteRecord(data);
         window.print();
         const next = incrementInvoiceNumber(data.invoiceNumber);
         fields.invoiceNumber.value = next;
@@ -3626,7 +3248,7 @@
           alert("Adicione pelo menos um item válido ao orçamento.");
           return;
         }
-        saveQuoteRecord(data);
+        await saveQuoteRecord(data);
         try {
           const blob = await createPdfBlobFromPreview(document.getElementById("preview"));
           const filename = `${sanitizeFileName(data.clientName)}-${data.invoiceNumber}.pdf`;
@@ -3659,7 +3281,7 @@
           alert("Adicione pelo menos um item válido ao orçamento.");
           return;
         }
-        saveQuoteRecord(data);
+        await saveQuoteRecord(data);
         try {
           const blob = await createPdfBlobFromPreview(document.getElementById("preview"));
           const filename = `${sanitizeFileName(data.clientName)}-${data.invoiceNumber}.pdf`;
@@ -3717,7 +3339,7 @@
           alert("Adicione pelo menos um item válido ao orçamento.");
           return;
         }
-        saveQuoteRecord(data);
+        await saveQuoteRecord(data);
         try {
           const blob = await createJpegBlob(document.getElementById("preview"));
           const filename = `${sanitizeFileName(data.clientName)}-${data.invoiceNumber}.jpg`;
@@ -3797,28 +3419,6 @@
           if (event.key === "Enter") login();
         });
         byId("saveUser").addEventListener("click", saveUserFromForm);
-        byId("savePortfolioItem").addEventListener("click", savePortfolioItem);
-        byId("clearPortfolioForm").addEventListener("click", clearPortfolioForm);
-        byId("portfolioList").addEventListener("click", async (event) => {
-          const editId = event.target.dataset.editPortfolio;
-          const deleteId = event.target.dataset.deletePortfolio;
-          if (editId) {
-            editPortfolioItem(editId);
-          }
-          if (deleteId) {
-            if (!confirm("Excluir este trabalho do portfólio?")) return;
-            try {
-              const items = loadPortfolioItems().filter((item) => item.id !== deleteId);
-              await savePortfolioItemsToCloud(items);
-              savePortfolioItems(items);
-              clearPortfolioForm();
-              renderPortfolioAdmin();
-              setStatus("Trabalho removido do portfólio em nuvem.");
-            } catch {
-              setStatus("Não foi possível remover o trabalho da nuvem.");
-            }
-          }
-        });
         byId("logoutButton").addEventListener("click", () => {
           sessionStorage.removeItem(sessionStorageKey);
           showPublicSite();
@@ -3826,25 +3426,16 @@
         byId("userList").addEventListener("click", async (event) => {
           const loginToRemove = event.target.dataset.removeUser;
           if (!loginToRemove) return;
-          await usersSyncPromise;
-          const users = loadUsers();
+          const users = await loadUsers();
           if (users.length === 1) {
-            alert("Mantenha pelo menos um usuário cadastrado.");
+            alert("Mantenha pelo menos um usu�rio cadastrado.");
             return;
           }
-          if (!confirm(`Remover o usuário ${loginToRemove}?`)) return;
-          const updatedUsers = users.filter((user) => user.login !== loginToRemove);
-          saveUsers(updatedUsers);
-          markUsersPendingSync(true);
-          renderUsers();
-          renderLoginUsers();
-          try {
-            await saveUsersToCloud(updatedUsers);
-            markUsersPendingSync(false);
-            setStatus("Usuário removido e sincronizado.");
-          } catch {
-            setStatus("Usuário removido neste dispositivo, mas a nuvem não respondeu.");
-          }
+          if (!confirm(`Remover o usu�rio ${loginToRemove}?`)) return;
+          await deleteUserFromServer(loginToRemove);
+          await renderUsers();
+          await renderLoginUsers();
+          setStatus("Usu�rio removido do MongoDB.");
         });
 
         Object.keys(defaults).forEach((key) => {
@@ -3901,7 +3492,7 @@
         });
         byId("referencePhotos").addEventListener("change", async (event) => {
           try { await addReferencePhotos(event.target.files); }
-          catch (error) { alert(error.message || "Não foi possível adicionar a foto."); }
+          catch (error) { alert(error.message || "N�o foi poss�vel adicionar a foto."); }
           event.target.value = "";
         });
         byId("referencePreview").addEventListener("click", (event) => {
@@ -3922,7 +3513,7 @@
         if (byId("printPdf")) byId("printPdf").addEventListener("click", printPdf);
         if (byId("saveNumber")) byId("saveNumber").addEventListener("click", () => {
           localStorage.setItem(storageKey, fields.invoiceNumber.value);
-          setStatus(`Número ${fields.invoiceNumber.value} salvo para o próximo orçamento.`);
+          setStatus(`N�mero ${fields.invoiceNumber.value} salvo para o pr�ximo or�amento.`);
         });
         byId("exportDb").addEventListener("click", exportDatabase);
         byId("importDbButton").addEventListener("click", () => byId("importDb").click());
@@ -3932,123 +3523,16 @@
           event.target.value = "";
         });
         byId("clearDb").addEventListener("click", clearDatabase);
-        clientLinks.addEventListener("click", async (event) => {
-          const copyId = event.target.dataset.copyClientLink;
-          const openId = event.target.dataset.openClientLink;
-          const deleteId = event.target.dataset.deleteClientLink;
-          const editId = event.target.dataset.editClientLink;
-          const id = copyId || openId || deleteId || editId;
-          if (!id) return;
-          const quotes = loadSavedQuotes();
-          const record = quotes.find((quote) => quote.id === id);
-          if (!record && !deleteId) return;
-          if (editId) {
-            loadQuoteForEditing(record);
-          }
-          if (copyId) {
-            const link = getClientLink(record);
-            await copyText(link);
-            setStatus(`Link copiado: ${link}`);
-          }
-          if (openId) {
-            window.open(getClientLink(record), "_blank", "noopener");
-          }
-          if (deleteId) {
-            if (!confirm("Excluir este link de cliente? O cliente não conseguirá mais consultar esse orçamento neste navegador.")) return;
-            try {
-              await deleteQuoteFromCloud(record);
-            } catch (error) {
-              console.error(error);
-              alert("Não foi possível excluir no JSONBin. Tente novamente.");
-              return;
-            }
-            const updatedQuotes = quotes.filter((quote) => quote.id !== deleteId);
-            localStorage.setItem(quotesStorageKey, JSON.stringify(updatedQuotes));
-            try {
-              await saveQuotesRegistryToCloud(updatedQuotes);
-            } catch (error) {
-              console.error(error);
-              setStatus("Link removido localmente, mas a sincronização da lista falhou.");
-              renderDbStats();
-              return;
-            }
-            renderDbStats();
-            setStatus("Link de cliente excluído.");
-          }
-        });
-        const installButton = byId("installButton");
-        installButton.addEventListener("click", () => {
-          if (!deferredPrompt) return;
-          deferredPrompt.prompt();
-          deferredPrompt.userChoice.then((choiceResult) => {
-            if (choiceResult.outcome === "accepted") {
-              setStatus("Instalação aceita. Use o app pela tela de início.");
-            } else {
-              setStatus("Instalação cancelada.");
-            }
-            deferredPrompt = null;
-            installButton.hidden = true;
-          });
-        });
-        if (byId("resetForm")) byId("resetForm").addEventListener("click", () => {
-          fields.clientName.value = "";
-          fields.discount.value = "0";
-          items = [{ description: "", quantity: 1, unitPrice: 0 }];
-          referencePhotos = [];
-          renderReferencePhotos();
-          setProjectData();
-          editingQuoteId = null;
-          updateEditState();
-          renderItems();
-          renderPreview();
-          setStatus("Formulário limpo.");
-        });
-      }
-
-      window.addEventListener("beforeinstallprompt", (event) => {
-        event.preventDefault();
-        deferredPrompt = event;
-        const installButton = byId("installButton");
-        if (installButton) {
-          installButton.hidden = false;
-        }
-      });
-
-      window.addEventListener("appinstalled", () => {
-        setStatus("App instalado com sucesso.");
-      });
-
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("load", () => {
-          navigator.serviceWorker.register("service-worker.js").catch(() => {
-            console.warn("Falha ao registrar service worker.");
-          });
-        });
-      }
-
-      setupWorkspaceTabs();
-      setupBrandTools();
-      bind();
-      setupPortfolioCategoryControl();
+      }      bind();
       renderCalculator();
       renderItems();
       renderPreview();
       renderDbStats();
-      syncQuotesFromCloud();
-      usersSyncPromise = syncUsersFromCloud();
-      usersSyncPromise.then(() => {
-        // JSONBin não envia eventos em tempo real ao navegador; esta checagem
-        // curta atualiza outros dispositivos abertos sem exigir recarregamento.
-        window.setInterval(() => {
-          if (document.visibilityState === "visible") syncUsersFromCloud();
-        }, 5000);
-        window.addEventListener("focus", syncUsersFromCloud);
-        document.addEventListener("visibilitychange", () => {
-          if (document.visibilityState === "visible") syncUsersFromCloud();
-        });
+      loadMaterialPresets().then((loadedMaterials) => {
+        materialPresets = loadedMaterials;
+        renderMaterialPresets();
+        renderCalculator();
       });
-      renderPublicPortfolio();
-      syncPortfolioFromCloud();
       // Mantém a tela de login aberta após recarregar, sem abrir o sistema automaticamente.
       if (sessionStorage.getItem(loginViewStorageKey) === "true") {
         showLoginOnly();
@@ -4058,6 +3542,3 @@
     </script>
   </body>
 </html>
-
-
-
