@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#090909" />
+  <meta name="description" content="Acompanhe a Innovae Digital no Instagram." />
+  <meta name="robots" content="index,follow" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Instagram — Innovae Digital" />
+  <meta property="og:description" content="Bastidores, projetos e soluções visuais da Innovae Digital." />
+  <meta property="og:image" content="assets/logo-innovae.png" />
+  <title>Instagram — Innovae Digital</title>
+  <style>
+    :root { --yellow:#fff200; --black:#090909; --line:rgba(255,255,255,.17); --muted:#aaa; }
+    * { box-sizing:border-box; }
+    body { min-height:100vh; margin:0; overflow-x:hidden; background:var(--black); color:#fff; font-family:Arial,Helvetica,sans-serif; }
+    body::before,body::after { content:""; position:fixed; z-index:-1; border-radius:50%; filter:blur(1px); pointer-events:none; }
+    body::before { width:66vw; height:66vw; top:-38vw; right:-24vw; background:radial-gradient(circle,rgba(255,242,0,.2),transparent 65%); }
+    body::after { width:42vw; height:42vw; bottom:-27vw; left:-18vw; background:radial-gradient(circle,rgba(255,255,255,.09),transparent 68%); }
+    nav { display:flex; justify-content:space-between; align-items:center; gap:22px; padding:24px clamp(20px,5vw,72px); }
+    nav img { display:block; width:min(180px,45vw); height:auto; }
+    nav a { color:#fff; font-size:12px; font-weight:800; letter-spacing:.08em; text-decoration:none; text-transform:uppercase; }
+    nav a:last-child { color:var(--yellow); }
+    main { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(310px,.9fr); gap:clamp(34px,8vw,130px); align-items:center; max-width:1400px; min-height:calc(100vh - 95px); margin:auto; padding:clamp(42px,8vw,112px) clamp(20px,5vw,72px); }
+    .eyebrow { display:flex; align-items:center; gap:10px; color:var(--yellow); font-size:11px; font-weight:900; letter-spacing:.15em; text-transform:uppercase; }
+    .eyebrow::before { content:""; width:34px; height:2px; background:currentColor; }
+    h1 { max-width:800px; margin:20px 0 24px; font-size:clamp(55px,8.6vw,124px); line-height:.81; letter-spacing:-.08em; }
+    h1 em { color:var(--yellow); font-style:normal; }
+    .intro { max-width:560px; margin:0; color:var(--muted); font-size:clamp(16px,1.5vw,19px); line-height:1.6; }
+    .actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:34px; }
+    .button { display:inline-flex; align-items:center; justify-content:center; min-height:52px; padding:14px 19px; border:1px solid var(--yellow); background:var(--yellow); color:#090909; font-size:12px; font-weight:900; letter-spacing:.08em; text-decoration:none; text-transform:uppercase; box-shadow:6px 6px 0 rgba(255,242,0,.26); transition:transform .25s ease,box-shadow .25s ease; }
+    .button:hover { transform:translate(-2px,-2px); box-shadow:9px 9px 0 rgba(255,242,0,.2); }
+    .button.secondary { background:transparent; color:#fff; border-color:var(--line); box-shadow:none; }
+    .profile-card { position:relative; overflow:hidden; padding:clamp(26px,4vw,46px); border:1px solid rgba(255,242,0,.55); background:linear-gradient(135deg,rgba(255,242,0,.14),rgba(16,16,16,.95) 44%); box-shadow:16px 16px 0 rgba(255,242,0,.8),0 28px 60px rgba(0,0,0,.42); }
+    .profile-card::before { content:"@"; position:absolute; right:-12px; top:-58px; color:rgba(255,242,0,.09); font-size:240px; font-weight:900; line-height:1; }
+    .profile-card > * { position:relative; }
+    .ig-mark { display:grid; width:68px; height:68px; place-items:center; border:2px solid var(--yellow); color:var(--yellow); font-size:34px; font-weight:900; }
+    .profile-label { display:block; margin-top:30px; color:#aaa; font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; }
+    .handle { margin:7px 0 28px; font-size:clamp(25px,3vw,38px); font-weight:900; letter-spacing:-.055em; }
+    .profile-card p { max-width:370px; margin:0; color:#ddd; font-size:15px; line-height:1.55; }
+    .divider { height:1px; margin:28px 0 20px; background:var(--line); }
+    .profile-link { color:var(--yellow); font-size:13px; font-weight:800; overflow-wrap:anywhere; }
+    .note { margin-top:24px; color:#777; font-size:12px; line-height:1.45; }
+    footer { padding:22px clamp(20px,5vw,72px); border-top:1px solid var(--line); color:#777; font-size:12px; }
+    @media(max-width:760px) { nav { padding:18px 16px; } nav img { width:145px; } main { grid-template-columns:1fr; min-height:auto; padding:48px 16px 70px; } h1 { font-size:clamp(54px,16vw,86px); } .profile-card { box-shadow:9px 9px 0 rgba(255,242,0,.75); } footer { padding:20px 16px; } }
+    @media(prefers-reduced-motion:reduce) { * { transition:none!important; } }
+  </style>
+</head>
+<body>
+  <nav aria-label="Navegação principal">
+    <a href="index.html"><img src="assets/logo-innovae.png" alt="Innovae Digital" /></a>
+    <a href="index.html">← Voltar ao site</a>
+  </nav>
+  <main>
+    <section>
+      <div class="eyebrow">Innovae no Instagram</div>
+      <h1>Design em<br /><em>movimento.</em></h1>
+      <p class="intro">Acompanhe os bastidores, projetos e soluções visuais que criamos para marcas ganharem presença no digital e no ponto de venda.</p>
+      <div class="actions">
+        <a class="button" href="https://www.instagram.com/innovaedigital.midia/?hl=pt-br" target="_blank" rel="noopener noreferrer">Seguir no Instagram ↗</a>
+      </div>
+    </section>
+    <aside class="profile-card" aria-label="Perfil oficial no Instagram">
+      <div class="ig-mark" aria-hidden="true">◎</div>
+      <span class="profile-label">Perfil oficial</span>
+      <div class="handle">@innovaedigital.midia</div>
+      <p>Conteúdo sobre design gráfico, mídia digital e comunicação visual feito pela Innovae Digital.</p>
+      <div class="divider"></div>
+      <a class="profile-link" href="https://www.instagram.com/innovaedigital.midia/?hl=pt-br" target="_blank" rel="noopener noreferrer">instagram.com/innovaedigital.midia</a>
+      <div class="note">Abra o perfil para acompanhar as publicações mais recentes.</div>
+    </aside>
+  </main>
+  <footer>© Innovae Digital · Design, impressão e comunicação visual · Luziânia/GO</footer>
+</body>
+</html>
