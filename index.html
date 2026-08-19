@@ -41,6 +41,20 @@
         font-family: Arial, Helvetica, sans-serif;
         background:
           linear-gradient(135deg, rgba(255, 242, 0, .18), transparent 26%),
+      .first-user-setup {
+        margin-top: 18px;
+        padding-top: 16px;
+        border-top: 1px solid rgba(255, 255, 255, .2);
+      }
+
+      .first-user-setup strong {
+        display: block;
+        margin-bottom: 4px;
+        color: var(--yellow);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+      }
           linear-gradient(315deg, rgba(5, 5, 5, .08), transparent 32%),
           var(--page);
         background-size: 140% 140%;
@@ -481,6 +495,21 @@
         height: 16px;
         margin: 0;
         accent-color: var(--yellow);
+      }
+
+      .first-user-setup {
+        margin-top: 18px;
+        padding-top: 16px;
+        border-top: 1px solid rgba(255, 255, 255, .2);
+      }
+
+      .first-user-setup strong {
+        display: block;
+        margin-bottom: 4px;
+        color: var(--yellow);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: .08em;
       }
 
       .hint {
@@ -1996,6 +2025,19 @@
             <button class="btn" id="backToSite" type="button">Voltar ao site</button>
           </div>
           <p class="hint" id="loginMessage" aria-live="polite"></p>
+          <div class="first-user-setup" id="firstUserSetup" hidden>
+            <strong>Primeiro acesso</strong>
+            <p class="hint">Nenhum usuário foi encontrado. Cadastre o seu acesso para iniciar.</p>
+            <div class="field">
+              <label for="firstUserLogin">Novo usuário</label>
+              <input id="firstUserLogin" autocomplete="username" />
+            </div>
+            <div class="field">
+              <label for="firstUserPassword">Nova senha</label>
+              <input id="firstUserPassword" type="password" autocomplete="new-password" />
+            </div>
+            <button class="btn" id="createFirstUser" type="button">Criar primeiro acesso</button>
+          </div>
         </div>
 
         <div id="systemContent" hidden>
@@ -2421,6 +2463,27 @@
         if (!response.ok) throw new Error("N�o foi poss�vel salvar o usu�rio no servidor.");
       }
 
+      async function createFirstUser() {
+        const login = byId("firstUserLogin").value.trim();
+        const password = byId("firstUserPassword").value;
+        if (!login || !password) {
+          byId("loginMessage").textContent = "Informe usuário e senha para criar o primeiro acesso.";
+          return;
+        }
+        const user = { login, password };
+        try {
+          await saveUsersToServer(user);
+        } catch (error) {
+          console.error(error);
+          const legacyUsers = loadLegacyUsers().filter((item) => item.login !== login);
+          localStorage.setItem(legacyUsersStorageKey, JSON.stringify([...legacyUsers, user]));
+        }
+        byId("firstUserLogin").value = "";
+        byId("firstUserPassword").value = "";
+        await renderLoginUsers(login);
+        byId("loginMessage").textContent = "Usuário criado. Informe a senha para entrar.";
+      }
+
       async function deleteUserFromServer(login) {
         await fetch(`${apiBase}/users/${encodeURIComponent(login)}`, { method: "DELETE" });
       }
@@ -2446,6 +2509,7 @@
           : `<option value="">Nenhum usuário cadastrado</option>`;
         select.disabled = !users.length;
         select.value = selectedLogin || "";
+        byId("firstUserSetup").hidden = users.length > 0;
         if (!users.length) {
           byId("loginMessage").textContent = "Nenhum usuário encontrado. Verifique o MongoDB ou cadastre um usuário em uma instalação conectada.";
         }
@@ -3465,6 +3529,7 @@
         byId("showLogin").addEventListener("click", showLoginOnly);
         byId("backToSite").addEventListener("click", showPublicSite);
         byId("loginButton").addEventListener("click", login);
+        byId("createFirstUser").addEventListener("click", createFirstUser);
         byId("loginPassword").addEventListener("keydown", (event) => {
           if (event.key === "Enter") login();
         });
