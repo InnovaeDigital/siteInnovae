@@ -8,9 +8,8 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Configuração da string de conexão MongoDB
-// IMPORTANTE: Certifique-se de que a senha não contém caracteres especiais não codificados
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://innovaedigitalmedia_db_user:XuXjCSu4rypz6Jxx@cluster0.cuhm6bt.mongodb.net/orcadores_innovae?retryWrites=true&w=majority&authSource=admin';
+// A conexão deve existir somente nas variáveis de ambiente locais/Vercel.
+const MONGODB_URI = process.env.MONGODB_URI;
 const DB_NAME = 'orcadores_innovae';
 
 // Middleware
@@ -30,9 +29,21 @@ function normalizeUser(user) {
   };
 }
 
+function serializeQuote(quote) {
+  if (!quote) return quote;
+  const { _id, ...data } = quote;
+  return { ...data, id: String(_id ?? quote.id ?? '') };
+}
+
+function getObjectId(value) {
+  const text = String(value || '').trim();
+  return /^[a-f\d]{24}$/i.test(text) ? text : null;
+}
+
 // Função para conectar ao MongoDB
 async function connectToDatabase() {
   try {
+    if (!MONGODB_URI) throw new Error('MONGODB_URI não configurada.');
     console.log('📡 Conectando ao MongoDB...');
     console.log('🔗 URI:', MONGODB_URI.replace(/(:\/\/.*:)(.*)(@)/, '$1****$3'));
     
@@ -193,7 +204,7 @@ app.post('/api/orcamentos', async (req, res) => {
     
     res.status(201).json({
       mensagem: 'Orçamento criado com sucesso',
-      id: result.insertedId
+      id: String(result.insertedId)
     });
   } catch (error) {
     res.status(500).json({ erro: error.message });
@@ -204,8 +215,8 @@ app.post('/api/orcamentos', async (req, res) => {
 app.get('/api/orcamentos', async (req, res) => {
   try {
     const collection = database.collection('orcamentos');
-    const orcamentos = await collection.find({}).toArray();
-    res.json(orcamentos);
+    const orcamentos = await collection.find({}).sort({ dataAtualizacao: -1, dataCriacao: -1 }).toArray();
+    res.json(orcamentos.map(serializeQuote));
   } catch (error) {
     res.status(500).json({ erro: error.message });
   }
@@ -215,14 +226,16 @@ app.get('/api/orcamentos', async (req, res) => {
 app.get('/api/orcamentos/:id', async (req, res) => {
   try {
     const { ObjectId } = await import('mongodb');
+    const objectId = getObjectId(req.params.id);
+    if (!objectId) return res.status(400).json({ erro: 'ID de orçamento inválido' });
     const collection = database.collection('orcamentos');
-    const orcamento = await collection.findOne({ _id: new ObjectId(req.params.id) });
+    const orcamento = await collection.findOne({ _id: new ObjectId(objectId) });
     
     if (!orcamento) {
       return res.status(404).json({ erro: 'Orçamento não encontrado' });
     }
     
-    res.json(orcamento);
+    res.json(serializeQuote(orcamento));
   } catch (error) {
     res.status(500).json({ erro: error.message });
   }
@@ -232,12 +245,15 @@ app.get('/api/orcamentos/:id', async (req, res) => {
 app.put('/api/orcamentos/:id', async (req, res) => {
   try {
     const { ObjectId } = await import('mongodb');
+    const objectId = getObjectId(req.params.id);
+    if (!objectId) return res.status(400).json({ erro: 'ID de orçamento inválido' });
     const collection = database.collection('orcamentos');
+    const { _id, id, ...payload } = req.body || {};
     const resultado = await collection.updateOne(
-      { _id: new ObjectId(req.params.id) },
+      { _id: new ObjectId(objectId) },
       { 
         $set: {
-          ...req.body,
+          ...payload,
           dataAtualizacao: new Date()
         }
       }
@@ -257,8 +273,10 @@ app.put('/api/orcamentos/:id', async (req, res) => {
 app.delete('/api/orcamentos/:id', async (req, res) => {
   try {
     const { ObjectId } = await import('mongodb');
+    const objectId = getObjectId(req.params.id);
+    if (!objectId) return res.status(400).json({ erro: 'ID de orçamento inválido' });
     const collection = database.collection('orcamentos');
-    const resultado = await collection.deleteOne({ _id: new ObjectId(req.params.id) });
+    const resultado = await collection.deleteOne({ _id: new ObjectId(objectId) });
     
     if (resultado.deletedCount === 0) {
       return res.status(404).json({ erro: 'Orçamento não encontrado' });

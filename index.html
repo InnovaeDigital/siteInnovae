@@ -2497,19 +2497,13 @@
       }
 
       async function loadUsers() {
-        const legacyUsers = loadLegacyUsers();
         try {
           const response = await apiRequest("/users", { cache: "no-store" });
           if (!response.ok) throw new Error(`API de usuários respondeu ${response.status}.`);
           const users = await response.json().catch(() => []);
-          if (Array.isArray(users) && users.length) return users;
-          if (!legacyUsers.length) return [];
-
-          await Promise.all(legacyUsers.map((user) => saveUsersToServer(user)));
-          return legacyUsers;
-        } catch (error) {
-          console.error(error);
-          return legacyUsers;
+          return Array.isArray(users) ? users : [];
+        } catch {
+          return [];
         }
       }
 
@@ -2532,10 +2526,9 @@
         const user = { login, password };
         try {
           await saveUsersToServer(user);
-        } catch (error) {
-          console.error(error);
-          const legacyUsers = loadLegacyUsers().filter((item) => item.login !== login);
-          localStorage.setItem(legacyUsersStorageKey, JSON.stringify([...legacyUsers, user]));
+        } catch {
+          byId("loginMessage").textContent = "Não foi possível criar o usuário na nuvem. Verifique a conexão com o MongoDB.";
+          return;
         }
         byId("firstUserLogin").value = "";
         byId("firstUserPassword").value = "";
@@ -2871,9 +2864,9 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
-        if (!response.ok) throw new Error('N�o foi poss�vel salvar o or�amento no servidor.');
+        if (!response.ok) throw new Error("Não foi possível salvar o orçamento na nuvem.");
         const result = await response.json().catch(() => ({}));
-        const record = { ...payload, id: isEditing ? editingQuoteId : result.id };
+        const record = { ...payload, id: isEditing ? editingQuoteId : result.id, storage: "cloud" };
         await loadSavedQuotes();
         renderDbStats();
         return record;
@@ -2931,6 +2924,54 @@
           `;
           clientLinks.appendChild(card);
         });
+      }
+
+      async function handleClientLinkAction(event) {
+        const button = event.target.closest("button[data-edit-client-link], button[data-copy-client-link], button[data-open-client-link], button[data-delete-client-link]");
+        if (!button) return;
+        const quoteId = button.dataset.editClientLink || button.dataset.copyClientLink || button.dataset.openClientLink || button.dataset.deleteClientLink;
+        const quote = savedQuotes.find((item) => String(item.id) === String(quoteId));
+        if (!quote) {
+          setStatus("Esse orçamento não está mais disponível. Atualize a lista.");
+          await renderDbStats();
+          return;
+        }
+
+        if (button.dataset.editClientLink) {
+          loadQuoteForEditing(quote);
+          return;
+        }
+
+        const link = getClientLink(quote);
+        if (button.dataset.copyClientLink) {
+          try {
+            await copyText(link);
+            setStatus(`Link copiado: ${link}`);
+          } catch (error) {
+            console.error(error);
+            alert(`Copie este link manualmente:\n\n${link}`);
+          }
+          return;
+        }
+
+        if (button.dataset.openClientLink) {
+          window.open(link, "_blank", "noopener,noreferrer");
+          return;
+        }
+
+        if (button.dataset.deleteClientLink) {
+          if (!confirm(`Excluir o orçamento de ${quote.clientName || "Cliente"}? Essa ação não pode ser desfeita.`)) return;
+          try {
+            const response = await apiRequest(`/orcamentos/${encodeURIComponent(quote.id)}`, { method: "DELETE" });
+            if (!response.ok) throw new Error("Falha ao excluir orçamento.");
+            if (String(editingQuoteId) === String(quote.id)) cancelEditing();
+            await renderDbStats();
+            setStatus("Orçamento excluído.");
+          } catch (error) {
+            console.error(error);
+            alert("Não foi possível excluir o orçamento. Verifique a conexão com o servidor.");
+          }
+        }
       }
 
       function loadQuoteForEditing(record) {
@@ -3721,6 +3762,7 @@
         byId("downloadPdf").addEventListener("click", downloadPdf);
         byId("createClientLink").addEventListener("click", createClientLink);
         byId("cancelEdit").addEventListener("click", cancelEditing);
+        clientLinks.addEventListener("click", handleClientLinkAction);
         byId("downloadPdfFile").addEventListener("click", downloadPdfFile);
         byId("sharePdfWhatsApp").addEventListener("click", sharePdfToWhatsApp);
         byId("downloadJpeg").addEventListener("click", downloadJpegFile);
