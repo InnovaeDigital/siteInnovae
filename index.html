@@ -465,6 +465,24 @@
         resize: vertical;
       }
 
+      .remember-login {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 4px 0 18px;
+        color: #444;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .remember-login input {
+        width: 16px;
+        height: 16px;
+        margin: 0;
+        accent-color: var(--yellow);
+      }
+
       .hint {
         color: var(--muted);
       }
@@ -1969,6 +1987,10 @@
             <label for="loginPassword">Senha</label>
             <input id="loginPassword" type="password" autocomplete="current-password" />
           </div>
+          <label class="remember-login" for="rememberLogin">
+            <input id="rememberLogin" type="checkbox" />
+            <span>Manter conectado</span>
+          </label>
           <div class="actions">
             <button class="btn primary" id="loginButton" type="button">Entrar</button>
             <button class="btn" id="backToSite" type="button">Voltar ao site</button>
@@ -2291,7 +2313,9 @@
     <script>
       const storageKey = "innovae.nextInvoiceNumber";
       const materialStorageKey = "innovae.materialPresets";
+      const legacyUsersStorageKey = "innovae.systemUsers";
       const sessionStorageKey = "innovae.activeUser";
+      const rememberedUserStorageKey = "innovae.rememberedUser";
       const loginViewStorageKey = "innovae.loginViewOpen";
 
       const apiBase = '/api';
@@ -2362,14 +2386,29 @@
       let usersSyncPromise = Promise.resolve();
       let usersSyncInProgress = false;
 
-      async function loadUsers() {
+      function loadLegacyUsers() {
         try {
-          const response = await fetch(`${apiBase}/users`, { cache: "no-store" });
-          if (!response.ok) return [];
-          const users = await response.json().catch(() => []);
+          const users = JSON.parse(localStorage.getItem(legacyUsersStorageKey) || "[]");
           return Array.isArray(users) ? users : [];
         } catch {
           return [];
+        }
+      }
+
+      async function loadUsers() {
+        const legacyUsers = loadLegacyUsers();
+        try {
+          const response = await fetch(`${apiBase}/users`, { cache: "no-store" });
+          if (!response.ok) throw new Error(`API de usuários respondeu ${response.status}.`);
+          const users = await response.json().catch(() => []);
+          if (Array.isArray(users) && users.length) return users;
+          if (!legacyUsers.length) return [];
+
+          await Promise.all(legacyUsers.map((user) => saveUsersToServer(user)));
+          return legacyUsers;
+        } catch (error) {
+          console.error(error);
+          return legacyUsers;
         }
       }
 
@@ -2402,8 +2441,14 @@
         const select = byId("loginUser");
         if (!select) return;
         const users = await loadUsers();
-        select.innerHTML = `<option value="">Selecione seu usu�rio</option>${users.map((user) => `<option value="${escapeHtml(user.login)}">${escapeHtml(user.login)}</option>`).join("")}`;
+        select.innerHTML = users.length
+          ? `<option value="">Selecione seu usuário</option>${users.map((user) => `<option value="${escapeHtml(user.login)}">${escapeHtml(user.login)}</option>`).join("")}`
+          : `<option value="">Nenhum usuário cadastrado</option>`;
+        select.disabled = !users.length;
         select.value = selectedLogin || "";
+        if (!users.length) {
+          byId("loginMessage").textContent = "Nenhum usuário encontrado. Verifique o MongoDB ou cadastre um usuário em uma instalação conectada.";
+        }
       }
 
       function showPublicSite() {
@@ -2450,6 +2495,11 @@
           return;
         }
         sessionStorage.setItem(sessionStorageKey, user.login);
+        if (byId("rememberLogin").checked) {
+          localStorage.setItem(rememberedUserStorageKey, user.login);
+        } else {
+          localStorage.removeItem(rememberedUserStorageKey);
+        }
         byId("loginPassword").value = "";
         byId("loginMessage").textContent = "";
         showSystem();
@@ -3421,6 +3471,7 @@
         byId("saveUser").addEventListener("click", saveUserFromForm);
         byId("logoutButton").addEventListener("click", () => {
           sessionStorage.removeItem(sessionStorageKey);
+          localStorage.removeItem(rememberedUserStorageKey);
           showPublicSite();
         });
         byId("userList").addEventListener("click", async (event) => {
@@ -3534,7 +3585,11 @@
         renderCalculator();
       });
       // Mantém a tela de login aberta após recarregar, sem abrir o sistema automaticamente.
-      if (sessionStorage.getItem(loginViewStorageKey) === "true") {
+      const activeUser = sessionStorage.getItem(sessionStorageKey) || localStorage.getItem(rememberedUserStorageKey);
+      if (activeUser) {
+        sessionStorage.setItem(sessionStorageKey, activeUser);
+        showSystem();
+      } else if (sessionStorage.getItem(loginViewStorageKey) === "true") {
         showLoginOnly();
       } else {
         showPublicSite();
