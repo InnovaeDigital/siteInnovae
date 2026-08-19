@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#0a0b17" />
+    <meta name="api-base" content="" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -2397,11 +2398,18 @@
       const rememberedUserStorageKey = "innovae.rememberedUser";
       const loginViewStorageKey = "innovae.loginViewOpen";
 
-      const apiBase = '/api';
+      function resolveApiBase() {
+        const runtimeBase = typeof window.__API_BASE__ === "string" ? window.__API_BASE__.trim() : "";
+        const metaBase = document.querySelector('meta[name="api-base"]')?.content?.trim() || "";
+        const base = runtimeBase || metaBase || "/api";
+        return base.replace(/\/+$/, "") || "/api";
+      }
+
+      const apiBase = resolveApiBase();
 
       async function apiRequest(path, options = {}) {
-        if (window.location.protocol === "file:") {
-          throw new Error("A API fica disponível quando o site é servido por HTTP.");
+        if (window.location.protocol === "file:" && !/^https?:\/\//i.test(apiBase)) {
+          throw new Error("Abra o site por HTTP/HTTPS ou defina uma URL absoluta em api-base.");
         }
         let lastError;
         for (let attempt = 0; attempt < 2; attempt += 1) {

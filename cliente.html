@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="robots" content="noindex,nofollow,noarchive" />
     <meta name="theme-color" content="#0a0b17" />
+    <meta name="api-base" content="" />
     <title>Consulta de Orçamento - Innovae Digital</title>
     <style>
       :root {
@@ -844,7 +845,14 @@
     </main>
 
     <script>
-      const apiBase = "/api";
+      function resolveApiBase() {
+        const runtimeBase = typeof window.__API_BASE__ === "string" ? window.__API_BASE__.trim() : "";
+        const metaBase = document.querySelector('meta[name="api-base"]')?.content?.trim() || "";
+        const base = runtimeBase || metaBase || "/api";
+        return base.replace(/\/+$/, "") || "/api";
+      }
+
+      const apiBase = resolveApiBase();
       const company = {
         providerName: "David P. Tomé",
         phone: "(61) 93300-4316",
@@ -963,10 +971,11 @@
       }
 
       async function loadQuote(quoteId) {
-        const response = await fetch(`${apiBase}/orcamentos/${encodeURIComponent(quoteId)}`, { cache: "no-store" });
-        if (!response.ok) {
-          throw new Error("Orçamento não encontrado.");
+        if (window.location.protocol === "file:" && !/^https?:\/\//i.test(apiBase)) {
+          throw new Error("Abra o site por HTTP/HTTPS ou defina uma URL absoluta em api-base.");
         }
+        const response = await fetch(`${apiBase}/orcamentos/${encodeURIComponent(quoteId)}`, { cache: "no-store" });
+        if (!response.ok) throw new Error("Orçamento não encontrado.");
         return response.json();
       }
 
