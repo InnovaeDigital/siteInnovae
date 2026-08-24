@@ -62,6 +62,32 @@
         margin-top: 4px;
       }
 
+      .paid-hero {
+        margin: 18px 30px 0;
+        padding: 16px 18px;
+        border: 2px solid #18a957;
+        background: linear-gradient(135deg, rgba(24, 169, 87, .18), #f4fff7);
+        color: #0f6d37;
+        box-shadow: 0 14px 34px rgba(24, 169, 87, .16);
+        animation: panelEntrance .5s .1s ease both;
+      }
+
+      .paid-hero strong {
+        display: block;
+        font-size: 12px;
+        font-weight: 900;
+        letter-spacing: .2em;
+        text-transform: uppercase;
+      }
+
+      .paid-hero span {
+        display: block;
+        margin-top: 6px;
+        font-size: 18px;
+        font-weight: 800;
+        line-height: 1.2;
+      }
+
       .sheet {
         width: 800px;
         max-width: 100%;
@@ -308,6 +334,13 @@
           #ffffff;
         animation: softRise .5s .18s ease both;
       }
+      .project-status.is-paid {
+        border-color: #18a957;
+        background:
+          linear-gradient(135deg, rgba(24, 169, 87, .18), transparent 40%),
+          #f3fff7;
+        box-shadow: 0 0 0 3px rgba(24, 169, 87, .18), 0 18px 38px rgba(0, 0, 0, .12);
+      }
 
       .project-status-head {
         display: flex;
@@ -334,6 +367,9 @@
         font-size: 22px;
         line-height: 1.1;
       }
+      .project-status.is-paid .project-status-head strong {
+        color: #18a957;
+      }
 
       .delivery-pill {
         min-width: 160px;
@@ -344,6 +380,10 @@
         font-size: 12px;
         font-weight: 800;
         text-align: center;
+      }
+      .project-status.is-paid .delivery-pill {
+        border-color: #18a957;
+        color: #18a957;
       }
 
       .project-status-body {
@@ -766,7 +806,6 @@
 
         <div class="pdf-title">
           <h1>Fatura de Serviço</h1>
-          <div class="invoice-number">NÚMERO DO ORÇAMENTO: <span data-preview="invoiceNumber"></span></div>
         </div>
 
         <div class="meta">
@@ -924,8 +963,8 @@
         const total = Number.isFinite(Number(data.total)) ? Number(data.total) : Math.max(0, subtotal - discount);
         const project = data.project || {};
         const progress = Math.min(100, Math.max(0, Number(project.progress || 0)));
+        const isPaid = String(project.status || "").trim().toUpperCase() === "PAGO";
 
-        previewTargets.invoiceNumber.textContent = data.invoiceNumber || "-";
         previewTargets.clientName.textContent = data.clientName || "-";
         previewTargets.providerName.textContent = providerName;
         previewTargets.phone.textContent = phone;
@@ -933,12 +972,29 @@
         previewTargets.social.textContent = social;
         previewTargets.phoneCity.textContent = `${phone} - ${city}`;
         previewTargets.grandTotal.textContent = money(total);
+        document.querySelector(".project-status")?.classList.toggle("is-paid", isPaid);
+        let paidHero = document.getElementById("paidHero");
+        if (isPaid) {
+          if (!paidHero) {
+            paidHero = document.createElement("section");
+            paidHero.id = "paidHero";
+            paidHero.className = "paid-hero";
+            paidHero.innerHTML = `<strong>PAGO</strong><span>Documento quitado e confirmado.</span>`;
+            document.getElementById("quote")?.insertAdjacentElement("afterbegin", paidHero);
+          }
+        } else if (paidHero) {
+          paidHero.remove();
+        }
         projectTargets.status.textContent = project.status || "Orçamento enviado";
         projectTargets.deliveryDate.textContent = project.deliveryDate ? `Entrega prevista: ${formatDate(project.deliveryDate)}` : "Entrega a confirmar";
         projectTargets.progressFill.style.width = `${progress}%`;
         projectTargets.progressValue.textContent = `${progress}%`;
         projectTargets.update.textContent = project.update || "A Innovae atualizará esta área conforme o projeto avançar.";
         projectTargets.updatedAt.textContent = project.updatedAt ? `Última atualização: ${formatDateTime(project.updatedAt)}` : "";
+        if (isPaid) {
+          projectTargets.update.textContent = project.update || "Pagamento confirmado. O projeto foi marcado como PAGO.";
+          projectTargets.updatedAt.textContent = project.updatedAt ? `Pago em: ${formatDateTime(project.updatedAt)}` : "PAGO";
+        }
 
         previewRows.innerHTML = "";
         items.forEach((item) => {

@@ -115,32 +115,6 @@ app.get('/api/stats', async (req, res) => {
   }
 });
 
-app.get('/api/config/invoice-number', async (req, res) => {
-  try {
-    const configCollection = database.collection('config');
-    const entry = await configCollection.findOne({ _id: 'nextInvoiceNumber' });
-    res.json({ value: entry?.value || '208-2026' });
-  } catch (error) {
-    res.status(500).json({ erro: error.message });
-  }
-});
-
-app.put('/api/config/invoice-number', async (req, res) => {
-  try {
-    const value = String(req.body?.value || '').trim();
-    if (!value) return res.status(400).json({ erro: 'Valor inválido' });
-    const configCollection = database.collection('config');
-    await configCollection.updateOne(
-      { _id: 'nextInvoiceNumber' },
-      { $set: { value, updatedAt: new Date() } },
-      { upsert: true }
-    );
-    res.json({ value });
-  } catch (error) {
-    res.status(500).json({ erro: error.message });
-  }
-});
-
 app.get('/api/users', async (req, res) => {
   try {
     const users = await database.collection('usuarios').find({}).toArray();
@@ -294,7 +268,7 @@ app.delete('/api/orcamentos/:id', async (req, res) => {
 // Importar dados do localStorage (migração do banco antigo)
 app.post('/api/migrate-from-localstorage', async (req, res) => {
   try {
-    const { quotes, materials, users, invoiceNumber } = req.body;
+    const { quotes, materials, users } = req.body;
     
     console.log('📦 Iniciando migração de dados...');
     
@@ -346,17 +320,6 @@ app.post('/api/migrate-from-localstorage', async (req, res) => {
       );
       migrated.users = result.insertedIds.length;
       console.log(`✓ ${migrated.users} usuários importados`);
-    }
-    
-    // Salvar número do próximo invoice
-    if (invoiceNumber) {
-      const configCollection = database.collection('config');
-      await configCollection.updateOne(
-        { _id: 'nextInvoiceNumber' },
-        { $set: { value: invoiceNumber } },
-        { upsert: true }
-      );
-      console.log(`✓ Próximo número de invoice: ${invoiceNumber}`);
     }
     
     res.json({

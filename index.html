@@ -2102,7 +2102,7 @@
             <button class="btn" id="logoutButton" type="button">Sair</button>
           </div>
           <div class="user-list" id="userList"></div>
-          <p class="hint">Os usuários ficam salvos neste navegador. Para trocar a senha de um login existente, cadastre o mesmo login com a nova senha.</p>
+          <p class="hint">Os usuários ficam salvos na nuvem, no MongoDB. Para trocar a senha de um login existente, cadastre o mesmo login com a nova senha.</p>
         </div>
 
           <div class="portfolio-admin">
@@ -2151,13 +2151,16 @@
         </div>
         <button class="btn primary install-app" id="installButton" type="button" hidden>Adicionar à tela de início</button>
         <h1>Gerador de Orçamentos</h1>
-        <p class="hint">Preencha os dados, confira a prévia e gere o PDF pelo navegador. Ao gerar, o próximo número da fatura avança automaticamente.</p>
+        <p class="hint">Preencha os dados, confira a prévia e gere o PDF pelo navegador.</p>
 
         <div class="section-title">Identificação</div>
         <div class="row">
           <div class="field">
-            <label for="invoiceNumber">Número da fatura</label>
-            <input id="invoiceNumber" autocomplete="off" />
+            <label for="documentType">Tipo de documento</label>
+            <select id="documentType">
+              <option value="orçamento">Orçamento</option>
+              <option value="faturamento">Faturamento</option>
+            </select>
           </div>
           <div class="field">
             <label for="clientName">Nome do cliente</label>
@@ -2248,6 +2251,7 @@
                 <option value="Orçamento enviado">Orçamento enviado</option>
                 <option value="Aguardando aprovação">Aguardando aprovação</option>
                 <option value="Aprovado">Aprovado</option>
+                <option value="PAGO">PAGO</option>
                 <option value="Arte em criação">Arte em criação</option>
                 <option value="Produção em andamento">Produção em andamento</option>
                 <option value="Pronto para entrega">Pronto para entrega</option>
@@ -2300,7 +2304,7 @@
           <input class="hidden-input" id="importDb" type="file" accept="application/json,.json" />
           <div class="section-title">Links para clientes</div>
           <div class="client-links" id="clientLinks"></div>
-          <p class="hint">Os dados ficam salvos neste navegador. Use o backup para transferir ou guardar uma cópia.</p>
+          <p class="hint">Os orçamentos, usuários e materiais ficam salvos na nuvem. O backup serve para transferir ou guardar uma cópia local.</p>
         </div>
         <p class="hint" id="statusMessage" aria-live="polite"></p>
         </section>
@@ -2332,7 +2336,6 @@
 
           <div class="pdf-title">
             <h2>Fatura de Serviço</h2>
-            <div class="invoice-number">NÚMERO DA FATURA: <span data-preview="invoiceNumber"></span></div>
           </div>
 
           <div class="meta">
@@ -2391,7 +2394,6 @@
     </main>
 
     <script>
-      const storageKey = "innovae.nextInvoiceNumber";
       const materialStorageKey = "innovae.materialPresets";
       const legacyUsersStorageKey = "innovae.systemUsers";
       const sessionStorageKey = "innovae.activeUser";
@@ -2443,21 +2445,8 @@
           return acc;
         }, {});
 
-      function incrementInvoiceNumber(value) {
-        const match = String(value).trim().match(/^(\d+)(.*)$/);
-        if (!match) return value;
-        return `${Number(match[1]) + 1}${match[2]}`;
-      }
-
-      function getInitialInvoiceNumber() {
-        const saved = localStorage.getItem(storageKey);
-        const next = saved ? incrementInvoiceNumber(saved) : "208-2026";
-        localStorage.setItem(storageKey, next);
-        return next;
-      }
-
       const defaults = {
-        invoiceNumber: getInitialInvoiceNumber(),
+        documentType: "orçamento",
         clientName: "",
         discount: "0"
       };
@@ -2852,7 +2841,6 @@
 
       async function saveQuoteRecord(data) {
         const payload = {
-          invoiceNumber: data.invoiceNumber,
           clientName: data.clientName,
           subtotal: data.subtotal,
           discount: data.discount,
@@ -2920,10 +2908,12 @@
         quotes.slice(0, 20).forEach((quote) => {
           const card = document.createElement("div");
           card.className = "client-link-card";
+          const isPaid = String(quote.project?.status || "").trim().toUpperCase() === "PAGO";
+          if (isPaid) card.dataset.paid = "true";
           const createdAt = (quote.createdAt || quote.dataCriacao) ? new Date(quote.createdAt || quote.dataCriacao).toLocaleString("pt-BR") : "-";
           card.innerHTML = `
-            <strong>${escapeHtml(quote.clientName || "Cliente")} - ${escapeHtml(quote.invoiceNumber || "")}</strong>
-            <div class="client-link-meta">${createdAt} | ${money(quote.total)} | Link ativo</div>
+            <strong>${escapeHtml(quote.clientName || "Cliente")}</strong>
+            <div class="client-link-meta">${createdAt} | ${money(quote.total)} | ${isPaid ? "PAGO" : "Link ativo"}</div>
             <div class="client-link-actions">
               <button class="btn primary" type="button" data-edit-client-link="${escapeHtml(quote.id)}">Editar orçamento</button>
               <button class="btn" type="button" data-copy-client-link="${escapeHtml(quote.id)}">Copiar link</button>
@@ -2987,8 +2977,7 @@
         editingQuoteId = record.id;
         referencePhotos = Array.isArray(record.references) ? record.references : [];
         renderReferencePhotos();
-        fields.invoiceNumber.value = record.invoiceNumber || "";
-        fields.clientName.value = record.clientName || "";
+                fields.clientName.value = record.clientName || "";
         fields.discount.value = record.discount || 0;
         items = Array.isArray(record.items) && record.items.length
           ? record.items.map((item) => ({
@@ -3001,7 +2990,7 @@
         renderItems();
         renderPreview();
         updateEditState(record);
-        setStatus(`Orçamento ${record.invoiceNumber} carregado para edição.`);
+        setStatus(`Orçamento carregado para edição.`);
         document.querySelector(".controls").scrollTo({ top: 0, behavior: "smooth" });
       }
 
@@ -3011,7 +3000,7 @@
         const linkButton = byId("createClientLink");
         const activeRecord = record || savedQuotes.find((quote) => quote.id === editingQuoteId);
         if (banner) banner.classList.toggle("active", Boolean(editingQuoteId));
-        if (label) label.textContent = activeRecord ? `${activeRecord.clientName || "Cliente"} - ${activeRecord.invoiceNumber || ""}` : "";
+        if (label) label.textContent = activeRecord ? `${activeRecord.clientName || "Cliente"}` : "";
         if (linkButton) linkButton.textContent = editingQuoteId ? "SALVAR ALTERAÇÕES NO LINK DO CLIENTE" : "CRIAR LINK PARA CLIENTE";
       }
 
@@ -3057,8 +3046,7 @@
         const payload = {
           version: 1,
           exportedAt: new Date().toISOString(),
-          nextInvoiceNumber: fields.invoiceNumber.value,
-          materialPresets,
+                    materialPresets,
           quotes: savedQuotes
         };
         const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
@@ -3077,12 +3065,7 @@
         reader.onload = async () => {
           try {
             const payload = JSON.parse(reader.result);
-            if (!payload || typeof payload !== "object") throw new Error("Arquivo inválido");
-            if (payload.nextInvoiceNumber) {
-              localStorage.setItem(storageKey, String(payload.nextInvoiceNumber));
-              fields.invoiceNumber.value = String(payload.nextInvoiceNumber);
-            }
-            if (Array.isArray(payload.materialPresets)) {
+            if (!payload || typeof payload !== "object") throw new Error("Arquivo inválido");if (Array.isArray(payload.materialPresets)) {
               materialPresets = [...new Set([...defaultMaterials, ...payload.materialPresets].map((item) => String(item).trim()).filter(Boolean))];
               saveMaterialPresets();
               renderMaterialPresets();
@@ -3209,7 +3192,9 @@
 
       function renderPreview() {
         const data = getFormData();
-        previewTargets.invoiceNumber.textContent = data.invoiceNumber;
+        const docLabel = String(data.documentType || "orçamento").toLowerCase() === "faturamento" ? "Faturamento" : "Orçamento";
+        const titleNode = document.querySelector(".pdf-title h2");
+        if (titleNode) titleNode.textContent = docLabel;
         previewTargets.clientName.textContent = data.clientName || "-";
         previewTargets.providerName.textContent = data.providerName || "-";
         previewTargets.phone.textContent = data.phone || "-";
@@ -3348,8 +3333,8 @@
         text(data.social || "", pageW - margin - 130, 88, 9, "F1", "right", 130);
 
         rect(margin, 134, pageW - margin * 2, 78, light);
-        text("Fatura de Serviço", margin, 172, 28, "F2", "center", pageW - margin * 2);
-        text(`NÚMERO DA FATURA: ${data.invoiceNumber}`, margin, 196, 11, "F2", "center", pageW - margin * 2);
+        const docLabel = String(data.documentType || "orçamento").toLowerCase() === "faturamento" ? "Faturamento" : "Orçamento";
+        text(docLabel, margin, 172, 28, "F2", "center", pageW - margin * 2);
 
         let top = 240;
         text(`Prestador do Serviço: ${data.providerName || "-"}`, margin, top, 10, "F2");
@@ -3450,11 +3435,8 @@
         }
         await saveQuoteRecord(data);
         window.print();
-        const next = incrementInvoiceNumber(data.invoiceNumber);
-        fields.invoiceNumber.value = next;
-        localStorage.setItem(storageKey, next);
         renderPreview();
-        setStatus(`Orçamento ${data.invoiceNumber} enviado para salvar/imprimir. Próximo número: ${next}.`);
+        setStatus(`Orçamento enviado para salvar/imprimir.`);
       }
 
       function printPdf() {
@@ -3509,8 +3491,8 @@
         }
         await saveQuoteRecord(data);
         try {
-          const blob = await createPdfBlobFromPreview(document.getElementById("preview"));
-          const filename = `${sanitizeFileName(data.clientName)}-${data.invoiceNumber}.pdf`;
+        const blob = await createPdfBlobFromPreview(document.getElementById("preview"));
+        const filename = `${sanitizeFileName(data.clientName)}.pdf`;
           const link = document.createElement("a");
           link.href = URL.createObjectURL(blob);
           link.download = filename;
@@ -3518,11 +3500,8 @@
           link.click();
           link.remove();
           URL.revokeObjectURL(link.href);
-          const next = incrementInvoiceNumber(data.invoiceNumber);
-          fields.invoiceNumber.value = next;
-          localStorage.setItem(storageKey, next);
           renderPreview();
-          setStatus(`PDF ${data.invoiceNumber} gerado para download. Próximo número: ${next}.`);
+          setStatus(`PDF gerado para download.`);
         } catch (error) {
           alert("Falha ao gerar o PDF. Tente novamente.");
           console.error(error);
@@ -3543,22 +3522,19 @@
         await saveQuoteRecord(data);
         try {
           const blob = await createPdfBlobFromPreview(document.getElementById("preview"));
-          const filename = `${sanitizeFileName(data.clientName)}-${data.invoiceNumber}.pdf`;
+          const filename = `${sanitizeFileName(data.clientName)}.pdf`;
           const file = new File([blob], filename, { type: "application/pdf" });
           if (navigator.canShare && navigator.canShare({ files: [file] })) {
             await navigator.share({
               files: [file],
               title: "Orçamento",
-              text: `Orçamento ${data.invoiceNumber} para ${data.clientName}`
+              text: `Orçamento para ${data.clientName}`
             });
-            setStatus(`PDF ${data.invoiceNumber} compartilhado com sucesso.`);
+            setStatus(`PDF compartilhado com sucesso.`);
           } else {
             await downloadPdfFile();
             alert("Compartilhamento direto não está disponível neste dispositivo. O PDF foi baixado automaticamente.");
           }
-          const next = incrementInvoiceNumber(data.invoiceNumber);
-          fields.invoiceNumber.value = next;
-          localStorage.setItem(storageKey, next);
           renderPreview();
         } catch (error) {
           alert("Falha ao compartilhar o PDF. Tente novamente ou use o download.");
@@ -3601,7 +3577,7 @@
         await saveQuoteRecord(data);
         try {
           const blob = await createJpegBlob(document.getElementById("preview"));
-          const filename = `${sanitizeFileName(data.clientName)}-${data.invoiceNumber}.jpg`;
+          const filename = `${sanitizeFileName(data.clientName)}.jpg`;
           const link = document.createElement("a");
           link.href = URL.createObjectURL(blob);
           link.download = filename;
@@ -3609,11 +3585,8 @@
           link.click();
           link.remove();
           URL.revokeObjectURL(link.href);
-          const next = incrementInvoiceNumber(data.invoiceNumber);
-          fields.invoiceNumber.value = next;
-          localStorage.setItem(storageKey, next);
           renderPreview();
-          setStatus(`JPEG ${data.invoiceNumber} gerado para download. Próximo número: ${next}.`);
+          setStatus(`JPEG gerado para download.`);
         } catch (error) {
           alert("Falha ao gerar o JPEG. Tente novamente ou use o botão de PDF.");
           console.error(error);
@@ -3776,10 +3749,6 @@
         byId("sharePdfWhatsApp").addEventListener("click", sharePdfToWhatsApp);
         byId("downloadJpeg").addEventListener("click", downloadJpegFile);
         if (byId("printPdf")) byId("printPdf").addEventListener("click", printPdf);
-        if (byId("saveNumber")) byId("saveNumber").addEventListener("click", () => {
-          localStorage.setItem(storageKey, fields.invoiceNumber.value);
-          setStatus(`N�mero ${fields.invoiceNumber.value} salvo para o pr�ximo or�amento.`);
-        });
         byId("exportDb").addEventListener("click", exportDatabase);
         byId("importDbButton").addEventListener("click", () => byId("importDb").click());
         byId("importDb").addEventListener("change", (event) => {
