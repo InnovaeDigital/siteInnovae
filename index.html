@@ -2888,7 +2888,8 @@
       }
 
       function getClientLink(record) {
-        const url = new URL('cliente.html', window.location.href);
+        const base = `${window.location.origin}${window.location.pathname.replace(/[^/]*$/, '')}`;
+        const url = new URL('cliente.html', base);
         url.searchParams.set('orcamento', record.id);
         return url.href;
       }

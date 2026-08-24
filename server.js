@@ -40,6 +40,13 @@ function getObjectId(value) {
   return /^[a-f\d]{24}$/i.test(text) ? text : null;
 }
 
+function buildQuoteLookup(id, ObjectId) {
+  const rawId = String(id || '').trim();
+  const objectId = getObjectId(rawId);
+  if (objectId) return { _id: new ObjectId(objectId) };
+  return { $or: [{ id: rawId }, { legacyId: rawId }] };
+}
+
 // Função para conectar ao MongoDB
 async function connectToDatabase() {
   try {
@@ -226,10 +233,8 @@ app.get('/api/orcamentos', async (req, res) => {
 app.get('/api/orcamentos/:id', async (req, res) => {
   try {
     const { ObjectId } = await import('mongodb');
-    const objectId = getObjectId(req.params.id);
-    if (!objectId) return res.status(400).json({ erro: 'ID de orçamento inválido' });
     const collection = database.collection('orcamentos');
-    const orcamento = await collection.findOne({ _id: new ObjectId(objectId) });
+    const orcamento = await collection.findOne(buildQuoteLookup(req.params.id, ObjectId));
     
     if (!orcamento) {
       return res.status(404).json({ erro: 'Orçamento não encontrado' });
@@ -245,12 +250,10 @@ app.get('/api/orcamentos/:id', async (req, res) => {
 app.put('/api/orcamentos/:id', async (req, res) => {
   try {
     const { ObjectId } = await import('mongodb');
-    const objectId = getObjectId(req.params.id);
-    if (!objectId) return res.status(400).json({ erro: 'ID de orçamento inválido' });
     const collection = database.collection('orcamentos');
     const { _id, id, ...payload } = req.body || {};
     const resultado = await collection.updateOne(
-      { _id: new ObjectId(objectId) },
+      buildQuoteLookup(req.params.id, ObjectId),
       { 
         $set: {
           ...payload,
@@ -273,10 +276,8 @@ app.put('/api/orcamentos/:id', async (req, res) => {
 app.delete('/api/orcamentos/:id', async (req, res) => {
   try {
     const { ObjectId } = await import('mongodb');
-    const objectId = getObjectId(req.params.id);
-    if (!objectId) return res.status(400).json({ erro: 'ID de orçamento inválido' });
     const collection = database.collection('orcamentos');
-    const resultado = await collection.deleteOne({ _id: new ObjectId(objectId) });
+    const resultado = await collection.deleteOne(buildQuoteLookup(req.params.id, ObjectId));
     
     if (resultado.deletedCount === 0) {
       return res.status(404).json({ erro: 'Orçamento não encontrado' });
