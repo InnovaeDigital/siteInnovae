@@ -1,56 +1,79 @@
 # Innovae Digital
 
-Gerador de orçamentos e consulta para clientes da Innovae Digital.
+Sistema de orçamentos, usuários e acompanhamento de cliente.
 
-## O que o sistema faz
+## O que está pronto
 
-- Cria e edita orçamentos.
-- Gera link de cliente.
-- Permite status de projeto, incluindo `PAGO`.
-- Salva usuários, orçamentos e materiais na nuvem via JSONBin.
+- Cadastro e login de usuários.
+- Criação e edição de orçamentos.
+- Link público do cliente.
+- Status de projeto, incluindo `PAGO`.
+- Persistência única na nuvem via JSONBin.
 
-## Estrutura
+## Estrutura principal
 
-- `index.html` - painel principal e geração dos orçamentos.
-- `cliente.html` - página pública de consulta do cliente.
-- `server.js` - API local que conversa com o JSONBin.
+- `index.html` - painel interno.
+- `cliente.html` - página pública do cliente.
+- `api/[...path].js` - API serverless para produção.
+- `server.js` - API local para desenvolvimento.
 
-## Como rodar localmente
+## Como publicar no GitHub
 
-1. Instale as dependências:
+1. Faça o push destes arquivos:
+- `index.html`
+- `cliente.html`
+- `api/[...path].js`
+- `server.js`
+- `package.json`
+- `package-lock.json`
+- `vercel.json`
+- `README.md`
+- `.gitignore`
+- `manifest.webmanifest`
+- `app-icon.svg`
+- `logo-innovae.png`
+- `logo-innovae (1).png`
 
-```bash
-npm install
-```
+2. Não envie:
+- `node_modules/`
+- `.env`
+- arquivos de diagnóstico antigos já removidos
 
-2. Configure o arquivo `.env` com:
+## Como publicar na Vercel
+
+1. Importe o repositório no Vercel.
+2. Configure as variáveis de ambiente:
 
 ```env
 JSONBIN_BIN_ID=6a8c3f21da38895dfe0a8282
 JSONBIN_MASTER_KEY=...
-JSONBIN_ACCESS_KEY=...
-PORT=3000
-NODE_ENV=development
 ```
 
-3. Inicie o servidor:
+3. Faça deploy.
+4. Abra a URL publicada.
+
+## Teste rápido
+
+- Acesse `https://sua-url.vercel.app/api/health`
+- Se responder `OK`, a API está no ar.
+- Depois teste:
+  - criar usuário
+  - salvar orçamento
+  - abrir link do cliente
+
+## Rodando localmente
 
 ```bash
+npm install
 npm start
 ```
 
-4. Abra:
+Depois abra:
 
 - `http://localhost:3000`
 
-## Deploy
-
-- O projeto está pronto para publicar em GitHub e Vercel.
-- Mantenha o `.env` fora do repositório.
-- O backend depende apenas do JSONBin.
-
 ## Observação
 
-- Não há mais ligação com MongoDB.
-- Os dados importantes ficam na nuvem.
+- O sistema não usa mais MongoDB.
+- Os dados importantes ficam somente na nuvem.
 - O navegador guarda apenas preferências leves de sessão.

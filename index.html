@@ -2500,7 +2500,7 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(user)
         });
-        if (!response.ok) throw new Error("Nï¿½o foi possï¿½vel salvar o usuï¿½rio no servidor.");
+        if (!response.ok) {`n          let details = "";`n          try {`n            const payload = await response.json();`n            details = payload?.erro || payload?.message || "";`n          } catch {`n            details = "";`n          }`n          throw new Error(details || "Não foi possível salvar o usuário no servidor.");`n        }
       }
 
       async function createFirstUser() {
