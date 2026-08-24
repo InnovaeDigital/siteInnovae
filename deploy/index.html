@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
@@ -11,14 +11,14 @@
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="icon" href="app-icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="app-icon.svg" />
-    <meta name="description" content="Design grÃ¡fico, mÃ­dia digital, impressÃ£o e comunicaÃ§Ã£o visual para marcas que querem ser percebidas e lembradas." />
+    <meta name="description" content="Design gráfico, mídia digital, impressão e comunicação visual para marcas que querem ser percebidas e lembradas." />
     <meta name="robots" content="index,follow" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Innovae Digital â€” Design que faz presenÃ§a" />
-    <meta property="og:description" content="Design grÃ¡fico, mÃ­dia digital e comunicaÃ§Ã£o visual para a sua marca ocupar espaÃ§o." />
+    <meta property="og:title" content="Innovae Digital — Design que faz presença" />
+    <meta property="og:description" content="Design gráfico, mídia digital e comunicação visual para a sua marca ocupar espaço." />
     <meta property="og:image" content="logo-innovae.png" />
     <meta name="twitter:card" content="summary_large_image" />
-    <title>Innovae Digital â€” Design que faz presenÃ§a</title>
+    <title>Innovae Digital — Design que faz presença</title>
     <style>
       :root {
         --yellow: #fff200;
@@ -1665,10 +1665,10 @@
           transition-duration: .01ms !important;
         }
       }
-      /* PÃ¡gina institucional */
+      /* Página institucional */
       html { scroll-behavior: smooth; }
       .site-home { position: relative; overflow: hidden; background: #070707; }
-      /* O CSS do painel usa display:grid; esta regra mantÃ©m o orÃ§amento fora da home. */
+      /* O CSS do painel usa display:grid; esta regra mantém o orçamento fora da home. */
       #systemApp[hidden] { display: none !important; }
       .site-home::before, .site-home::after { content: ""; position: absolute; border-radius: 50%; pointer-events: none; }
       .site-home::before { width: 54vw; height: 54vw; top: -27vw; right: -14vw; background: radial-gradient(circle, rgba(255,242,0,.32), transparent 68%); animation: orbDrift 14s ease-in-out infinite alternate; }
@@ -1717,7 +1717,7 @@
       .faq-list details { padding:20px 0; border-bottom:1px solid rgba(255,255,255,.24); }
       .faq-list summary { cursor:pointer; color:#fff; font-weight:800; list-style:none; }
       .faq-list summary::after { content:"+"; float:right; color:var(--yellow); font-size:22px; line-height:.7; }
-      .faq-list details[open] summary::after { content:"âˆ’"; }
+      .faq-list details[open] summary::after { content:"-"; }
       .faq-list p { max-width:620px; margin:13px 32px 0 0; color:#aaa; line-height:1.55; }
       @media (max-width:700px) { .home-process, .home-faq { padding-top:64px; padding-bottom:64px; } .home-process-head { display:block; } .home-process-head p { margin-top:22px; } .process-grid, .home-faq-grid { grid-template-columns:1fr; } .process-step { min-height:auto; } .process-step span { margin-bottom:20px; } }
       .home-portfolio-call { position: relative; z-index: 1; display: grid; grid-template-columns: 1.1fr .9fr; gap: 36px; align-items: end; padding: 108px clamp(20px, 5vw, 72px); background: #111; }
@@ -1745,14 +1745,14 @@
       @keyframes gridTurn { to { transform:rotate(360deg) scale(1.14); } } @keyframes ringOrbit { to { transform:rotate(360deg); } } @keyframes logoFloat { 50% { transform:translate(-50%,-54%) rotate(-3deg); } } @keyframes chipFloat { to { transform:translateY(-12px) rotate(4deg); } } @keyframes inkPulse { 50% { transform:scale(1.35); } }
       @media (max-width: 900px) { .home-visual { opacity:.62; right:-60px; top:80px; } }
       @media (max-width: 700px) { .home-nav-links a { display: none; } .home-hero, .home-statement, .home-portfolio-call { grid-template-columns: 1fr; } .home-hero { min-height: auto; padding-top: 34px; } .home-statement, .home-portfolio-call { padding-top: 64px; padding-bottom: 64px; } .service-card { min-height: 126px; padding: 15px; } .home-footer { flex-direction: column; } .home-visual { width:440px; height:440px; right:-165px; top:0; opacity:.32; } .service-grid { margin-top:14px; } }
-      /* Acesso interno: mesma atmosfera visual da pÃ¡gina institucional. */
+      /* Acesso interno: mesma atmosfera visual da página institucional. */
       #systemApp.login-view { display:block; position:relative; min-height:100vh; padding:clamp(48px,10vh,110px) 0; overflow:hidden; background:#070707; }
       #systemApp.login-view.login-overlay { position:fixed; z-index:20; inset:0; min-height:100dvh; padding:clamp(42px,8vh,96px) 0; overflow:auto; background:rgba(5,5,5,.64); backdrop-filter:blur(5px); }
       #systemApp.login-view.login-overlay::before { opacity:.38; }
       #systemApp.login-view::before { content:""; position:absolute; inset:0; background:radial-gradient(circle at 82% 18%,rgba(255,242,0,.23),transparent 25%),linear-gradient(90deg,rgba(255,242,0,.08) 1px,transparent 1px),linear-gradient(rgba(255,242,0,.08) 1px,transparent 1px); background-size:auto,34px 34px,34px 34px; mask-image:linear-gradient(90deg,black,transparent 80%); animation:gridTurn 24s linear infinite; }
       #systemApp.login-view .preview-wrap { display:none; }
       #systemApp.login-view .controls { position:relative; z-index:1; top:auto; width:min(440px,calc(100% - 40px)); max-height:none; margin:0 auto; padding:0; overflow:visible; border:1px solid rgba(255,242,0,.58); border-radius:0; background:rgba(12,12,12,.91); box-shadow:22px 22px 0 rgba(255,242,0,.88),0 35px 90px rgba(0,0,0,.55); transform:translateY(0); }
-      #systemApp.login-view .controls::before { content:"ÃREA INTERNA"; white-space:pre; display:block; padding:180px 34px 32px; color:#fff; font-weight:900; font-size:clamp(25px,4vw,38px); line-height:.94; letter-spacing:-.06em; background:linear-gradient(135deg,rgba(255,242,0,.17),transparent 65%); }
+      #systemApp.login-view .controls::before { content:"ÁREA INTERNA"; white-space:pre; display:block; padding:180px 34px 32px; color:#fff; font-weight:900; font-size:clamp(25px,4vw,38px); line-height:.94; letter-spacing:-.06em; background:linear-gradient(135deg,rgba(255,242,0,.17),transparent 65%); }
       #systemApp.login-view .login-panel { margin:0; padding:30px 34px 38px; border:0; border-radius:0; background:transparent; }
       #systemApp.login-view .login-panel h2 { color:var(--yellow); font-size:12px; letter-spacing:.12em; text-transform:uppercase; }
       #systemApp.login-view .field label { color:#eee; font-size:12px; }
@@ -1778,7 +1778,7 @@
       #systemApp:not(.login-view) .item-editor,#systemApp:not(.login-view) .user-row,#systemApp:not(.login-view) .portfolio-admin-card,#systemApp:not(.login-view) .client-link { background:#111; border-color:rgba(255,255,255,.16); border-radius:0; color:#fff; }
       #systemApp:not(.login-view) .btn { border-radius:0; }
       #systemApp:not(.login-view) .btn.primary { box-shadow:4px 4px 0 rgba(255,242,0,.25); }
-      /* A folha Ã© um documento de cliente: nunca deve herdar a cor do painel escuro. */
+      /* A folha é um documento de cliente: nunca deve herdar a cor do painel escuro. */
       #systemApp:not(.login-view) .sheet { color:#050505; }
       #systemApp:not(.login-view) .sheet .pdf-title,#systemApp:not(.login-view) .sheet .meta,#systemApp:not(.login-view) .sheet .table-yellow,#systemApp:not(.login-view) .sheet .payment-info { color:#050505; }
       #systemApp:not(.login-view) .controls h1 { color:#fff; }
@@ -1791,7 +1791,7 @@
       #systemApp:not(.login-view) .edit-banner { border-left:4px solid var(--yellow); border-radius:0; background:#0b0b0b; }
       #systemApp:not(.login-view) .db-panel .section-title { margin-top:18px; }
       #systemApp:not(.login-view) #statusMessage { display:block; min-height:20px; padding:8px 0; color:var(--yellow); }
-      /* Janelas do painel: cada fluxo tem seu prÃ³prio espaÃ§o de trabalho. */
+      /* Janelas do painel: cada fluxo tem seu próprio espaço de trabalho. */
       #systemApp:not(.login-view) .workspace-tabs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; margin:0 0 16px; padding-bottom:14px; border-bottom:1px solid rgba(255,255,255,.16); }
       #systemApp:not(.login-view) .workspace-tab { min-height:42px; padding:8px 9px; border:1px solid rgba(255,255,255,.25); background:#0a0a0a; color:#ddd; font:inherit; font-size:11px; font-weight:800; line-height:1.15; letter-spacing:.04em; text-transform:uppercase; cursor:pointer; transition:background .2s ease,color .2s ease,border-color .2s ease,transform .2s ease; }
       #systemApp:not(.login-view) .workspace-tab:hover { border-color:var(--yellow); color:#fff; transform:translateY(-1px); }
@@ -1829,7 +1829,7 @@
         #systemApp:not(.login-view) .workspace-tab { min-height:38px; }
       }
 
-      /* Hero: a arte deixa de ocupar a mesma Ã¡rea dos cards de serviÃ§o. */
+      /* Hero: a arte deixa de ocupar a mesma Área dos cards de serviço. */
       .home-hero {
         grid-template-columns: minmax(0, 1.12fr) minmax(300px, .88fr);
         grid-template-rows: minmax(470px, auto) auto;
@@ -1939,7 +1939,7 @@
         .home-footer { padding-left: 16px; padding-right: 16px; }
       }
 
-      /* Ferramentas rÃ¡pidas para quem estÃ¡ comeÃ§ando a marca. */
+      /* Ferramentas rápidas para quem está começando a marca. */
       .brand-tools { position:relative; z-index:1; padding:88px clamp(20px,5vw,72px); background:#fff200; color:#090909; }
       .brand-tools-head { display:grid; grid-template-columns:.82fr 1.18fr; gap:54px; align-items:end; margin-bottom:30px; }
       .brand-tools h2 { margin:12px 0 0; max-width:680px; font-size:clamp(38px,5.6vw,72px); line-height:.88; letter-spacing:-.065em; }
@@ -1951,9 +1951,9 @@
       .brand-tool-panel[hidden] { display:none; }.tool-kicker { color:#fff200; font-size:11px; font-weight:900; letter-spacing:.12em; text-transform:uppercase; }.brand-tool-panel h3 { max-width:710px; margin:12px 0 10px; font-size:clamp(29px,4vw,52px); line-height:.92; letter-spacing:-.055em; }.brand-tool-panel > p { max-width:690px; color:#c7c7c7; line-height:1.55; }
       .quiz-options { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-top:24px; }.quiz-option { min-height:64px; border:1px solid rgba(255,255,255,.32); padding:14px; background:#141414; color:#fff; font:800 14px Arial,Helvetica,sans-serif; text-align:left; cursor:pointer; transition:.2s ease; }.quiz-option:hover,.quiz-option:focus-visible { border-color:#fff200; color:#fff200; transform:translateX(4px); }.quiz-progress { margin-top:22px; color:#aaa; font-size:12px; font-weight:800; letter-spacing:.06em; }.tool-result { margin-top:24px; padding:20px; border-left:4px solid #fff200; background:#161616; }.tool-result strong { display:block; color:#fff200; font-size:24px; }.tool-result p { margin:8px 0 0; color:#ddd; line-height:1.5; }.tool-reset { margin-top:16px; border:1px solid #fff200; padding:10px 13px; background:transparent; color:#fff200; font:800 12px Arial,Helvetica,sans-serif; cursor:pointer; }
       .diagnostic-list { display:grid; gap:11px; margin-top:24px; }.diagnostic-item { display:flex; align-items:center; justify-content:space-between; gap:18px; padding:14px 0; border-bottom:1px solid rgba(255,255,255,.18); }.diagnostic-item span { font-weight:800; }.score-options { display:flex; gap:7px; }.score-options button { width:37px; height:37px; border:1px solid rgba(255,255,255,.35); background:transparent; color:#fff; font-weight:900; cursor:pointer; }.score-options button.is-selected,.score-options button:hover { border-color:#fff200; background:#fff200; color:#090909; }.diagnostic-score { display:flex; gap:20px; align-items:center; margin-top:25px; padding:18px; background:#fff200; color:#090909; }.diagnostic-score strong { font-size:50px; letter-spacing:-.07em; }.diagnostic-score p { margin:0; font-weight:800; line-height:1.35; }
-      .micro-faq { display:grid; gap:0; margin-top:23px; }.micro-faq details { border-bottom:1px solid rgba(255,255,255,.22); padding:17px 0; }.micro-faq summary { position:relative; padding-right:35px; color:#fff; font-size:17px; font-weight:800; cursor:pointer; list-style:none; }.micro-faq summary::-webkit-details-marker { display:none; }.micro-faq summary::after { content:'+'; position:absolute; right:4px; color:#fff200; font-size:24px; line-height:.7; }.micro-faq details[open] summary::after { content:'âˆ’'; }.micro-faq p { max-width:680px; margin:12px 30px 0 0; color:#c7c7c7; line-height:1.55; }
+      .micro-faq { display:grid; gap:0; margin-top:23px; }.micro-faq details { border-bottom:1px solid rgba(255,255,255,.22); padding:17px 0; }.micro-faq summary { position:relative; padding-right:35px; color:#fff; font-size:17px; font-weight:800; cursor:pointer; list-style:none; }.micro-faq summary::-webkit-details-marker { display:none; }.micro-faq summary::after { content:'+'; position:absolute; right:4px; color:#fff200; font-size:24px; line-height:.7; }.micro-faq details[open] summary::after { content:'-'; }.micro-faq p { max-width:680px; margin:12px 30px 0 0; color:#c7c7c7; line-height:1.55; }
       @keyframes toolPanelIn { from { opacity:0; transform:translateY(14px) skewY(1deg); } to { opacity:1; transform:none; } }
-      /* Tipografia em movimento: presente nas entradas de cada pÃ¡gina, sem comprometer leitura. */
+      /* Tipografia em movimento: presente nas entradas de cada página, sem comprometer leitura. */
       @keyframes typeLift { from { opacity:0; transform:translateY(.45em) skewY(3deg); letter-spacing:-.11em; } to { opacity:1; transform:translateY(0) skewY(0); } }
       .site-home h1,.site-home h2,#systemApp h1,#systemApp h2 { animation:typeLift .72s cubic-bezier(.16,1,.3,1) both; }
       .site-home .home-kicker,.site-home .service-card strong { animation:typeLift .55s .12s cubic-bezier(.16,1,.3,1) both; }
@@ -1965,12 +1965,12 @@
   </head>
   <body>
     <main class="site-home" id="siteHome">
-      <nav class="home-nav" aria-label="NavegaÃ§Ã£o principal">
+      <nav class="home-nav" aria-label="Navegação principal">
         <div class="nav-spacer" aria-hidden="true"></div>
         <div class="home-nav-links">
           <a href="https://www.instagram.com/innovaedigital.midia/?hl=pt-br" target="_blank" rel="noopener noreferrer">Instagram</a>
-          <a href="https://wa.me/5561933004316?text=OlÃ¡%2C%20vim%20pelo%20site%20da%20Innovae%20Digital." target="_blank" rel="noopener noreferrer">Contato</a>
-          <button class="system-entry" id="showLogin" type="button">Ãrea interna</button>
+          <a href="https://wa.me/5561933004316?text=Olá%2C%20vim%20pelo%20site%20da%20Innovae%20Digital." target="_blank" rel="noopener noreferrer">Contato</a>
+          <button class="system-entry" id="showLogin" type="button">Área interna</button>
         </div>
       </nav>
       <section class="home-hero">
@@ -1979,69 +1979,69 @@
           <div class="visual-ring"></div>
           <div class="visual-ring ring-two"></div>
           <div class="visual-logo"><img src="logo-innovae.png" alt="" /></div>
-          <span class="visual-chip one">Criar Â· Impactar</span>
+          <span class="visual-chip one">Criar · Impactar</span>
           <span class="visual-chip two">Design em movimento</span>
           <div class="visual-cmyk"><i></i><i></i><i></i><i></i></div>
         </div>
         <div class="home-copy">
           <img class="hero-logo" src="logo-innovae.png" alt="Innovae Digital" />
-          <div class="home-kicker">Design grÃ¡fico Â· mÃ­dia digital Â· comunicaÃ§Ã£o visual</div>
-          <h1>Sua marca<br />nÃ£o passa.<br /><em>Ela fica.</em></h1>
-          <p>EstratÃ©gia, design e presenÃ§a visual para negÃ³cios que querem ser percebidos, lembrados e escolhidos.</p>
+          <div class="home-kicker">Design gráfico · mídia digital · comunicação visual</div>
+          <h1>Sua marca<br />não passa.<br /><em>Ela fica.</em></h1>
+          <p>Estratégia, design e presença visual para negócios que querem ser percebidos, lembrados e escolhidos.</p>
           <div class="home-actions">
             <a class="home-button" href="https://wa.me/5561933004316?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20Innovae%20Digital%20e%20quero%20um%20atendimento%20humanizado." target="_blank" rel="noopener noreferrer">Atendimento no WhatsApp</a>
           </div>
         </div>
-        <div class="service-grid" aria-label="ServiÃ§os da Innovae Digital">
-          <div class="service-card"><strong>Social media</strong><span>Posts, criativos e peÃ§as digitais para fortalecer sua presenÃ§a online.</span></div>
-          <div class="service-card"><strong>Identidade visual</strong><span>DireÃ§Ã£o visual para marcas que precisam transmitir confianÃ§a desde o primeiro contato.</span></div>
-          <div class="service-card"><strong>ComunicaÃ§Ã£o visual</strong><span>Banners, fachadas, adesivos, placas e materiais para ponto de venda.</span></div>
-          <div class="service-card"><strong>Impressos & PDV</strong><span>Materiais que orientam, encantam e transformam o espaÃ§o em experiÃªncia de marca.</span></div>
+        <div class="service-grid" aria-label="Serviços da Innovae Digital">
+          <div class="service-card"><strong>Social media</strong><span>Posts, criativos e peças digitais para fortalecer sua presença online.</span></div>
+          <div class="service-card"><strong>Identidade visual</strong><span>Direção visual para marcas que precisam transmitir confiança desde o primeiro contato.</span></div>
+          <div class="service-card"><strong>Comunicação visual</strong><span>Banners, fachadas, adesivos, placas e materiais para ponto de venda.</span></div>
+          <div class="service-card"><strong>Impressos & PDV</strong><span>Materiais que orientam, encantam e transformam o espaço em experiência de marca.</span></div>
         </div>
       </section>
       <section class="home-statement">
-        <strong>Ideias que chamam atenÃ§Ã£o.<br />Design que gera valor.</strong>
-        <p>Da primeira impressÃ£o ao ponto de venda, criamos sistemas visuais consistentes para deixar cada contato com a sua marca mais forte.</p>
+        <strong>Ideias que chamam atenção.<br />Design que gera valor.</strong>
+        <p>Da primeira impressão ao ponto de venda, criamos sistemas visuais consistentes para deixar cada contato com a sua marca mais forte.</p>
       </section>
 
       <section class="home-process" aria-labelledby="processTitle">
-        <div class="home-process-head"><div><div class="home-kicker">Do briefing Ã  entrega</div><h2 id="processTitle">Um processo claro para sua marca avanÃ§ar.</h2></div><p>VocÃª acompanha cada etapa e recebe uma soluÃ§Ã£o pensada para funcionar no canal certo: digital, impresso ou no ponto de venda.</p></div>
+        <div class="home-process-head"><div><div class="home-kicker">Do briefing à entrega</div><h2 id="processTitle">Um processo claro para sua marca avançar.</h2></div><p>Você acompanha cada etapa e recebe uma solução pensada para funcionar no canal certo: digital, impresso ou no ponto de venda.</p></div>
         <div class="process-grid">
-          <article class="process-step"><span>01 Â· CONVERSA</span><strong>Entendemos o desafio</strong><p>Objetivo, pÃºblico, aplicaÃ§Ã£o e referÃªncias para comeÃ§ar com direÃ§Ã£o.</p></article>
-          <article class="process-step"><span>02 Â· ESTRATÃ‰GIA</span><strong>Definimos a soluÃ§Ã£o</strong><p>Escopo, materiais e proposta visual organizados antes da produÃ§Ã£o.</p></article>
-          <article class="process-step"><span>03 Â· CRIAÃ‡ÃƒO</span><strong>Transformamos em presenÃ§a</strong><p>Design desenvolvido para destacar a marca onde ela precisa aparecer.</p></article>
-          <article class="process-step"><span>04 Â· ENTREGA</span><strong>VocÃª coloca em movimento</strong><p>Arquivos, produÃ§Ã£o ou instalaÃ§Ã£o conforme o projeto contratado.</p></article>
+          <article class="process-step"><span>01 · CONVERSA</span><strong>Entendemos o desafio</strong><p>Objetivo, público, aplicação e referências para começar com direção.</p></article>
+          <article class="process-step"><span>02 · ESTRATÉGIA</span><strong>Definimos a solução</strong><p>Escopo, materiais e proposta visual organizados antes da produção.</p></article>
+          <article class="process-step"><span>03 · CRIAÇÃO</span><strong>Transformamos em presença</strong><p>Design desenvolvido para destacar a marca onde ela precisa aparecer.</p></article>
+          <article class="process-step"><span>04 · ENTREGA</span><strong>Você coloca em movimento</strong><p>Arquivos, produção ou instalação conforme o projeto contratado.</p></article>
         </div>
       </section>
-      <section class="home-faq" aria-labelledby="faqTitle"><div class="home-faq-grid"><div><div class="home-kicker">DÃºvidas frequentes</div><h2 id="faqTitle">Vamos tirar sua ideia do papel?</h2></div><div class="faq-list"><details><summary>Quais serviÃ§os a Innovae realiza?</summary><p>Identidade visual, criativos digitais, materiais impressos, fachadas, adesivos, banners, placas e outras soluÃ§Ãµes de comunicaÃ§Ã£o visual.</p></details><details><summary>Como solicito um orÃ§amento?</summary><p>Chame no WhatsApp, conte o que precisa e envie medidas, referÃªncias e prazo quando tiver. Assim a proposta fica mais objetiva.</p></details><details><summary>O atendimento Ã© somente em LuziÃ¢nia?</summary><p>Os projetos digitais podem ser atendidos Ã  distÃ¢ncia. Para produÃ§Ã£o e instalaÃ§Ã£o, a disponibilidade Ã© confirmada conforme a demanda e a localizaÃ§Ã£o.</p></details><details><summary>Posso acompanhar meu projeto?</summary><p>Sim. ApÃ³s a confirmaÃ§Ã£o, vocÃª recebe atualizaÃ§Ãµes sobre as etapas e a previsÃ£o de entrega do serviÃ§o contratado.</p></details></div></div></section>
+      <section class="home-faq" aria-labelledby="faqTitle"><div class="home-faq-grid"><div><div class="home-kicker">Dúvidas frequentes</div><h2 id="faqTitle">Vamos tirar sua ideia do papel?</h2></div><div class="faq-list"><details><summary>Quais serviços a Innovae realiza?</summary><p>Identidade visual, criativos digitais, materiais impressos, fachadas, adesivos, banners, placas e outras soluções de comunicação visual.</p></details><details><summary>Como solicito um orçamento?</summary><p>Chame no WhatsApp, conte o que precisa e envie medidas, referências e prazo quando tiver. Assim a proposta fica mais objetiva.</p></details><details><summary>O atendimento é somente em Luziânia?</summary><p>Os projetos digitais podem ser atendidos à distância. Para produção e instalação, a disponibilidade é confirmada conforme a demanda e a localização.</p></details><details><summary>Posso acompanhar meu projeto?</summary><p>Sim. Após a confirmação, você recebe atualizações sobre as etapas e a previsão de entrega do serviço contratado.</p></details></div></div></section>
       <section class="brand-tools" aria-labelledby="toolsTitle">
-        <div class="brand-tools-head"><div><div class="home-kicker" style="color:#090909">Ferramentas para sua marca</div><h2 id="toolsTitle">Descubra o prÃ³ximo passo da sua presenÃ§a visual.</h2></div><p>TrÃªs experiÃªncias rÃ¡pidas para tirar dÃºvidas, encontrar uma direÃ§Ã£o criativa e olhar sua marca com mais clareza.</p></div>
-        <div class="brand-tool-tabs" role="tablist" aria-label="Ferramentas para microempresÃ¡rios">
+        <div class="brand-tools-head"><div><div class="home-kicker" style="color:#090909">Ferramentas para sua marca</div><h2 id="toolsTitle">Descubra o próximo passo da sua presença visual.</h2></div><p>Três experiências rápidas para tirar dêvidas, encontrar uma direção criativa e olhar sua marca com mais clareza.</p></div>
+        <div class="brand-tool-tabs" role="tablist" aria-label="Ferramentas para microempresários">
           <button class="brand-tool-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="toolBriefing" data-tool-target="briefing">Simulador de briefing</button>
-          <button class="brand-tool-tab" type="button" role="tab" aria-selected="false" aria-controls="toolDiagnostic" data-tool-target="diagnostic">DiagnÃ³stico de marca grÃ¡tis</button>
-          <button class="brand-tool-tab" type="button" role="tab" aria-selected="false" aria-controls="toolFaq" data-tool-target="faq">FAQ de microempresÃ¡rio</button>
+          <button class="brand-tool-tab" type="button" role="tab" aria-selected="false" aria-controls="toolDiagnostic" data-tool-target="diagnostic">Diagnóstico de marca grátis</button>
+          <button class="brand-tool-tab" type="button" role="tab" aria-selected="false" aria-controls="toolFaq" data-tool-target="faq">FAQ de microempresário</button>
         </div>
         <section class="brand-tool-panel" id="toolBriefing" data-tool-panel="briefing" role="tabpanel">
-          <div class="tool-kicker">Simulador de briefing</div><h3 id="briefingQuestion">Qual sensaÃ§Ã£o sua marca precisa passar primeiro?</h3><p id="briefingSupport">Escolha a alternativa que mais parece com o momento do seu negÃ³cio.</p><div class="quiz-options" id="briefingOptions"></div><div class="quiz-progress" id="briefingProgress">Pergunta 1 de 3</div><div class="tool-result" id="briefingResult" hidden></div><button class="tool-reset" id="briefingReset" type="button" hidden>Refazer simulador</button>
+          <div class="tool-kicker">Simulador de briefing</div><h3 id="briefingQuestion">Qual sensação sua marca precisa passar primeiro?</h3><p id="briefingSupport">Escolha a alternativa que mais parece com o momento do seu negócio.</p><div class="quiz-options" id="briefingOptions"></div><div class="quiz-progress" id="briefingProgress">Pergunta 1 de 3</div><div class="tool-result" id="briefingResult" hidden></div><button class="tool-reset" id="briefingReset" type="button" hidden>Refazer simulador</button>
         </section>
         <section class="brand-tool-panel" id="toolDiagnostic" data-tool-panel="diagnostic" role="tabpanel" hidden>
-          <div class="tool-kicker">DiagnÃ³stico de marca grÃ¡tis</div><h3>Em dois minutos, dÃª uma nota ao seu logo atual.</h3><p>Marque de 1 a 5 em cada ponto. A nota Ã© calculada na hora e mostra qual conversa vale priorizar.</p><div class="diagnostic-list" id="diagnosticList"></div><div class="diagnostic-score" aria-live="polite"><strong id="diagnosticScore">â€”</strong><p id="diagnosticMessage">Selecione as notas para ver seu diagnÃ³stico.</p></div>
+          <div class="tool-kicker">Diagnóstico de marca grátis</div><h3>Em dois minutos, dê uma nota ao seu logo atual.</h3><p>Marque de 1 a 5 em cada ponto. A nota é calculada na hora e mostra qual conversa vale priorizar.</p><div class="diagnostic-list" id="diagnosticList"></div><div class="diagnostic-score" aria-live="polite"><strong id="diagnosticScore">—</strong><p id="diagnosticMessage">Selecione as notas para ver seu diagnóstico.</p></div>
         </section>
         <section class="brand-tool-panel" id="toolFaq" data-tool-panel="faq" role="tabpanel" hidden>
-          <div class="tool-kicker">FAQ de microempresÃ¡rio</div><h3>Respostas sem enrolaÃ§Ã£o.</h3><p>O bÃ¡sico para contratar design com mais seguranÃ§a.</p><div class="micro-faq"><details><summary>Eu mudo o design se nÃ£o gostar?</summary><p>Sim. O processo inclui apresentaÃ§Ã£o e ajustes alinhados ao briefing contratado. Assim refinamos a soluÃ§Ã£o com direÃ§Ã£o, sem recomeÃ§ar do zero a cada etapa.</p></details><details><summary>Como funciona o pagamento?</summary><p>O formato e as etapas de pagamento sÃ£o definidos na proposta, antes de comeÃ§ar. VocÃª recebe tudo organizado para aprovar com clareza.</p></details><details><summary>Os arquivos sÃ£o meus?</summary><p>ApÃ³s a quitaÃ§Ã£o do projeto, vocÃª recebe os arquivos finais combinados na proposta para usar sua marca e seus materiais com autonomia.</p></details><details><summary>Quanto tempo leva?</summary><p>O prazo depende do escopo e da agilidade nas aprovaÃ§Ãµes. A previsÃ£o de entrega Ã© apresentada jÃ¡ no orÃ§amento.</p></details></div>
+          <div class="tool-kicker">FAQ de microempresário</div><h3>Respostas sem enrolação.</h3><p>O básico para contratar design com mais segurança.</p><div class="micro-faq"><details><summary>Eu mudo o design se não gostar?</summary><p>Sim. O processo inclui apresentação e ajustes alinhados ao briefing contratado. Assim refinamos a solução com direção, sem recomeçar do zero a cada etapa.</p></details><details><summary>Como funciona o pagamento?</summary><p>O formato e as etapas de pagamento são definidos na proposta, antes de começar. Você recebe tudo organizado para aprovar com clareza.</p></details><details><summary>Os arquivos são meus?</summary><p>Após a quitação do projeto, você recebe os arquivos finais combinados na proposta para usar sua marca e seus materiais com autonomia.</p></details><details><summary>Quanto tempo leva?</summary><p>O prazo depende do escopo e da agilidade nas aprovações. A previsão de entrega é apresentada já no orçamento.</p></details></div>
         </section>
       </section>
-      <footer class="home-footer"><span>Â© Innovae Digital</span><span>Design, impressÃ£o e comunicaÃ§Ã£o visual Â· LuziÃ¢nia/GO</span></footer>
+      <footer class="home-footer"><span>© Innovae Digital</span><span>Design, impressão e comunicação visual · Luziânia/GO</span></footer>
     </main>
 
     <main class="app" id="systemApp" hidden>
-      <section class="controls" aria-label="Dados do orÃ§amento">
+      <section class="controls" aria-label="Dados do orçamento">
         <div class="login-panel" id="loginPanel">
           <div class="login-brand"><img src="logo-innovae.png" alt="Innovae Digital" /></div>
           <h2>Acesso ao sistema</h2>
           <div class="field">
-            <label for="loginUser">UsuÃ¡rio</label>
-            <select id="loginUser" autocomplete="username" aria-label="Selecione o usuÃ¡rio"></select>
+            <label for="loginUser">Usuário</label>
+            <select id="loginUser" autocomplete="username" aria-label="Selecione o usuário"></select>
           </div>
           <div class="field">
             <label for="loginPassword">Senha</label>
@@ -2058,9 +2058,9 @@
           <p class="hint" id="loginMessage" aria-live="polite"></p>
           <div class="first-user-setup" id="firstUserSetup" hidden>
             <strong>Primeiro acesso</strong>
-            <p class="hint">Nenhum usuÃ¡rio foi encontrado. Cadastre o seu acesso para iniciar.</p>
+            <p class="hint">Nenhum usuário foi encontrado. Cadastre o seu acesso para iniciar.</p>
             <div class="field">
-              <label for="firstUserLogin">Novo usuÃ¡rio</label>
+              <label for="firstUserLogin">Novo usuário</label>
               <input id="firstUserLogin" autocomplete="username" />
             </div>
             <div class="field">
@@ -2073,19 +2073,19 @@
 
         <div id="systemContent" hidden>
         <img class="control-logo" src="logo-innovae.png" alt="Innovae Digital" />
-        <nav class="workspace-tabs" aria-label="SeÃ§Ãµes do sistema" role="tablist">
-          <button class="workspace-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="windowAdmin" data-window-target="admin">AdministraÃ§Ã£o</button>
-          <button class="workspace-tab" type="button" role="tab" aria-selected="false" aria-controls="windowBudget" data-window-target="budget">OrÃ§amento</button>
-          <button class="workspace-tab" type="button" role="tab" aria-selected="false" aria-controls="windowManage" data-window-target="manage">GestÃ£o e backups</button>
+        <nav class="workspace-tabs" aria-label="Seções do sistema" role="tablist">
+          <button class="workspace-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="windowAdmin" data-window-target="admin">Administração</button>
+          <button class="workspace-tab" type="button" role="tab" aria-selected="false" aria-controls="windowBudget" data-window-target="budget">Orçamento</button>
+          <button class="workspace-tab" type="button" role="tab" aria-selected="false" aria-controls="windowManage" data-window-target="manage">Gestáo e backups</button>
         </nav>
         <section class="cloud-storage" aria-label="Armazenamento do banco de dados">
           <div class="cloud-storage-head"><span>Armazenamento em nuvem</span><span class="cloud-storage-value" id="cloudStorageValue">Consultando...</span></div>
           <div class="cloud-storage-track" role="progressbar" aria-label="Uso do armazenamento" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="cloud-storage-fill" id="cloudStorageFill"></div></div>
-          <div class="cloud-storage-meta" id="cloudStorageMeta">AtualizaÃ§Ã£o automÃ¡tica a cada 30 segundos.</div>
+          <div class="cloud-storage-meta" id="cloudStorageMeta">Atualização automática a cada 30 segundos.</div>
         </section>
         <section class="workspace-window is-active" id="windowAdmin" data-window="admin" role="tabpanel">
         <div class="user-admin">
-          <h2>UsuÃ¡rios do sistema</h2>
+          <h2>Usuários do sistema</h2>
           <div class="row">
             <div class="field">
               <label for="newUserLogin">Novo login</label>
@@ -2097,22 +2097,22 @@
             </div>
           </div>
           <div class="actions">
-            <button class="btn primary" id="saveUser" type="button">Salvar usuÃ¡rio</button>
+            <button class="btn primary" id="saveUser" type="button">Salvar usuário</button>
             <button class="btn" id="logoutButton" type="button">Sair</button>
           </div>
           <div class="user-list" id="userList"></div>
-          <p class="hint">Os usuÃ¡rios ficam salvos na nuvem. Para trocar a senha de um login existente, cadastre o mesmo login com a nova senha.</p>
+          <p class="hint">Os usuários ficam salvos na nuvem. Para trocar a senha de um login existente, cadastre o mesmo login com a nova senha.</p>
         </div>
 
           <div class="portfolio-admin">
             <div class="field">
-            <label for="portfolioTitle">TÃ­tulo do trabalho</label>
+            <label for="portfolioTitle">Título do trabalho</label>
             <input id="portfolioTitle" autocomplete="off" placeholder="Ex.: Fachada loja X" />
           </div>
           <div class="row">
             <div class="field">
               <label for="portfolioCategory">Categoria</label>
-              <input id="portfolioCategory" autocomplete="off" placeholder="Ex.: ComunicaÃ§Ã£o visual" />
+              <input id="portfolioCategory" autocomplete="off" placeholder="Ex.: Comunicação visual" />
             </div>
             <div class="field">
               <label for="portfolioImage">URL de capa (opcional)</label>
@@ -2120,17 +2120,17 @@
             </div>
           </div>
           <div class="field">
-            <label for="portfolioMedia">Fotos e vÃ­deos do projeto</label>
+            <label for="portfolioMedia">Fotos e vídeos do projeto</label>
             <input id="portfolioMedia" type="file" accept="image/*,video/*" multiple />
-            <p class="hint" id="portfolioMediaMessage">Envie imagens ou vÃ­deos para a nuvem. VocÃª pode selecionar vÃ¡rios arquivos.</p>
+            <p class="hint" id="portfolioMediaMessage">Envie imagens ou vídeos para a nuvem. Você pode selecionar vários arquivos.</p>
           </div>
           <div class="field">
-            <label for="portfolioDescription">DescriÃ§Ã£o</label>
+            <label for="portfolioDescription">Descrição</label>
             <textarea id="portfolioDescription" placeholder="Conte rapidamente o que foi produzido para o cliente."></textarea>
           </div>
           <div class="field">
             <label for="portfolioLink">Link opcional</label>
-            <input id="portfolioLink" autocomplete="off" placeholder="Instagram, Behance, pasta pÃºblica..." />
+            <input id="portfolioLink" autocomplete="off" placeholder="Instagram, Behance, pasta pública..." />
           </div>
           <input id="portfolioEditingId" type="hidden" />
           <div class="actions">
@@ -2138,26 +2138,26 @@
             
           </div>
           <div class="portfolio-list" id="portfolioList"></div>
-          <p class="hint">As alteraÃ§Ãµes aparecem na pÃ¡gina inicial deste navegador. Use imagens com link pÃºblico para que o cliente consiga visualizar.</p>
+          <p class="hint">As alterações aparecem na página inicial deste navegador. Use imagens com link público para que o cliente consiga visualizar.</p>
         </div>
         </section>
         <section class="workspace-window" id="windowBudget" data-window="budget" role="tabpanel" hidden>
         <div class="app-splash">
           <div class="splash-copy">
-            <strong>OrÃ§amento limpo e pronto para envio</strong>
-            <span>Preencha os dados, confira a prÃ©via e gere o PDF ou imagem para WhatsApp com facilidade.</span>
+            <strong>Orçamento limpo e pronto para envio</strong>
+            <span>Preencha os dados, confira a prévia e gere o PDF ou imagem para WhatsApp com facilidade.</span>
           </div>
         </div>
-        <button class="btn primary install-app" id="installButton" type="button" hidden>Adicionar Ã  tela de inÃ­cio</button>
-        <h1>Gerador de OrÃ§amentos</h1>
-        <p class="hint">Preencha os dados, confira a prÃ©via e gere o PDF pelo navegador.</p>
+        <button class="btn primary install-app" id="installButton" type="button" hidden>Adicionar à tela de início</button>
+        <h1>Gerador de Orçamentos</h1>
+        <p class="hint">Preencha os dados, confira a prévia e gere o PDF pelo navegador.</p>
 
-        <div class="section-title">IdentificaÃ§Ã£o</div>
+        <div class="section-title">Identificação</div>
         <div class="row">
           <div class="field">
             <label for="documentType">Tipo de documento</label>
             <select id="documentType">
-              <option value="orÃ§amento">OrÃ§amento</option>
+              <option value="orçamento">Orçamento</option>
               <option value="faturamento">Faturamento</option>
             </select>
           </div>
@@ -2167,7 +2167,7 @@
           </div>
         </div>
 
-        <div class="section-title">Calculadora de mÂ²</div>
+        <div class="section-title">Calculadora de m²</div>
         <div class="calc-panel">
           <div class="field">
             <label for="materialPreset">Tipo de material</label>
@@ -2190,24 +2190,24 @@
               <input id="calcHeight" type="number" min="0" step="0.01" />
             </div>
             <div class="field">
-              <label for="calcQuantity">Qtd (unid/mÂ²)</label>
+              <label for="calcQuantity">Qtd (unid/m²)</label>
               <input id="calcQuantity" type="number" min="1" step="1" value="1" />
             </div>
           </div>
           <div class="row">
             <div class="field">
-              <label for="calcCost">PreÃ§o de custo por mÂ²</label>
+              <label for="calcCost">Preço de custo por m²</label>
               <input id="calcCost" type="number" min="0" step="0.01" />
             </div>
             <div class="field">
-              <label for="calcPrice">Valor final por mÂ²</label>
+              <label for="calcPrice">Valor final por m²</label>
               <input id="calcPrice" type="number" min="0" step="0.01" />
             </div>
           </div>
           <div class="calc-summary">
             <div class="calc-metric">
               <strong>Material utilizado</strong>
-              <span id="calcArea">0,00 mÂ²</span>
+              <span id="calcArea">0,00 m²</span>
             </div>
             <div class="calc-metric">
               <strong>Custo total</strong>
@@ -2223,23 +2223,23 @@
             </div>
           </div>
           <div class="actions">
-            <button class="btn primary" id="addCalcItem" type="button">Adicionar ao orÃ§amento</button>
+            <button class="btn primary" id="addCalcItem" type="button">Adicionar ao orçamento</button>
           </div>
         </div>
 
-        <div class="section-title">Itens do orÃ§amento</div>
+        <div class="section-title">Itens do orçamento</div>
         <div id="items"></div>
         <button class="btn" id="addItem" type="button">Adicionar item</button>
 
-        <div class="section-title">Fotos de referÃªncia (opcional)</div>
-        <div class="reference-upload"><label for="referencePhotos">Fotos enviadas pelo cliente</label><input id="referencePhotos" type="file" accept="image/*" multiple /><p class="hint">Adicione atÃ© 3 fotos leves para orientar a produÃ§Ã£o. Elas ficarÃ£o anexadas ao orÃ§amento.</p><div class="reference-preview" id="referencePreview"></div></div>
+        <div class="section-title">Fotos de referência (opcional)</div>
+        <div class="reference-upload"><label for="referencePhotos">Fotos enviadas pelo cliente</label><input id="referencePhotos" type="file" accept="image/*" multiple /><p class="hint">Adicione até 3 fotos leves para orientar a produção. Elas ficarão anexadas ao orçamento.</p><div class="reference-preview" id="referencePreview"></div></div>
 
         <div class="section-title">Desconto</div>
         <div class="field">
           <label for="discount">Desconto (R$)</label>
           <input id="discount" type="number" min="0" step="0.01" />
         </div>
-        <p class="hint">Pague via PIX para a chave celular 61933004316 em nome de David PeÃ§anha TomÃ©. Digite o valor do orÃ§amento manualmente no seu app.</p>
+        <p class="hint">Pague via PIX para a chave celular 61933004316 em nome de David Peçanha Tomé. Digite o valor do orçamento manualmente no seu app.</p>
 
         <div class="section-title">Andamento do projeto</div>
         <div class="project-panel">
@@ -2247,18 +2247,18 @@
             <div class="field">
               <label for="projectStatus">Status atual</label>
               <select id="projectStatus">
-                <option value="OrÃ§amento enviado">OrÃ§amento enviado</option>
-                <option value="Aguardando aprovaÃ§Ã£o">Aguardando aprovaÃ§Ã£o</option>
+                <option value="Orçamento enviado">Orçamento enviado</option>
+                <option value="Aguardando aprovação">Aguardando aprovação</option>
                 <option value="Aprovado">Aprovado</option>
                 <option value="PAGO">PAGO</option>
-                <option value="Arte em criaÃ§Ã£o">Arte em criaÃ§Ã£o</option>
-                <option value="ProduÃ§Ã£o em andamento">ProduÃ§Ã£o em andamento</option>
+                <option value="Arte em criação">Arte em criação</option>
+                <option value="Produção em andamento">Produção em andamento</option>
                 <option value="Pronto para entrega">Pronto para entrega</option>
                 <option value="Entregue">Entregue</option>
               </select>
             </div>
             <div class="field">
-              <label for="deliveryDate">PossÃ­vel data de entrega</label>
+              <label for="deliveryDate">Possível data de entrega</label>
               <input id="deliveryDate" type="date" />
             </div>
           </div>
@@ -2271,14 +2271,14 @@
             <span class="progress-value" id="progressValue">0%</span>
           </div>
           <div class="field">
-            <label for="projectUpdate">AtualizaÃ§Ã£o para o cliente</label>
-            <textarea id="projectUpdate" placeholder="Ex.: Arte aprovada, material em produÃ§Ã£o e entrega prevista para sexta-feira."></textarea>
+            <label for="projectUpdate">Atualização para o cliente</label>
+            <textarea id="projectUpdate" placeholder="Ex.: Arte aprovada, material em produção e entrega prevista para sexta-feira."></textarea>
           </div>
         </div>
 
         <div class="edit-banner" id="editBanner">
-          <span>Editando <strong id="editingQuoteLabel"></strong>. Ao salvar, o link do cliente serÃ¡ atualizado.</span>
-          <button class="btn" id="cancelEdit" type="button">Cancelar ediÃ§Ã£o</button>
+          <span>Editando <strong id="editingQuoteLabel"></strong>. Ao salvar, o link do cliente será atualizado.</span>
+          <button class="btn" id="cancelEdit" type="button">Cancelar edição</button>
         </div>
 
         <div class="actions" id="quoteActions">
@@ -2292,7 +2292,7 @@
         <section class="workspace-window" id="windowManage" data-window="manage" role="tabpanel" hidden>
         <div class="db-panel">
           <div class="db-stats">
-            <div class="db-stat">OrÃ§amentos salvos<strong id="savedQuotesCount">0</strong></div>
+            <div class="db-stat">Orçamentos salvos<strong id="savedQuotesCount">0</strong></div>
             <div class="db-stat">Materiais<strong id="savedMaterialsCount">0</strong></div>
           </div>
           <div class="actions">
@@ -2303,16 +2303,16 @@
           <input class="hidden-input" id="importDb" type="file" accept="application/json,.json" />
           <div class="section-title">Links para clientes</div>
           <div class="client-links" id="clientLinks"></div>
-          <p class="hint">Os orÃ§amentos, usuÃ¡rios e materiais ficam salvos na nuvem. O backup serve para transferir ou guardar uma cÃ³pia local.</p>
+          <p class="hint">Os orçamentos, usuários e materiais ficam salvos na nuvem. O backup serve para transferir ou guardar uma cópia local.</p>
         </div>
         <p class="hint" id="statusMessage" aria-live="polite"></p>
         </section>
         </div>
       </section>
 
-      <section class="preview-wrap" aria-label="PrÃ©via do orÃ§amento">
+      <section class="preview-wrap" aria-label="Prévia do orçamento">
         <div class="preview-header">
-          <strong>PrÃ©via do orÃ§amento</strong>
+          <strong>Prévia do orçamento</strong>
           <span>Confira layout e valores antes de salvar em PDF ou JPEG.</span>
         </div>
         <article class="sheet" id="preview">
@@ -2334,11 +2334,11 @@
           </div>
 
           <div class="pdf-title">
-            <h2>Fatura de ServiÃ§o</h2>
+            <h2>Fatura de Serviço</h2>
           </div>
 
           <div class="meta">
-            <div><strong>Prestador do ServiÃ§o:</strong> <span data-preview="providerName"></span></div>
+            <div><strong>Prestador do Serviço:</strong> <span data-preview="providerName"></span></div>
             <div><strong>Telefone:</strong> <span data-preview="phone"></span></div>
             <div><strong>E-mail:</strong> <span data-preview="email"></span></div>
             <div class="client-line"><strong>Nome do Cliente:</strong> <span data-preview="clientName"></span></div>
@@ -2347,9 +2347,9 @@
           <table class="table-yellow">
             <thead>
               <tr>
-                <th style="width:55%">DESCRIÃ‡ÃƒO</th>
-                <th style="width:10%">QTD (unid/mÂ²)</th>
-                <th style="width:17%">PREÃ‡O UNITÃRIO</th>
+                <th style="width:55%">DESCRIÇÃO</th>
+                <th style="width:10%">QTD (unid/m²)</th>
+                <th style="width:17%">PREÇO UNITÁRIO</th>
                 <th style="width:18%">TOTAL</th>
               </tr>
             </thead>
@@ -2362,18 +2362,18 @@
             </tfoot>
           </table>
 
-          <section class="quote-references" id="quoteReferences" hidden><strong>FOTOS DE REFERÃŠNCIA DO CLIENTE</strong><div class="quote-references-grid" id="quoteReferencesGrid"></div></section>
+          <section class="quote-references" id="quoteReferences" hidden><strong>FOTOS DE REFERÊNCIA DO CLIENTE</strong><div class="quote-references-grid" id="quoteReferencesGrid"></div></section>
 
           <div class="payment-info">
             <div><strong>FORMA DE PAGAMENTO</strong></div>
             <div class="payment-note">PIX Celular: <strong>61933004316</strong></div>
-            <div class="payment-note">Recebedor: <strong>David PeÃ§anha TomÃ©</strong></div>
-            <div class="payment-note">Informe o valor do orÃ§amento manualmente no app do banco.</div>
+            <div class="payment-note">Recebedor: <strong>David Peçanha Tomé</strong></div>
+            <div class="payment-note">Informe o valor do orçamento manualmente no app do banco.</div>
           </div>
 
-          <section class="design-showcase" aria-label="Design grÃ¡fico e comunicaÃ§Ã£o visual">
+          <section class="design-showcase" aria-label="Design gráfico e comunicação visual">
             <div class="design-copy">
-              <div class="design-kicker">Design grÃ¡fico + comunicaÃ§Ã£o visual</div>
+              <div class="design-kicker">Design gráfico + comunicação visual</div>
               <strong>Projetos pensados para destacar sua marca no digital e no ponto de venda.</strong>
             </div>
             <div class="design-tags" aria-hidden="true">
@@ -2386,7 +2386,7 @@
 
           <div class="footer-logos">
             <img class="footer-logo" src="logo-innovae.png" alt="Innovae Digital" />
-            <div class="footer-note">Design, impressÃ£o e comunicaÃ§Ã£o visual</div>
+            <div class="footer-note">Design, impressão e comunicação visual</div>
           </div>
         </article>
       </section>
@@ -2426,7 +2426,7 @@
             window.clearTimeout(timeout);
           }
         }
-        throw lastError || new Error("API indisponÃ­vel.");
+        throw lastError || new Error("API indisponível.");
       }
 
       const fields = {};
@@ -2445,17 +2445,17 @@
         }, {});
 
       const defaults = {
-        documentType: "orÃ§amento",
+        documentType: "orçamento",
         clientName: "",
         discount: "0"
       };
 
       const company = {
-        providerName: "David P. TomÃ©",
+        providerName: "David P. Tomé",
         phone: "(61) 93300-4316",
         pixKey: "+5561933004316",
         pixDisplayKey: "61933004316",
-        city: "LuziÃ¢nia/GO",
+        city: "Luziânia/GO",
         email: "innovaedigital.media@gmail.com",
         social: "@innovaedigital.midia",
         pixName: "DAVID PECANHA TOME",
@@ -2486,7 +2486,7 @@
       async function loadUsers() {
         try {
           const response = await apiRequest("/users", { cache: "no-store" });
-          if (!response.ok) throw new Error(`API de usuÃ¡rios respondeu ${response.status}.`);
+          if (!response.ok) throw new Error(`API de usuários respondeu ${response.status}.`);
           const users = await response.json().catch(() => []);
           return Array.isArray(users) ? users : [];
         } catch {
@@ -2500,27 +2500,36 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(user)
         });
-        if (!response.ok) {`n          let details = "";`n          try {`n            const payload = await response.json();`n            details = payload?.erro || payload?.message || "";`n          } catch {`n            details = "";`n          }`n          throw new Error(details || "Não foi possível salvar o usuário no servidor.");`n        }
+        if (!response.ok) {
+          let details = "";
+          try {
+            const payload = await response.json();
+            details = payload?.erro || payload?.message || "";
+          } catch {
+            details = "";
+          }
+          throw new Error(details || "Não foi possível salvar o usuário no servidor.");
+        }
       }
 
       async function createFirstUser() {
         const login = byId("firstUserLogin").value.trim();
         const password = byId("firstUserPassword").value;
         if (!login || !password) {
-          byId("loginMessage").textContent = "Informe usuÃ¡rio e senha para criar o primeiro acesso.";
+          byId("loginMessage").textContent = "Informe usuário e senha para criar o primeiro acesso.";
           return;
         }
         const user = { login, password };
         try {
           await saveUsersToServer(user);
         } catch {
-          byId("loginMessage").textContent = "NÃ£o foi possÃ­vel criar o usuÃ¡rio na nuvem. Verifique a conexÃ£o com a base.";
+          byId("loginMessage").textContent = "Não foi possível criar o usuário na nuvem. Verifique a conexão com a base.";
           return;
         }
         byId("firstUserLogin").value = "";
         byId("firstUserPassword").value = "";
         await renderLoginUsers(login);
-        byId("loginMessage").textContent = "UsuÃ¡rio criado. Informe a senha para entrar.";
+        byId("loginMessage").textContent = "Usuário criado. Informe a senha para entrar.";
       }
 
       async function deleteUserFromServer(login) {
@@ -2544,13 +2553,13 @@
         if (!select) return;
         const users = await loadUsers();
         select.innerHTML = users.length
-          ? `<option value="">Selecione seu usuÃ¡rio</option>${users.map((user) => `<option value="${escapeHtml(user.login)}">${escapeHtml(user.login)}</option>`).join("")}`
-          : `<option value="">Nenhum usuÃ¡rio cadastrado</option>`;
+          ? `<option value="">Selecione seu usuário</option>${users.map((user) => `<option value="${escapeHtml(user.login)}">${escapeHtml(user.login)}</option>`).join("")}`
+          : `<option value="">Nenhum usuário cadastrado</option>`;
         select.disabled = !users.length;
         select.value = selectedLogin || "";
         byId("firstUserSetup").hidden = users.length > 0;
         if (!users.length) {
-          byId("loginMessage").textContent = "Nenhum usuÃ¡rio encontrado. Verifique a conexÃ£o com a base ou cadastre um usuÃ¡rio em uma instalaÃ§Ã£o conectada.";
+          byId("loginMessage").textContent = "Nenhum usuário encontrado. Verifique a conexão com a base ou cadastre um usuário em uma instalação conectada.";
         }
       }
 
@@ -2595,7 +2604,7 @@
         const users = await loadUsers();
         const user = users.find((item) => item.login === loginValue && item.password === passwordValue);
         if (!user) {
-          byId("loginMessage").textContent = "Login ou senha invï¿½lidos.";
+          byId("loginMessage").textContent = "Login ou senha inválidos.";
           return;
         }
         sessionStorage.setItem(sessionStorageKey, user.login);
@@ -2613,7 +2622,7 @@
         const loginValue = byId("newUserLogin").value.trim();
         const passwordValue = byId("newUserPassword").value;
         if (!loginValue || !passwordValue) {
-          alert("Informe login e senha para salvar o usuï¿½rio.");
+          alert("Informe login e senha para salvar o usuário.");
           return;
         }
         await saveUsersToServer({ login: loginValue, password: passwordValue });
@@ -2621,7 +2630,7 @@
         byId("newUserLogin").value = "";
         byId("newUserPassword").value = "";
         await renderUsers();
-        setStatus(`UsuÃ¡rio ${loginValue} salvo na nuvem.`);
+        setStatus(`Usuário ${loginValue} salvo na nuvem.`);
       }
 
       function byId(id) {
@@ -2666,7 +2675,7 @@
         });
         data.discount = cleanNumber(data.discount);
         data.items = items.map((item) => ({
-          description: item.description.trim() || "ServiÃ§o a definir",
+          description: item.description.trim() || "Serviço a definir",
           quantity: cleanNumber(item.quantity),
           unitPrice: cleanNumber(item.unitPrice)
         }));
@@ -2685,7 +2694,7 @@
       function renderReferencePhotos() {
         const target = byId("referencePreview");
         if (!target) return;
-        target.innerHTML = referencePhotos.map((photo, index) => `<div class="reference-photo"><img src="${escapeHtml(photo.url)}" alt="ReferÃªncia ${index + 1}" /><button type="button" data-remove-reference="${index}" aria-label="Remover foto">Ã—</button></div>`).join("");
+        target.innerHTML = referencePhotos.map((photo, index) => `<div class="reference-photo"><img src="${escapeHtml(photo.url)}" alt="Referência ${index + 1}" /><button type="button" data-remove-reference="${index}" aria-label="Remover foto">×</button></div>`).join("");
       }
 
       async function addReferencePhotos(files) {
@@ -2695,7 +2704,7 @@
           if (file.size > 900 * 1024) return reject(new Error(`${file.name} ultrapassa o limite de 900 KB.`));
           const reader = new FileReader();
           reader.onload = () => resolve({ name:file.name, url:reader.result });
-          reader.onerror = () => reject(new Error(`NÃ£o foi possÃ­vel ler ${file.name}.`));
+          reader.onerror = () => reject(new Error(`Não foi possível ler ${file.name}.`));
           reader.readAsDataURL(file);
         })));
         referencePhotos = [...referencePhotos, ...photos];
@@ -2705,7 +2714,7 @@
 
       function getProjectData() {
         return {
-          status: projectFields.projectStatus?.value || "OrÃ§amento enviado",
+          status: projectFields.projectStatus?.value || "Orçamento enviado",
           deliveryDate: projectFields.deliveryDate?.value || "",
           progress: Math.min(100, Math.max(0, cleanNumber(projectFields.projectProgress?.value || 0))),
           update: (projectFields.projectUpdate?.value || "").trim(),
@@ -2714,7 +2723,7 @@
       }
 
       function setProjectData(project = {}) {
-        if (projectFields.projectStatus) projectFields.projectStatus.value = project.status || "OrÃ§amento enviado";
+        if (projectFields.projectStatus) projectFields.projectStatus.value = project.status || "Orçamento enviado";
         if (projectFields.deliveryDate) projectFields.deliveryDate.value = project.deliveryDate || "";
         if (projectFields.projectProgress) projectFields.projectProgress.value = project.progress ?? 0;
         if (projectFields.projectUpdate) projectFields.projectUpdate.value = project.update || "";
@@ -2751,14 +2760,14 @@
           fill.classList.toggle("is-danger", percentage >= 90);
           panel?.classList.remove("is-offline");
           progress.setAttribute("aria-valuenow", String(percentage));
-          meta.textContent = `${percentage}% utilizado Â· atualizado agora`;
+          meta.textContent = `${percentage}% utilizado · atualizado agora`;
         } catch (error) {
-          value.textContent = "IndisponÃ­vel";
+          value.textContent = "Indisponível";
           fill.style.width = "0";
           fill.classList.remove("is-warning", "is-danger");
           panel?.classList.add("is-offline");
           progress.setAttribute("aria-valuenow", "0");
-          meta.textContent = "NÃ£o foi possÃ­vel consultar o armazenamento da nuvem.";
+          meta.textContent = "Não foi possível consultar o armazenamento da nuvem.";
         }
       }
 
@@ -2850,7 +2859,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
-        if (!response.ok) throw new Error("NÃ£o foi possÃ­vel salvar o orÃ§amento na nuvem.");
+        if (!response.ok) throw new Error("Não foi possível salvar o orçamento na nuvem.");
         const result = await response.json().catch(() => ({}));
         const record = { ...payload, id: isEditing ? editingQuoteId : result.id, storage: "cloud" };
         await loadSavedQuotes();
@@ -2905,7 +2914,7 @@
             <strong>${escapeHtml(quote.clientName || "Cliente")}</strong>
             <div class="client-link-meta">${createdAt} | ${money(quote.total)} | ${isPaid ? "PAGO" : "Link ativo"}</div>
             <div class="client-link-actions">
-              <button class="btn primary" type="button" data-edit-client-link="${escapeHtml(quote.id)}">Editar orÃ§amento</button>
+              <button class="btn primary" type="button" data-edit-client-link="${escapeHtml(quote.id)}">Editar orçamento</button>
               <button class="btn" type="button" data-copy-client-link="${escapeHtml(quote.id)}">Copiar link</button>
               <button class="btn" type="button" data-open-client-link="${escapeHtml(quote.id)}">Abrir</button>
               <button class="btn danger" type="button" data-delete-client-link="${escapeHtml(quote.id)}">Excluir</button>
@@ -2921,7 +2930,7 @@
         const quoteId = button.dataset.editClientLink || button.dataset.copyClientLink || button.dataset.openClientLink || button.dataset.deleteClientLink;
         const quote = savedQuotes.find((item) => String(item.id) === String(quoteId));
         if (!quote) {
-          setStatus("Esse orÃ§amento nÃ£o estÃ¡ mais disponÃ­vel. Atualize a lista.");
+          setStatus("Esse orçamento não está mais disponível. Atualize a lista.");
           await renderDbStats();
           return;
         }
@@ -2949,16 +2958,16 @@
         }
 
         if (button.dataset.deleteClientLink) {
-          if (!confirm(`Excluir o orÃ§amento de ${quote.clientName || "Cliente"}? Essa aÃ§Ã£o nÃ£o pode ser desfeita.`)) return;
+          if (!confirm(`Excluir o orçamento de ${quote.clientName || "Cliente"}? Essa ação não pode ser desfeita.`)) return;
           try {
             const response = await apiRequest(`/orcamentos/${encodeURIComponent(quote.id)}`, { method: "DELETE" });
-            if (!response.ok) throw new Error("Falha ao excluir orÃ§amento.");
+            if (!response.ok) throw new Error("Falha ao excluir orçamento.");
             if (String(editingQuoteId) === String(quote.id)) cancelEditing();
             await renderDbStats();
-            setStatus("OrÃ§amento excluÃ­do.");
+            setStatus("Orçamento excluído.");
           } catch (error) {
             console.error(error);
-            alert("NÃ£o foi possÃ­vel excluir o orÃ§amento. Verifique a conexÃ£o com o servidor.");
+            alert("Não foi possível excluir o orçamento. Verifique a conexão com o servidor.");
           }
         }
       }
@@ -2980,7 +2989,7 @@
         renderItems();
         renderPreview();
         updateEditState(record);
-        setStatus(`OrÃ§amento carregado para ediÃ§Ã£o.`);
+        setStatus(`Orçamento carregado para edição.`);
         document.querySelector(".controls").scrollTo({ top: 0, behavior: "smooth" });
       }
 
@@ -2991,13 +3000,13 @@
         const activeRecord = record || savedQuotes.find((quote) => quote.id === editingQuoteId);
         if (banner) banner.classList.toggle("active", Boolean(editingQuoteId));
         if (label) label.textContent = activeRecord ? `${activeRecord.clientName || "Cliente"}` : "";
-        if (linkButton) linkButton.textContent = editingQuoteId ? "SALVAR ALTERAÃ‡Ã•ES NO LINK DO CLIENTE" : "CRIAR LINK PARA CLIENTE";
+        if (linkButton) linkButton.textContent = editingQuoteId ? "SALVAR ALTERAÇÕES NO LINK DO CLIENTE" : "CRIAR LINK PARA CLIENTE";
       }
 
       function cancelEditing() {
         editingQuoteId = null;
         updateEditState();
-        setStatus("EdiÃ§Ã£o cancelada.");
+        setStatus("Edição cancelada.");
       }
 
       function validateQuoteData(data, action) {
@@ -3007,7 +3016,7 @@
           return false;
         }
         if (!data.items.some((item) => item.description !== "-" && item.quantity > 0 && item.unitPrice >= 0)) {
-          alert("Adicione pelo menos um item vÃ¡lido ao orÃ§amento.");
+          alert("Adicione pelo menos um item válido ao orçamento.");
           return false;
         }
         return true;
@@ -3017,7 +3026,7 @@
         const data = getFormData();
         if (!validateQuoteData(data, "criar o link")) return;
         try {
-          setStatus("Salvando orÃ§amento na nuvem...");
+          setStatus("Salvando orçamento na nuvem...");
           const record = await saveQuoteRecord(data);
           const link = getClientLink(record);
           await copyText(link);
@@ -3026,7 +3035,7 @@
           setStatus(`Link do cliente copiado: ${link}`);
         } catch (error) {
           console.error(error);
-          alert("NÃ£o foi possÃ­vel criar o link do cliente. Verifique se o servidor estÃ¡ conectado Ã  base.");
+          alert("Não foi possível criar o link do cliente. Verifique se o servidor está conectado à base.");
           setStatus("Falha ao criar link do cliente.");
         }
       }
@@ -3055,7 +3064,7 @@
         reader.onload = async () => {
           try {
             const payload = JSON.parse(reader.result);
-            if (!payload || typeof payload !== "object") throw new Error("Arquivo invÃ¡lido");if (Array.isArray(payload.materialPresets)) {
+            if (!payload || typeof payload !== "object") throw new Error("Arquivo inválido");if (Array.isArray(payload.materialPresets)) {
               materialPresets = [...new Set([...defaultMaterials, ...payload.materialPresets].map((item) => String(item).trim()).filter(Boolean))];
               saveMaterialPresets();
               renderMaterialPresets();
@@ -3071,28 +3080,28 @@
             renderPreview();
             setStatus("Backup importado com sucesso.");
           } catch {
-            alert("NÃ£o foi possÃ­vel importar esse arquivo de backup.");
+            alert("Não foi possível importar esse arquivo de backup.");
           }
         };
         reader.readAsText(file);
       }
 
       async function clearDatabase() {
-        if (!confirm("Tem certeza que deseja limpar histÃ³rico e materiais salvos na nuvem?")) return;
+        if (!confirm("Tem certeza que deseja limpar histórico e materiais salvos na nuvem?")) return;
         await loadSavedQuotes();
         await Promise.all(savedQuotes.map((quote) => apiRequest(`/orcamentos/${encodeURIComponent(quote.id)}`, { method: "DELETE" })));
         savedQuotes = [];
         materialPresets = await loadMaterialPresets();
         renderMaterialPresets();
         await renderDbStats();
-        setStatus("Banco de dados limpo. A numeraÃ§Ã£o atual foi mantida.");
+        setStatus("Banco de dados limpo. A numeração atual foi mantida.");
       }
 
       function formatArea(value) {
         return `${Number(value || 0).toLocaleString("pt-BR", {
           minimumFractionDigits: 2,
           maximumFractionDigits: 2
-        })} mÂ²`;
+        })} m²`;
       }
 
       function getCalcData() {
@@ -3106,7 +3115,7 @@
         const totalCost = totalArea * cost;
         const clientTotal = totalArea * price;
         return {
-          description: calcFields.materialPreset.value || "Material em mÂ²",
+          description: calcFields.materialPreset.value || "Material em m²",
           width,
           height,
           quantity,
@@ -3131,7 +3140,7 @@
       function addCalculatorItem() {
         const data = getCalcData();
         if (!data.width || !data.height || !data.clientTotal) {
-          alert("Informe largura, altura e valor final por mÂ² para adicionar ao orÃ§amento.");
+          alert("Informe largura, altura e valor final por m² para adicionar ao orçamento.");
           return;
         }
         items.push({
@@ -3141,7 +3150,7 @@
         });
         renderItems();
         renderPreview();
-        setStatus(`${data.description} adicionado ao orÃ§amento com venda de ${money(data.clientTotal)}.`);
+        setStatus(`${data.description} adicionado ao orçamento com venda de ${money(data.clientTotal)}.`);
       }
 
       function renderItems() {
@@ -3152,15 +3161,15 @@
           wrapper.innerHTML = `
             <div class="item-grid">
               <div class="field">
-                <label>DescriÃ§Ã£o</label>
+                <label>Descrição</label>
                 <textarea data-field="description" data-index="${index}">${escapeHtml(item.description)}</textarea>
               </div>
               <div class="field">
-                <label>Qtd (unid/mÂ²)</label>
+                <label>Qtd (unid/m²)</label>
                 <input data-field="quantity" data-index="${index}" type="number" min="0" step="0.01" value="${item.quantity}">
               </div>
               <div class="field">
-                <label>PreÃ§o unitÃ¡rio</label>
+                <label>Preço unitário</label>
                 <input data-field="unitPrice" data-index="${index}" type="number" min="0" step="0.01" value="${item.unitPrice}">
               </div>
             </div>
@@ -3181,7 +3190,7 @@
 
       function renderPreview() {
         const data = getFormData();
-        const docLabel = String(data.documentType || "orÃ§amento").toLowerCase() === "faturamento" ? "Faturamento" : "OrÃ§amento";
+        const docLabel = String(data.documentType || "orçamento").toLowerCase() === "faturamento" ? "Faturamento" : "Orçamento";
         const titleNode = document.querySelector(".pdf-title h2");
         if (titleNode) titleNode.textContent = docLabel;
         previewTargets.clientName.textContent = data.clientName || "-";
@@ -3192,10 +3201,10 @@
         const referenceGrid = byId("quoteReferencesGrid");
         if (references && referenceGrid) {
           references.hidden = !data.references?.length;
-          referenceGrid.innerHTML = (data.references || []).map((photo, index) => `<img src="${escapeHtml(photo.url)}" alt="ReferÃªncia ${index + 1}" />`).join("");
+          referenceGrid.innerHTML = (data.references || []).map((photo, index) => `<img src="${escapeHtml(photo.url)}" alt="Referência ${index + 1}" />`).join("");
         }
         previewTargets.social.textContent = data.social || "";
-        previewTargets.phoneCity.textContent = `${data.phone || "-"} â€” ${data.city || "-"}`;
+        previewTargets.phoneCity.textContent = `${data.phone || "-"} · ${data.city || "-"}`;
         previewTargets.grandTotal.textContent = money(data.total);
 
         previewRows.innerHTML = "";
@@ -3234,10 +3243,10 @@
 
       function pdfEscape(value) {
         const map = {
-          "â‚¬": 128, "â€š": 130, "Æ’": 131, "â€ž": 132, "â€¦": 133, "â€ ": 134, "â€¡": 135,
-          "Ë†": 136, "â€°": 137, "Å ": 138, "â€¹": 139, "Å’": 140, "Å½": 142,
-          "â€˜": 145, "â€™": 146, "â€œ": 147, "â€": 148, "â€¢": 149, "â€“": 150, "â€”": 151,
-          "Ëœ": 152, "â„¢": 153, "Å¡": 154, "â€º": 155, "Å“": 156, "Å¾": 158, "Å¸": 159
+          "€": 128, "‚": 130, "ƒ": 131, "„": 132, "…": 133, "†": 134, "‡": 135,
+          "ˆ": 136, "‰": 137, "Š": 138, "‹": 139, "Œ": 140, "Ž": 142,
+          "‘": 145, "’": 146, "“": 147, "”": 148, "•": 149, "–": 150, "—": 151,
+          "˜": 152, "™": 153, "š": 154, "›": 155, "œ": 156, "ž": 158, "Ÿ": 159
         };
         let output = "";
         for (const char of String(value)) {
@@ -3317,17 +3326,17 @@
         rect(margin, 50, pageW - margin * 2, 72, black);
         circle(margin + 46, 86, 28, yellow);
         rect(margin + 30, 91, 24, 7, black);
-        text("AGÃŠNCIA INNOVAE DIGITAL", margin + 62, 78, 13, "F2");
-        text(`${data.phone || "-"} â€” ${data.city || "-"}`, margin + 62, 96, 9);
+        text("AGÊNCIA INNOVAE DIGITAL", margin + 62, 78, 13, "F2");
+        text(`${data.phone || "-"} · ${data.city || "-"}`, margin + 62, 96, 9);
         text(data.social || "", pageW - margin - 130, 88, 9, "F1", "right", 130);
 
         rect(margin, 134, pageW - margin * 2, 78, light);
-        const docLabel = String(data.documentType || "orÃ§amento").toLowerCase() === "faturamento" ? "Faturamento" : "OrÃ§amento";
+        const docLabel = String(data.documentType || "orçamento").toLowerCase() === "faturamento" ? "Faturamento" : "Orçamento";
         text(docLabel, margin, 172, 28, "F2", "center", pageW - margin * 2);
 
         let top = 240;
-        text(`Prestador do ServiÃ§o: ${data.providerName || "-"}`, margin, top, 10, "F2");
-        text(`Telefone: ${data.phone || "-"}`, margin, top + 16, 10);
+        text(`Prestador do Serviço: ${data.providerName || "-"}`, margin, top, 10, "F2");
+        text(`Telefone: ${data.phone || "-"} · ${data.city || "-"}`, margin, top + 16, 10);
         text(`E-mail: ${data.email || "-"}`, margin, top + 32, 10);
         text(`Nome do Cliente: ${data.clientName || "-"}`, margin, top + 56, 10, "F2");
 
@@ -3337,7 +3346,7 @@
         const headerH = 30;
         const rowH = 46;
         rect(tableX, top, 505, headerH, yellow);
-        ["DESCRIÃ‡ÃƒO", "QTD (unid/mÂ²)", "PREÃ‡O UNITÃRIO", "TOTAL"].forEach((label, index) => {
+        ["DESCRIÇÃO", "QTD (unid/m²)", "PREÇO UNITÁRIO", "TOTAL"].forEach((label, index) => {
           lineRect(tableX + col[index], top, col[index + 1] - col[index], headerH);
           text(label, tableX + col[index] + 5, top + 19, 9, "F2", "center", col[index + 1] - col[index] - 10);
         });
@@ -3372,8 +3381,8 @@
         top += 66;
         const paymentLines = [
           "PIX Celular: 61933004316",
-          "Recebedor: David PeÃ§anha TomÃ©",
-          "Digite o valor do orÃ§amento manualmente no app do banco."
+          "Recebedor: David Peçanha Tomé",
+          "Digite o valor do orçamento manualmente no app do banco."
         ];
         text(data.paymentTitle || "FORMA DE PAGAMENTO:", margin, top, 10, "F2");
         paymentLines.forEach((line, index) => {
@@ -3419,13 +3428,13 @@
           return;
         }
         if (!data.items.some((item) => item.description !== "-" && item.quantity > 0 && item.unitPrice >= 0)) {
-          alert("Adicione pelo menos um item vÃ¡lido ao orÃ§amento.");
+          alert("Adicione pelo menos um item válido ao orçamento.");
           return;
         }
         await saveQuoteRecord(data);
         window.print();
         renderPreview();
-        setStatus(`OrÃ§amento enviado para salvar/imprimir.`);
+        setStatus(`Orçamento enviado para salvar/imprimir.`);
       }
 
       function printPdf() {
@@ -3448,7 +3457,7 @@
       async function createPdfBlobFromPreview(element) {
         const jsPDFClass = window.jspdf?.jsPDF || window.jsPDF;
         if (!jsPDFClass) {
-          throw new Error("jsPDF nÃ£o estÃ¡ carregado.");
+          throw new Error("jsPDF não está carregado.");
         }
         const { width, height } = getPreviewRenderSize(element);
         const canvas = await html2canvas(element, {
@@ -3475,7 +3484,7 @@
           return;
         }
         if (!data.items.some((item) => item.description !== "-" && item.quantity > 0 && item.unitPrice >= 0)) {
-          alert("Adicione pelo menos um item vÃ¡lido ao orÃ§amento.");
+          alert("Adicione pelo menos um item válido ao orçamento.");
           return;
         }
         await saveQuoteRecord(data);
@@ -3505,7 +3514,7 @@
           return;
         }
         if (!data.items.some((item) => item.description !== "-" && item.quantity > 0 && item.unitPrice >= 0)) {
-          alert("Adicione pelo menos um item vÃ¡lido ao orÃ§amento.");
+          alert("Adicione pelo menos um item válido ao orçamento.");
           return;
         }
         await saveQuoteRecord(data);
@@ -3516,13 +3525,13 @@
           if (navigator.canShare && navigator.canShare({ files: [file] })) {
             await navigator.share({
               files: [file],
-              title: "OrÃ§amento",
-              text: `OrÃ§amento para ${data.clientName}`
+              title: "Orçamento",
+              text: `Orçamento para ${data.clientName}`
             });
             setStatus(`PDF compartilhado com sucesso.`);
           } else {
             await downloadPdfFile();
-            alert("Compartilhamento direto nÃ£o estÃ¡ disponÃ­vel neste dispositivo. O PDF foi baixado automaticamente.");
+            alert("Compartilhamento direto não está disponível neste dispositivo. O PDF foi baixado automaticamente.");
           }
           renderPreview();
         } catch (error) {
@@ -3560,7 +3569,7 @@
           return;
         }
         if (!data.items.some((item) => item.description !== "-" && item.quantity > 0 && item.unitPrice >= 0)) {
-          alert("Adicione pelo menos um item vÃ¡lido ao orÃ§amento.");
+          alert("Adicione pelo menos um item válido ao orçamento.");
           return;
         }
         await saveQuoteRecord(data);
@@ -3577,7 +3586,7 @@
           renderPreview();
           setStatus(`JPEG gerado para download.`);
         } catch (error) {
-          alert("Falha ao gerar o JPEG. Tente novamente ou use o botÃ£o de PDF.");
+          alert("Falha ao gerar o JPEG. Tente novamente ou use o botão de PDF.");
           console.error(error);
         }
       }
@@ -3618,21 +3627,21 @@
         }));
 
         const questions = [
-          { text:"Qual sensaÃ§Ã£o sua marca precisa passar primeiro?", support:"Escolha a alternativa que mais parece com o momento do seu negÃ³cio.", options:[["ConfianÃ§a e organizaÃ§Ã£o", "classic"],["Criatividade e atitude", "bold"],["Leveza e proximidade", "human"]] },
-          { text:"Quando alguÃ©m encontra sua marca, o que deve perceber?", support:"NÃ£o existe resposta certa â€” existe a que deixa sua marca mais reconhecÃ­vel.", options:[["Profissional e estabelecida", "classic"],["Fora do Ã³bvio", "bold"],["Acolhedora e fÃ¡cil de entender", "human"]] },
-          { text:"Qual ambiente combina mais com o seu negÃ³cio?", support:"Sua escolha ajuda a definir o tom visual da marca.", options:[["Um espaÃ§o elegante e bem resolvido", "classic"],["Um lugar cheio de contrastes e energia", "bold"],["Um canto claro, prÃ³ximo e convidativo", "human"]] }
+          { text:"Qual sensação sua marca precisa passar primeiro?", support:"Escolha a alternativa que mais parece com o momento do seu negócio.", options:[["Confiança e organização", "classic"],["Criatividade e atitude", "bold"],["Leveza e proximidade", "human"]] },
+          { text:"Quando alguém encontra sua marca, o que deve perceber?", support:"Não existe resposta certa — existe a que deixa sua marca mais reconhecível.", options:[["Profissional e estabelecida", "classic"],["Fora do óbvio", "bold"],["Acolhedora e fácil de entender", "human"]] },
+          { text:"Qual ambiente combina mais com o seu negócio?", support:"Sua escolha ajuda a definir o tom visual da marca.", options:[["Um espaço elegante e bem resolvido", "classic"],["Um lugar cheio de contrastes e energia", "bold"],["Um canto claro, próximo e convidativo", "human"]] }
         ];
-        const profiles = { classic:{ name:"ClÃ¡ssico contemporÃ¢neo", text:"Sua marca pede estrutura, tipografia precisa e uma paleta sÃ³bria com pontos de destaque. Ã‰ uma direÃ§Ã£o que constrÃ³i confianÃ§a sem ficar distante." }, bold:{ name:"Impacto criativo", text:"Sua marca pode ocupar espaÃ§o com contrastes, cores marcantes e composiÃ§Ãµes expressivas. O segredo Ã© ter atitude com uma mensagem simples." }, human:{ name:"Humano e acolhedor", text:"Sua marca combina com cores gentis, elementos orgÃ¢nicos e uma linguagem direta. O visual deve aproximar antes mesmo do primeiro atendimento." } };
+        const profiles = { classic:{ name:"Clássico contemporâneo", text:"Sua marca pede estrutura, tipografia precisa e uma paleta sóbria com pontos de destaque. É uma direção que constrói confiança sem ficar distante." }, bold:{ name:"Impacto criativo", text:"Sua marca pode ocupar espaço com contrastes, cores marcantes e composições expressivas. O segredo é ter atitude com uma mensagem simples." }, human:{ name:"Humano e acolhedor", text:"Sua marca combina com cores gentis, elementos orgânicos e uma linguagem direta. O visual deve aproximar antes mesmo do primeiro atendimento." } };
         let step = 0; const answers = [];
         const question = byId("briefingQuestion"), support = byId("briefingSupport"), options = byId("briefingOptions"), progress = byId("briefingProgress"), result = byId("briefingResult"), reset = byId("briefingReset");
         const renderQuestion = () => { const current = questions[step]; question.textContent = current.text; support.textContent = current.support; options.hidden = false; progress.hidden = false; result.hidden = true; reset.hidden = true; progress.textContent = `Pergunta ${step + 1} de ${questions.length}`; options.innerHTML = current.options.map(([label,value]) => `<button class="quiz-option" type="button" data-briefing-answer="${value}">${label}</button>`).join(""); };
-        options.addEventListener("click", (event) => { const answer = event.target.closest("[data-briefing-answer]"); if (!answer) return; answers.push(answer.dataset.briefingAnswer); step += 1; if (step < questions.length) return renderQuestion(); const profile = Object.entries(answers.reduce((count, value) => ({ ...count, [value]:(count[value] || 0) + 1 }), {})).sort((a,b) => b[1] - a[1])[0][0]; const selected = profiles[profile]; options.hidden = true; progress.hidden = true; question.textContent = "Sua direÃ§Ã£o visual apareceu."; support.textContent = "Use este resultado como ponto de partida para uma conversa de briefing mais objetiva."; result.innerHTML = `<strong>${selected.name}</strong><p>${selected.text}</p>`; result.hidden = false; reset.hidden = false; });
+        options.addEventListener("click", (event) => { const answer = event.target.closest("[data-briefing-answer]"); if (!answer) return; answers.push(answer.dataset.briefingAnswer); step += 1; if (step < questions.length) return renderQuestion(); const profile = Object.entries(answers.reduce((count, value) => ({ ...count, [value]:(count[value] || 0) + 1 }), {})).sort((a,b) => b[1] - a[1])[0][0]; const selected = profiles[profile]; options.hidden = true; progress.hidden = true; question.textContent = "Sua direção visual apareceu."; support.textContent = "Use este resultado como ponto de partida para uma conversa de briefing mais objetiva."; result.innerHTML = `<strong>${selected.name}</strong><p>${selected.text}</p>`; result.hidden = false; reset.hidden = false; });
         reset.addEventListener("click", () => { step = 0; answers.length = 0; renderQuestion(); }); renderQuestion();
 
-        const criteria = ["Ã‰ fÃ¡cil de ler em tamanho pequeno?", "As cores combinam com o seu pÃºblico?", "VocÃª usaria esse logo com orgulho por mais 2 anos?", "Ele parece diferente dos concorrentes?"];
+        const criteria = ["É fácil de ler em tamanho pequeno?", "As cores combinam com o seu público?", "Você usaria esse logo com orgulho por mais 2 anos?", "Ele parece diferente dos concorrentes?"];
         const diagnostic = byId("diagnosticList"), score = byId("diagnosticScore"), message = byId("diagnosticMessage"); const ratings = Array(criteria.length).fill(null);
         diagnostic.innerHTML = criteria.map((criterion,index) => `<div class="diagnostic-item"><span>${criterion}</span><div class="score-options" aria-label="Nota para: ${criterion}">${[1,2,3,4,5].map(value => `<button type="button" data-score-index="${index}" data-score-value="${value}" aria-label="Nota ${value}">${value}</button>`).join("")}</div></div>`).join("");
-        diagnostic.addEventListener("click", (event) => { const button = event.target.closest("[data-score-index]"); if (!button) return; const index = Number(button.dataset.scoreIndex); ratings[index] = Number(button.dataset.scoreValue); diagnostic.querySelectorAll(`[data-score-index="${index}"]`).forEach((item) => item.classList.toggle("is-selected", Number(item.dataset.scoreValue) === ratings[index])); if (ratings.some((value) => value === null)) return; const total = ratings.reduce((sum,value) => sum + value, 0); const grade = (total / ratings.length).toFixed(1).replace(".", ","); score.textContent = `${grade}/5`; message.textContent = total >= 16 ? "Boa base: um refinamento estratÃ©gico pode deixar a marca ainda mais consistente." : total >= 11 ? "HÃ¡ potencial: vale alinhar tipografia, cores e aplicaÃ§Ãµes para ganhar clareza." : "Hora de dar atenÃ§Ã£o Ã  marca: uma identidade bem resolvida ajuda seu negÃ³cio a ser reconhecido."; });
+        diagnostic.addEventListener("click", (event) => { const button = event.target.closest("[data-score-index]"); if (!button) return; const index = Number(button.dataset.scoreIndex); ratings[index] = Number(button.dataset.scoreValue); diagnostic.querySelectorAll(`[data-score-index="${index}"]`).forEach((item) => item.classList.toggle("is-selected", Number(item.dataset.scoreValue) === ratings[index])); if (ratings.some((value) => value === null)) return; const total = ratings.reduce((sum,value) => sum + value, 0); const grade = (total / ratings.length).toFixed(1).replace(".", ","); score.textContent = `${grade}/5`; message.textContent = total >= 16 ? "Boa base: um refinamento estratégico pode deixar a marca ainda mais consistente." : total >= 11 ? "Há potencial: vale alinhar tipografia, cores e aplicações para ganhar clareza." : "Hora de dar atenção à marca: uma identidade bem resolvida ajuda seu negócio a ser reconhecido."; });
       }
 
       function bind() {
@@ -3654,14 +3663,14 @@
           if (!loginToRemove) return;
           const users = await loadUsers();
           if (users.length === 1) {
-            alert("Mantenha pelo menos um usuï¿½rio cadastrado.");
+            alert("Mantenha pelo menos um usuário cadastrado.");
             return;
           }
-          if (!confirm(`Remover o usuï¿½rio ${loginToRemove}?`)) return;
+          if (!confirm(`Remover o usuário ${loginToRemove}?`)) return;
           await deleteUserFromServer(loginToRemove);
           await renderUsers();
           await renderLoginUsers();
-          setStatus("UsuÃ¡rio removido da nuvem.");
+          setStatus("Usuário removido da nuvem.");
         });
 
         Object.keys(defaults).forEach((key) => {
@@ -3718,7 +3727,7 @@
         });
         byId("referencePhotos").addEventListener("change", async (event) => {
           try { await addReferencePhotos(event.target.files); }
-          catch (error) { alert(error.message || "Nï¿½o foi possï¿½vel adicionar a foto."); }
+          catch (error) { alert(error.message || "Não foi possível adicionar a foto."); }
           event.target.value = "";
         });
         byId("referencePreview").addEventListener("click", (event) => {
@@ -3758,7 +3767,7 @@
         renderMaterialPresets();
         renderCalculator();
       });
-      // MantÃ©m a tela de login aberta apÃ³s recarregar, sem abrir o sistema automaticamente.
+      // Mantém a tela de login aberta após recarregar, sem abrir o sistema automaticamente.
       const activeUser = sessionStorage.getItem(sessionStorageKey) || localStorage.getItem(rememberedUserStorageKey);
       if (activeUser) {
         sessionStorage.setItem(sessionStorageKey, activeUser);
