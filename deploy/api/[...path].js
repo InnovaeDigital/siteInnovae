@@ -6,7 +6,6 @@ const JSONBIN_BASE_URL = 'https://api.jsonbin.io/v3';
 
 const emptyStore = () => ({ users: [], quotes: [], materials: [], config: {} });
 let store = emptyStore();
-let storeLoaded = false;
 
 function normalizeUser(user) {
   return {
@@ -50,7 +49,6 @@ async function jsonbinRequest(method, path, body) {
 }
 
 async function loadStore() {
-  if (storeLoaded) return store;
   const payload = await jsonbinRequest('GET', `/b/${JSONBIN_BIN_ID}/latest`);
   const record = payload?.record || payload || {};
   store = {
@@ -59,7 +57,6 @@ async function loadStore() {
     materials: Array.isArray(record.materials) ? record.materials : [],
     config: record.config && typeof record.config === 'object' ? record.config : {}
   };
-  storeLoaded = true;
   return store;
 }
 
@@ -70,6 +67,7 @@ async function saveStore() {
 function json(res, status, payload) {
   res.statusCode = status;
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader('Cache-Control', 'no-store, max-age=0');
   res.end(JSON.stringify(payload));
 }
 

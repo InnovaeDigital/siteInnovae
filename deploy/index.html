@@ -2540,7 +2540,12 @@
       }
 
       async function deleteUserFromServer(login) {
-        await apiRequest(`/users/${encodeURIComponent(login)}`, { method: "DELETE" });
+        const response = await apiRequest(`/users/${encodeURIComponent(login)}`, { method: "DELETE" });
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(payload?.erro || payload?.message || `API respondeu ${response.status}.`);
+        }
+        if (!payload.deleted) throw new Error("Usuário não encontrado na nuvem.");
       }
 
       async function renderUsers() {
@@ -2986,15 +2991,19 @@
 
         if (button.dataset.deleteClientLink) {
           if (!confirm(`Excluir o orçamento de ${quote.clientName || "Cliente"}? Essa ação não pode ser desfeita.`)) return;
+          button.disabled = true;
           try {
             const response = await apiRequest(`/orcamentos/${encodeURIComponent(quote.id)}`, { method: "DELETE" });
-            if (!response.ok) throw new Error("Falha ao excluir orçamento.");
+            const payload = await response.json().catch(() => ({}));
+            if (!response.ok) throw new Error(payload?.erro || payload?.message || "Falha ao excluir orçamento.");
+            if (!payload.deleted) throw new Error("Orçamento não encontrado na nuvem.");
             if (String(editingQuoteId) === String(quote.id)) cancelEditing();
             await renderDbStats();
             setStatus("Orçamento excluído.");
           } catch (error) {
             console.error(error);
-            alert("Não foi possível excluir o orçamento. Verifique a conexão com o servidor.");
+            button.disabled = false;
+            alert(`Não foi possível excluir o orçamento. Motivo: ${error?.message || "erro desconhecido"}`);
           }
         }
       }
@@ -3693,15 +3702,22 @@
             alert(`Não foi possível conectar à nuvem. Motivo: ${usersLoadError}`);
             return;
           }
-          if (users.length === 1) {
-            alert("Mantenha pelo menos um usuário cadastrado.");
-            return;
-          }
           if (!confirm(`Remover o usuário ${loginToRemove}?`)) return;
-          await deleteUserFromServer(loginToRemove);
-          await renderUsers();
-          await renderLoginUsers();
-          setStatus("Usuário removido da nuvem.");
+          try {
+            await deleteUserFromServer(loginToRemove);
+            const removedActiveUser = sessionStorage.getItem(sessionStorageKey) === loginToRemove;
+            if (removedActiveUser) {
+              sessionStorage.removeItem(sessionStorageKey);
+              localStorage.removeItem(rememberedUserStorageKey);
+              await showLoginOnly();
+            } else {
+              await renderUsers();
+              await renderLoginUsers();
+              setStatus("Usuário removido da nuvem.");
+            }
+          } catch (error) {
+            alert(`Não foi possível remover o usuário. Motivo: ${error?.message || "erro desconhecido"}`);
+          }
         });
 
         Object.keys(defaults).forEach((key) => {

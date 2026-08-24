@@ -18,7 +18,6 @@ app.use(express.static('./'));
 
 const emptyStore = () => ({ users: [], quotes: [], materials: [], config: {} });
 let store = emptyStore();
-let storeLoaded = false;
 
 function normalizeUser(user) {
   return {
@@ -69,7 +68,6 @@ async function jsonbinRequest(method, path, body) {
 }
 
 async function loadStore() {
-  if (storeLoaded) return store;
   const payload = await jsonbinRequest('GET', `/b/${JSONBIN_BIN_ID}/latest`);
   const record = payload?.record || payload || {};
   store = {
@@ -78,7 +76,6 @@ async function loadStore() {
     materials: Array.isArray(record.materials) ? record.materials : [],
     config: record.config && typeof record.config === 'object' ? record.config : {}
   };
-  storeLoaded = true;
   return store;
 }
 
