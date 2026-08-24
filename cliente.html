@@ -887,7 +887,8 @@
       function resolveApiBase() {
         const runtimeBase = typeof window.__API_BASE__ === "string" ? window.__API_BASE__.trim() : "";
         const metaBase = document.querySelector('meta[name="api-base"]')?.content?.trim() || "";
-        const base = runtimeBase || metaBase || "/api";
+        const publicBase = `${window.location.origin}/api`;
+        const base = runtimeBase || metaBase || publicBase;
         return base.replace(/\/+$/, "") || "/api";
       }
 
