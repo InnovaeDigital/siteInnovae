@@ -90,8 +90,17 @@ function buildQuoteLookup(id) {
   return String(id || '').trim();
 }
 
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date().toISOString() });
+app.get('/api/health', async (req, res) => {
+  try {
+    await loadStore();
+    res.json({
+      status: 'OK',
+      storage: 'connected',
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({ status: 'ERROR', storage: 'disconnected', erro: error.message });
+  }
 });
 
 app.get('/api/stats', async (req, res) => {

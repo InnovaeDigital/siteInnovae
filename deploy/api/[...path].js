@@ -84,7 +84,12 @@ export default async function handler(req, res) {
     const method = req.method || 'GET';
 
     if (method === 'GET' && path === '/health') {
-      return json(res, 200, { status: 'OK', timestamp: new Date().toISOString() });
+      await loadStore();
+      return json(res, 200, {
+        status: 'OK',
+        storage: 'connected',
+        timestamp: new Date().toISOString()
+      });
     }
 
     if (method === 'GET' && path === '/stats') {
@@ -250,6 +255,16 @@ export default async function handler(req, res) {
 }
 
 async function readJson(req) {
+  if (req.body !== undefined && req.body !== null) {
+    if (typeof req.body === 'object' && !Buffer.isBuffer(req.body)) return req.body;
+    const value = Buffer.isBuffer(req.body) ? req.body.toString('utf8') : String(req.body);
+    try {
+      return JSON.parse(value || '{}');
+    } catch {
+      return {};
+    }
+  }
+
   const chunks = [];
   for await (const chunk of req) chunks.push(chunk);
   if (!chunks.length) return {};

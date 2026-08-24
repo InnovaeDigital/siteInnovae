@@ -2482,15 +2482,21 @@
       let usersSyncPromise = Promise.resolve();
       let usersSyncInProgress = false;
       let cloudStorageTimer = null;
+      let usersLoadError = "";
 
       async function loadUsers() {
         try {
           const response = await apiRequest("/users", { cache: "no-store" });
-          if (!response.ok) throw new Error(`API de usuários respondeu ${response.status}.`);
+          if (!response.ok) {
+            const payload = await response.json().catch(() => ({}));
+            throw new Error(payload?.erro || payload?.message || `API de usuários respondeu ${response.status}.`);
+          }
           const users = await response.json().catch(() => []);
+          usersLoadError = "";
           return Array.isArray(users) ? users : [];
-        } catch {
-          return [];
+        } catch (error) {
+          usersLoadError = error?.message || "API de usuários indisponível.";
+          return null;
         }
       }
 
@@ -2522,8 +2528,9 @@
         const user = { login, password };
         try {
           await saveUsersToServer(user);
-        } catch {
-          byId("loginMessage").textContent = "Não foi possível criar o usuário na nuvem. Verifique a conexão com a base.";
+        } catch (error) {
+          const details = error?.message ? ` Motivo: ${error.message}` : "";
+          byId("loginMessage").textContent = `Não foi possível criar o usuário na nuvem.${details}`;
           return;
         }
         byId("firstUserLogin").value = "";
@@ -2540,6 +2547,10 @@
         const list = byId("userList");
         if (!list) return;
         const users = await loadUsers();
+        if (!users) {
+          list.innerHTML = `<p class="hint">Não foi possível carregar os usuários: ${escapeHtml(usersLoadError)}</p>`;
+          return;
+        }
         list.innerHTML = users.map((user) => `
           <div class="user-row">
             <strong>${escapeHtml(user.login)}</strong>
@@ -2552,6 +2563,13 @@
         const select = byId("loginUser");
         if (!select) return;
         const users = await loadUsers();
+        if (!users) {
+          select.innerHTML = `<option value="">Nuvem indisponível</option>`;
+          select.disabled = true;
+          byId("firstUserSetup").hidden = true;
+          byId("loginMessage").textContent = `Não foi possível conectar à nuvem. Motivo: ${usersLoadError}`;
+          return;
+        }
         select.innerHTML = users.length
           ? `<option value="">Selecione seu usuário</option>${users.map((user) => `<option value="${escapeHtml(user.login)}">${escapeHtml(user.login)}</option>`).join("")}`
           : `<option value="">Nenhum usuário cadastrado</option>`;
@@ -2559,7 +2577,7 @@
         select.value = selectedLogin || "";
         byId("firstUserSetup").hidden = users.length > 0;
         if (!users.length) {
-          byId("loginMessage").textContent = "Nenhum usuário encontrado. Verifique a conexão com a base ou cadastre um usuário em uma instalação conectada.";
+          byId("loginMessage").textContent = "Nenhum usuário foi encontrado. Cadastre o primeiro acesso para iniciar.";
         }
       }
 
@@ -2602,6 +2620,10 @@
         const loginValue = byId("loginUser").value.trim();
         const passwordValue = byId("loginPassword").value;
         const users = await loadUsers();
+        if (!users) {
+          byId("loginMessage").textContent = `Não foi possível conectar à nuvem. Motivo: ${usersLoadError}`;
+          return;
+        }
         const user = users.find((item) => item.login === loginValue && item.password === passwordValue);
         if (!user) {
           byId("loginMessage").textContent = "Login ou senha inválidos.";
@@ -2625,7 +2647,12 @@
           alert("Informe login e senha para salvar o usuário.");
           return;
         }
-        await saveUsersToServer({ login: loginValue, password: passwordValue });
+        try {
+          await saveUsersToServer({ login: loginValue, password: passwordValue });
+        } catch (error) {
+          alert(`Não foi possível salvar o usuário na nuvem. Motivo: ${error?.message || "erro desconhecido"}`);
+          return;
+        }
         await renderLoginUsers(loginValue);
         byId("newUserLogin").value = "";
         byId("newUserPassword").value = "";
@@ -3662,6 +3689,10 @@
           const loginToRemove = event.target.dataset.removeUser;
           if (!loginToRemove) return;
           const users = await loadUsers();
+          if (!users) {
+            alert(`Não foi possível conectar à nuvem. Motivo: ${usersLoadError}`);
+            return;
+          }
           if (users.length === 1) {
             alert("Mantenha pelo menos um usuário cadastrado.");
             return;
