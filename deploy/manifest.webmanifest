@@ -1,0 +1,19 @@
+﻿{
+  "name": "Gerador de OrÃ§amentos Innovae",
+  "short_name": "OrÃ§amentos",
+  "description": "Gerador de orÃ§amentos em modo escuro com instalaÃ§Ã£o na tela de inÃ­cio.",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#07080f",
+  "theme_color": "#0a0b17",
+  "icons": [
+    {
+      "src": "app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
+
