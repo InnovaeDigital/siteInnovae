@@ -119,9 +119,12 @@ export default async function handler(req, res) {
       return json(res, 201, user);
     }
 
-    if (method === 'DELETE' && path.startsWith('/users/')) {
+    if (method === 'DELETE' && (path.startsWith('/users/') || path === '/users')) {
       await loadStore();
-      const login = decodeURIComponent(path.slice('/users/'.length));
+      const login = path === '/users'
+        ? String(url.searchParams.get('login') || '')
+        : decodeURIComponent(path.slice('/users/'.length));
+      if (!login) return json(res, 400, { erro: 'Usuário não informado' });
       const before = store.users.length;
       store.users = store.users.filter((user) => user.login !== login);
       await saveStore();
@@ -141,7 +144,9 @@ export default async function handler(req, res) {
       return json(res, 200, { items: store.materials });
     }
 
-    if (method === 'GET' && path === '/orcamentos') {
+    const quoteIdFromQuery = String(url.searchParams.get('id') || '');
+
+    if (method === 'GET' && path === '/orcamentos' && !quoteIdFromQuery) {
       await loadStore();
       return json(res, 200, store.quotes.map(serializeQuote));
     }
@@ -158,9 +163,9 @@ export default async function handler(req, res) {
       return json(res, 201, { mensagem: 'Orçamento criado com sucesso', id: body.id });
     }
 
-    if (path.startsWith('/orcamentos/')) {
+    if (path.startsWith('/orcamentos/') || (path === '/orcamentos' && quoteIdFromQuery)) {
       await loadStore();
-      const id = decodeURIComponent(path.slice('/orcamentos/'.length));
+      const id = quoteIdFromQuery || decodeURIComponent(path.slice('/orcamentos/'.length));
       const index = store.quotes.findIndex((item) => String(item.id) === id);
 
       if (method === 'GET') {

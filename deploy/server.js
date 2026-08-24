@@ -140,6 +140,20 @@ app.post('/api/users', async (req, res) => {
   }
 });
 
+app.delete('/api/users', async (req, res) => {
+  try {
+    const login = String(req.query.login || '');
+    if (!login) return res.status(400).json({ erro: 'Usuário não informado' });
+    await loadStore();
+    const before = store.users.length;
+    store.users = store.users.filter((user) => user.login !== login);
+    await saveStore();
+    res.json({ deleted: store.users.length < before });
+  } catch (error) {
+    res.status(500).json({ erro: error.message });
+  }
+});
+
 app.delete('/api/users/:login', async (req, res) => {
   try {
     await loadStore();
@@ -191,6 +205,12 @@ app.post('/api/orcamentos', async (req, res) => {
 app.get('/api/orcamentos', async (req, res) => {
   try {
     await loadStore();
+    const id = String(req.query.id || '');
+    if (id) {
+      const quote = store.quotes.find((item) => String(item.id) === buildQuoteLookup(id));
+      if (!quote) return res.status(404).json({ erro: 'Orçamento não encontrado' });
+      return res.json(serializeQuote(quote));
+    }
     res.json(store.quotes.map(serializeQuote));
   } catch (error) {
     res.status(500).json({ erro: error.message });
@@ -203,6 +223,28 @@ app.get('/api/orcamentos/:id', async (req, res) => {
     const quote = store.quotes.find((item) => String(item.id) === buildQuoteLookup(req.params.id));
     if (!quote) return res.status(404).json({ erro: 'Orçamento não encontrado' });
     res.json(serializeQuote(quote));
+  } catch (error) {
+    res.status(500).json({ erro: error.message });
+  }
+});
+
+app.put('/api/orcamentos', async (req, res) => {
+  try {
+    await loadStore();
+    const id = String(req.query.id || '');
+    if (!id) return res.status(400).json({ erro: 'Orçamento não informado' });
+    const idx = store.quotes.findIndex((item) => String(item.id) === buildQuoteLookup(id));
+    if (idx < 0) return res.status(404).json({ erro: 'Orçamento não encontrado' });
+    const { _id, id: bodyId, ...payload } = req.body || {};
+    store.quotes[idx] = {
+      ...store.quotes[idx],
+      ...payload,
+      id: store.quotes[idx].id,
+      dataCriacao: store.quotes[idx].dataCriacao,
+      dataAtualizacao: new Date().toISOString()
+    };
+    await saveStore();
+    res.json({ mensagem: 'Orçamento atualizado com sucesso' });
   } catch (error) {
     res.status(500).json({ erro: error.message });
   }
@@ -223,6 +265,20 @@ app.put('/api/orcamentos/:id', async (req, res) => {
     };
     await saveStore();
     res.json({ mensagem: 'Orçamento atualizado com sucesso' });
+  } catch (error) {
+    res.status(500).json({ erro: error.message });
+  }
+});
+
+app.delete('/api/orcamentos', async (req, res) => {
+  try {
+    await loadStore();
+    const id = String(req.query.id || '');
+    if (!id) return res.status(400).json({ erro: 'Orçamento não informado' });
+    const before = store.quotes.length;
+    store.quotes = store.quotes.filter((item) => String(item.id) !== buildQuoteLookup(id));
+    await saveStore();
+    res.json({ mensagem: 'Orçamento deletado com sucesso', deleted: store.quotes.length < before });
   } catch (error) {
     res.status(500).json({ erro: error.message });
   }

@@ -1031,7 +1031,7 @@
         if (window.location.protocol === "file:" && !/^https?:\/\//i.test(apiBase)) {
           throw new Error("Abra o site por HTTP/HTTPS ou defina uma URL absoluta em api-base.");
         }
-        const response = await fetch(`${apiBase}/orcamentos/${encodeURIComponent(quoteId)}`, { cache: "no-store" });
+        const response = await fetch(`${apiBase}/orcamentos?id=${encodeURIComponent(quoteId)}`, { cache: "no-store" });
         if (!response.ok) throw new Error("Orçamento não encontrado.");
         return response.json();
       }

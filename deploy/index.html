@@ -2540,7 +2540,7 @@
       }
 
       async function deleteUserFromServer(login) {
-        const response = await apiRequest(`/users/${encodeURIComponent(login)}`, { method: "DELETE" });
+        const response = await apiRequest(`/users?login=${encodeURIComponent(login)}`, { method: "DELETE" });
         const payload = await response.json().catch(() => ({}));
         if (!response.ok) {
           throw new Error(payload?.erro || payload?.message || `API respondeu ${response.status}.`);
@@ -2886,7 +2886,7 @@
           references: data.references || []
         };
         const isEditing = Boolean(editingQuoteId);
-        const response = await apiRequest(`/orcamentos${isEditing ? `/${encodeURIComponent(editingQuoteId)}` : ""}`, {
+        const response = await apiRequest(`/orcamentos${isEditing ? `?id=${encodeURIComponent(editingQuoteId)}` : ""}`, {
           method: isEditing ? 'PUT' : 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
@@ -2993,7 +2993,7 @@
           if (!confirm(`Excluir o orçamento de ${quote.clientName || "Cliente"}? Essa ação não pode ser desfeita.`)) return;
           button.disabled = true;
           try {
-            const response = await apiRequest(`/orcamentos/${encodeURIComponent(quote.id)}`, { method: "DELETE" });
+            const response = await apiRequest(`/orcamentos?id=${encodeURIComponent(quote.id)}`, { method: "DELETE" });
             const payload = await response.json().catch(() => ({}));
             if (!response.ok) throw new Error(payload?.erro || payload?.message || "Falha ao excluir orçamento.");
             if (!payload.deleted) throw new Error("Orçamento não encontrado na nuvem.");
@@ -3125,7 +3125,7 @@
       async function clearDatabase() {
         if (!confirm("Tem certeza que deseja limpar histórico e materiais salvos na nuvem?")) return;
         await loadSavedQuotes();
-        await Promise.all(savedQuotes.map((quote) => apiRequest(`/orcamentos/${encodeURIComponent(quote.id)}`, { method: "DELETE" })));
+        await Promise.all(savedQuotes.map((quote) => apiRequest(`/orcamentos?id=${encodeURIComponent(quote.id)}`, { method: "DELETE" })));
         savedQuotes = [];
         materialPresets = await loadMaterialPresets();
         renderMaterialPresets();
