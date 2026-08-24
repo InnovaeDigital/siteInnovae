@@ -10,7 +10,6 @@ const PORT = process.env.PORT || 3000;
 
 const JSONBIN_BIN_ID = process.env.JSONBIN_BIN_ID || '6a8c3f21da38895dfe0a8282';
 const JSONBIN_MASTER_KEY = process.env.JSONBIN_MASTER_KEY;
-const JSONBIN_ACCESS_KEY = process.env.JSONBIN_ACCESS_KEY;
 const JSONBIN_BASE_URL = 'https://api.jsonbin.io/v3';
 
 app.use(cors());
@@ -47,13 +46,12 @@ function normalizeQuote(quote) {
 }
 
 function jsonbinHeaders() {
-  if (!JSONBIN_MASTER_KEY || !JSONBIN_ACCESS_KEY) {
-    throw new Error('Credenciais do JSONBin não configuradas.');
+  if (!JSONBIN_MASTER_KEY) {
+    throw new Error('Credencial principal do JSONBin não configurada.');
   }
   return {
     'Content-Type': 'application/json',
-    'X-Master-Key': JSONBIN_MASTER_KEY,
-    'X-Access-Key': JSONBIN_ACCESS_KEY
+    'X-Master-Key': JSONBIN_MASTER_KEY
   };
 }
 
