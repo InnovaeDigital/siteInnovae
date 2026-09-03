@@ -1770,6 +1770,7 @@
       .portfolio-link span { color: var(--yellow); font-size: 24px; transition: transform .25s ease; }
       .portfolio-link:hover span { transform: translateX(8px); }
       .home-footer { position: relative; z-index: 1; display: flex; justify-content: space-between; gap: 20px; padding: 24px clamp(20px, 5vw, 72px); color: #777; background: #050505; font-size: 12px; }
+      .creator-credit { color: #aaa; font-size: 11px; letter-spacing: .02em; }
       @keyframes revealUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
       @keyframes orbDrift { to { transform: translate3d(-8%, 12%, 0) scale(1.16); } }
       .home-visual { position:absolute; z-index:0; width:min(42vw,590px); height:min(42vw,590px); right:clamp(20px,7vw,118px); top:46px; pointer-events:none; }
@@ -2085,6 +2086,7 @@
         <div class="home-nav-links">
           <a href="https://www.instagram.com/innovaedigital.midia/?hl=pt-br" target="_blank" rel="noopener noreferrer">Instagram</a>
           <a href="https://wa.me/5561933004316?text=Olá%2C%20vim%20pelo%20site%20da%20Innovae%20Digital." target="_blank" rel="noopener noreferrer">Contato</a>
+          <a href="briefing.html">Briefing</a>
           <button class="system-entry" id="showLogin" type="button">Área interna</button>
         </div>
       </nav>
@@ -2105,6 +2107,7 @@
           <p>Estratégia, design e presença visual para negócios que querem ser percebidos, lembrados e escolhidos.</p>
           <div class="home-actions">
             <a class="home-button" href="https://wa.me/5561933004316?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20Innovae%20Digital%20e%20quero%20um%20atendimento%20humanizado." target="_blank" rel="noopener noreferrer">Atendimento no WhatsApp</a>
+            <a class="home-button secondary" href="briefing.html">Abrir briefing rápido</a>
           </div>
         </div>
         <div class="service-grid" aria-label="Serviços da Innovae Digital">
@@ -2146,7 +2149,7 @@
           <div class="tool-kicker">FAQ de microempresário</div><h3>Respostas sem enrolação.</h3><p>O básico para contratar design com mais segurança.</p><div class="micro-faq"><details><summary>Eu mudo o design se não gostar?</summary><p>Sim. O processo inclui apresentação e ajustes alinhados ao briefing contratado. Assim refinamos a solução com direção, sem recomeçar do zero a cada etapa.</p></details><details><summary>Como funciona o pagamento?</summary><p>O formato e as etapas de pagamento são definidos na proposta, antes de começar. Você recebe tudo organizado para aprovar com clareza.</p></details><details><summary>Os arquivos são meus?</summary><p>Após a quitação do projeto, você recebe os arquivos finais combinados na proposta para usar sua marca e seus materiais com autonomia.</p></details><details><summary>Quanto tempo leva?</summary><p>O prazo depende do escopo e da agilidade nas aprovações. A previsão de entrega é apresentada já no orçamento.</p></details></div>
         </section>
       </section>
-      <footer class="home-footer"><span>© Innovae Digital</span><span>Design, impressão e comunicação visual · Luziânia/GO</span></footer>
+      <footer class="home-footer"><span>© Innovae Digital</span><span>Design, impressão e comunicação visual · Luziânia/GO</span><span class="creator-credit">Site produzido por David P. Tomé · Proprietário da Innovae Digital</span></footer>
     </main>
 
     <main class="app" id="systemApp" hidden>
@@ -2513,7 +2516,7 @@
 
           <div class="footer-logos">
             <img class="footer-logo" src="logo-innovae.png" alt="Innovae Digital" />
-            <div class="footer-note">Design, impressão e comunicação visual</div>
+          <div class="footer-note">Design, impressão e comunicação visual<br /><span class="creator-credit">Site produzido por David P. Tomé · Proprietário da Innovae Digital</span></div>
           </div>
         </article>
       </section>

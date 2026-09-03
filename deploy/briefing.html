@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#050505" />
+    <meta name="description" content="Escolha o briefing da Innovae Digital e envie as informações do seu projeto pelo WhatsApp." />
+    <meta name="robots" content="index,follow" />
+    <link rel="icon" href="app-icon.svg" type="image/svg+xml" />
+    <title>Briefing | Innovae Digital</title>
+    <style>
+      :root { --yellow:#fff200; --black:#050505; --white:#fff; --gray:#a9a9a9; --line:rgba(255,255,255,.17); }
+      * { box-sizing:border-box; }
+      html { scroll-behavior:smooth; }
+      body { margin:0; color:var(--white); background:var(--black); font-family:Arial,Helvetica,sans-serif; overflow-x:hidden; }
+      a { color:inherit; }
+      .briefing-page { min-height:100vh; position:relative; background:radial-gradient(circle at 78% 30%, rgba(255,242,0,.11), transparent 27%), #050505; }
+      .briefing-page::before { content:""; position:fixed; inset:0; pointer-events:none; opacity:.18; background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px); background-size:58px 58px; mask-image:linear-gradient(to bottom,black,transparent 90%); }
+      .topbar { position:relative; z-index:3; display:flex; justify-content:space-between; align-items:center; padding:22px clamp(20px,5vw,72px); }
+      .topbar-logo { width:170px; max-width:52vw; }
+      .topbar-links { display:flex; gap:24px; align-items:center; }
+      .topbar-links a { color:rgba(255,255,255,.7); font-size:12px; letter-spacing:.08em; text-decoration:none; text-transform:uppercase; transition:color .25s; }
+      .topbar-links a:hover,.topbar-links .active { color:var(--yellow); }
+      .landing { position:relative; z-index:1; min-height:calc(100vh - 92px); display:grid; grid-template-columns:minmax(0,1.02fr) minmax(360px,.98fr); gap:clamp(24px,5vw,86px); align-items:center; padding:30px clamp(20px,5vw,72px) 84px; }
+      .landing.is-locked { visibility:hidden; opacity:0; pointer-events:none; }
+      .landing-copy { animation:revealUp .8s .15s both cubic-bezier(.16,1,.3,1); }
+      .eyebrow { display:flex; align-items:center; gap:10px; color:var(--yellow); font-size:12px; font-weight:900; letter-spacing:.13em; text-transform:uppercase; }
+      .eyebrow::before { content:""; width:32px; height:2px; background:var(--yellow); }
+      h1 { max-width:690px; margin:20px 0 24px; font-size:clamp(48px,7.4vw,104px); line-height:.88; letter-spacing:-.07em; }
+      h1 em,.stage-heading h2 em { color:var(--yellow); font-style:normal; }
+      .lead { max-width:590px; margin:0; color:#aaa; font-size:clamp(16px,1.8vw,20px); line-height:1.55; }
+      .media-note { display:flex; align-items:flex-start; gap:12px; max-width:530px; margin-top:30px; padding:15px 0 0; border-top:1px solid var(--line); color:#d1d1d1; font-size:13px; line-height:1.5; }
+      .media-note strong { color:var(--yellow); font-size:20px; line-height:1; }
+      .selector { position:relative; animation:revealUp .9s .3s both cubic-bezier(.16,1,.3,1); }
+      .selector::before { content:""; position:absolute; z-index:-1; width:430px; height:430px; left:50%; top:50%; transform:translate(-50%,-50%); border:1px solid rgba(255,242,0,.38); border-radius:50%; box-shadow:0 0 0 58px rgba(255,242,0,.035),0 0 0 118px rgba(255,242,0,.022); animation:orbit 18s linear infinite; }
+      .selector::after { content:""; position:absolute; z-index:-1; width:9px; height:9px; top:10%; right:8%; border-radius:50%; background:var(--yellow); box-shadow:0 0 20px 5px rgba(255,242,0,.65); animation:dotFloat 3.6s ease-in-out infinite; }
+      .selector-head { display:flex; justify-content:space-between; align-items:end; margin-bottom:14px; }
+      .selector-head span { color:var(--yellow); font-size:11px; font-weight:900; letter-spacing:.12em; text-transform:uppercase; }
+      .selector-head small { color:#777; }
+      .choices { display:grid; gap:12px; }
+      .type-card { position:relative; display:grid; grid-template-columns:58px 1fr 30px; align-items:center; gap:16px; width:100%; min-height:128px; padding:18px 20px; border:1px solid var(--line); background:rgba(255,255,255,.045); color:#fff; text-align:left; overflow:hidden; cursor:pointer; transition:transform .3s,border-color .3s,background .3s; }
+      .type-card::before { content:""; position:absolute; inset:0; width:0; background:var(--yellow); transition:width .45s cubic-bezier(.16,1,.3,1); }
+      .type-card:hover,.type-card:focus-visible { transform:translateX(10px); border-color:var(--yellow); outline:none; }
+      .type-card:hover::before,.type-card:focus-visible::before { width:100%; }
+      .type-card > * { position:relative; z-index:1; }
+      .type-icon { display:grid; place-items:center; width:52px; height:52px; border:1px solid rgba(255,242,0,.55); color:var(--yellow); font-size:23px; font-weight:900; }
+      .type-card:hover .type-icon,.type-card:focus-visible .type-icon { color:var(--black); border-color:var(--black); }
+      .type-card h2 { margin:0 0 6px; font-size:22px; letter-spacing:-.04em; }
+      .type-card p { margin:0; color:#aaa; font-size:13px; line-height:1.4; }
+      .type-card:hover p,.type-card:focus-visible p,.type-card:hover h2,.type-card:focus-visible h2 { color:var(--black); }
+      .type-arrow { color:var(--yellow); font-size:25px; transition:transform .3s,color .3s; }
+      .type-card:hover .type-arrow,.type-card:focus-visible .type-arrow { color:var(--black); transform:translateX(6px); }
+      .form-stage { position:relative; z-index:2; display:none; padding:26px clamp(20px,5vw,72px) 76px; background:linear-gradient(180deg,#050505 0%,#111 100%); }
+      .form-stage.is-visible { display:block; animation:stageIn .85s both cubic-bezier(.16,1,.3,1); }
+      .stage-heading { display:flex; justify-content:space-between; align-items:end; gap:20px; max-width:1180px; margin:0 auto 22px; }
+      .stage-heading h2 { margin:0; font-size:clamp(32px,5vw,64px); line-height:.9; letter-spacing:-.06em; }
+      .change-type { border:1px solid var(--line); padding:11px 14px; color:#fff; background:transparent; font-weight:800; cursor:pointer; }
+      .change-type:hover { border-color:var(--yellow); color:var(--yellow); }
+      .form-layout { display:grid; grid-template-columns:minmax(0,1.08fr) minmax(300px,.92fr); gap:18px; max-width:1180px; margin:auto; }
+      .form-panel { padding:22px; border:1px solid var(--line); background:#fff; color:var(--black); box-shadow:0 22px 70px rgba(0,0,0,.35); }
+      .section-title { margin:0 0 18px; padding-left:12px; border-left:5px solid var(--yellow); font-size:13px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
+      .field { margin-bottom:15px; }
+      .field label,.group-title { display:block; margin-bottom:8px; color:#242424; font-size:12px; font-weight:900; }
+      input[type=text],textarea { width:100%; border:1px solid #ccc; border-radius:0; padding:12px; color:#111; background:#fff; font:inherit; transition:border-color .2s,box-shadow .2s; }
+      input:focus,textarea:focus { border-color:#111; box-shadow:0 0 0 3px rgba(255,242,0,.45); outline:none; }
+      textarea { min-height:96px; resize:vertical; }
+      .group { margin-bottom:15px; padding:15px; border:1px solid #dedede; background:#fafaf6; }
+      .choice-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
+      .choice { display:flex; align-items:flex-start; gap:8px; color:#333; font-size:13px; line-height:1.35; cursor:pointer; }
+      .choice input { margin-top:2px; accent-color:#111; }
+      .notice { margin-top:16px; padding:16px; border:1px solid rgba(255,242,0,.5); border-left:5px solid var(--yellow); color:#e5e5e5; background:rgba(255,242,0,.06); font-size:13px; line-height:1.5; }
+      .notice strong { color:var(--yellow); }
+      .form-panel .media-alert { position:relative; padding:18px 18px 18px 22px; border:2px solid var(--yellow); border-left:8px solid var(--black); color:#111; background:var(--yellow); font-size:14px; font-weight:700; box-shadow:8px 8px 0 rgba(5,5,5,.12); animation:alertPulse 3.2s ease-in-out infinite; }
+      .form-panel .media-alert::before { content:"ATENÇÃO"; display:block; margin-bottom:7px; color:#111; font-size:11px; font-weight:900; letter-spacing:.16em; }
+      .form-panel .media-alert strong { color:#111; font-size:16px; }
+      .summary-panel { position:sticky; top:18px; align-self:start; }
+      .summary-box { padding:22px; border:1px solid rgba(255,242,0,.55); background:linear-gradient(145deg,#1a1a1a,#080808); }
+      .summary-box h3 { margin:0 0 16px; color:var(--yellow); font-size:23px; letter-spacing:-.04em; }
+      .summary-text { max-height:540px; overflow:auto; white-space:pre-wrap; color:#ddd; font-size:13px; line-height:1.58; }
+      .summary-actions { display:grid; gap:10px; margin-top:18px; }
+      .btn { display:flex; align-items:center; justify-content:center; min-height:52px; border:0; border-radius:0; padding:13px 16px; font-weight:900; text-decoration:none; cursor:pointer; transition:transform .25s,box-shadow .25s,background .25s; }
+      .btn:hover { transform:translateY(-4px); box-shadow:0 14px 28px rgba(255,242,0,.18); }
+      .btn-primary { color:var(--black); background:var(--yellow); }
+      .btn-secondary { color:#fff; background:#252525; }
+      .footer { padding:22px; color:#777; text-align:center; font-size:12px; }
+      .creator-credit { display:block; margin-top:7px; color:#aaa; font-size:11px; letter-spacing:.02em; }
+      .name-gate,.welcome-screen { position:fixed; inset:0; z-index:10; display:grid; place-items:center; padding:24px; background:#050505; }
+      .name-gate::before,.welcome-screen::before { content:""; position:absolute; width:54vw; height:54vw; max-width:720px; max-height:720px; border:1px solid rgba(255,242,0,.35); border-radius:50%; box-shadow:0 0 0 70px rgba(255,242,0,.035),0 0 0 140px rgba(255,242,0,.02); animation:orbit 20s linear infinite; }
+      .name-gate.is-hidden { animation:gateOut .7s both; pointer-events:none; }
+      .gate-content,.welcome-content { position:relative; max-width:560px; width:100%; text-align:center; animation:revealUp .8s both cubic-bezier(.16,1,.3,1); }
+      .gate-logo { width:min(245px,68vw); margin-bottom:32px; }
+      .gate-content .eyebrow { justify-content:center; }
+      .gate-content h2 { margin:20px 0 12px; font-size:clamp(37px,6vw,68px); line-height:.9; letter-spacing:-.06em; }
+      .gate-content h2 em,.welcome-content h2 em { color:var(--yellow); font-style:normal; }
+      .gate-content p { margin:0 auto 24px; color:#aaa; line-height:1.5; }
+      .gate-form { display:flex; max-width:480px; margin:auto; }
+      .gate-form input { min-width:0; flex:1; border:1px solid rgba(255,255,255,.3); border-right:0; border-radius:0; padding:15px; color:#fff; background:#151515; font:inherit; }
+      .gate-form input:focus { outline:2px solid var(--yellow); outline-offset:-2px; }
+      .gate-form button { border:0; padding:0 20px; color:var(--black); background:var(--yellow); font-weight:900; cursor:pointer; }
+      .gate-form button:hover { background:#fff; }
+      .welcome-screen { display:none; z-index:9; }
+      .welcome-screen.is-visible { display:grid; animation:welcomeIn .7s both; }
+      .welcome-screen.is-leaving { animation:gateOut .7s both; }
+      .welcome-content .eyebrow { justify-content:center; }
+      .welcome-content h2 { margin:22px 0 12px; font-size:clamp(42px,7vw,82px); line-height:.88; letter-spacing:-.07em; }
+      .welcome-content p { color:#aaa; font-size:17px; }
+      .welcome-mark { display:inline-grid; place-items:center; width:68px; height:68px; margin-top:15px; border:1px solid var(--yellow); color:var(--yellow); font-size:28px; animation:markPulse 1.2s ease-in-out infinite; }
+      @keyframes revealUp { from { opacity:0; transform:translateY(34px); } to { opacity:1; transform:none; } }
+      @keyframes stageIn { from { opacity:0; clip-path:inset(12% 0 0); transform:translateY(36px); } to { opacity:1; clip-path:inset(0); transform:none; } }
+      @keyframes orbit { to { transform:translate(-50%,-50%) rotate(360deg); } }
+      @keyframes dotFloat { 50% { transform:translate(-18px,25px) scale(1.5); } }
+      @keyframes welcomeIn { from { opacity:0; transform:scale(1.04); } to { opacity:1; transform:none; } }
+      @keyframes gateOut { to { opacity:0; visibility:hidden; transform:scale(1.04); } }
+      @keyframes markPulse { 50% { transform:scale(1.12) rotate(45deg); box-shadow:0 0 34px rgba(255,242,0,.35); } }
+      @keyframes alertPulse { 50% { box-shadow:12px 12px 0 rgba(5,5,5,.2); } }
+      @media (max-width:800px) { .landing,.form-layout { grid-template-columns:1fr; } .landing { min-height:auto; padding-top:54px; } .selector { margin-top:30px; } .selector::before { width:320px; height:320px; } .summary-panel { position:static; } }
+      @media (max-width:560px) { .topbar { padding:18px 16px; } .topbar-logo { width:145px; } .topbar-links { gap:12px; } .topbar-links a:not(.active) { display:none; } h1 { font-size:clamp(48px,15vw,72px); } .type-card { grid-template-columns:45px 1fr 22px; gap:12px; min-height:112px; padding:14px; } .type-icon { width:42px; height:42px; font-size:18px; } .type-card h2 { font-size:19px; } .choice-grid { grid-template-columns:1fr; } .stage-heading { align-items:start; flex-direction:column; } .change-type { width:100%; } }
+      @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; scroll-behavior:auto !important; transition-duration:.01ms !important; } }
+    </style>
+  </head>
+  <body>
+    <main class="briefing-page">
+      <section class="name-gate" id="nameGate" aria-labelledby="gateTitle">
+        <div class="gate-content">
+          <img class="gate-logo" src="logo-innovae.png" alt="Innovae Digital" />
+          <div class="eyebrow">Vamos começar</div>
+          <h2 id="gateTitle">Qual é o seu <em>nome?</em></h2>
+          <p>Assim personalizamos seu briefing e deixamos a conversa com a Innovae mais direta.</p>
+          <form class="gate-form" id="nameForm"><input id="clientName" type="text" autocomplete="name" placeholder="Digite seu nome" aria-label="Seu nome" /><button type="submit">Continuar →</button></form>
+        </div>
+      </section>
+      <section class="welcome-screen" id="welcomeScreen" aria-live="polite"><div class="welcome-content"><div class="eyebrow">Briefing selecionado</div><h2 id="welcomeTitle">Vamos criar algo <em>marcante.</em></h2><p id="welcomeText">Organizando as perguntas para você...</p><span class="welcome-mark">✦</span></div></section>
+      <header class="topbar"><a href="index.html"><img class="topbar-logo" src="logo-innovae.png" alt="Innovae Digital" /></a><nav class="topbar-links" aria-label="Navegação principal"><a href="index.html">Início</a><a class="active" href="briefing.html">Briefing</a><a href="https://wa.me/5561933004316" target="_blank" rel="noopener noreferrer">Contato</a></nav></header>
+      <section class="landing is-locked" id="landing">
+        <div class="landing-copy"><div class="eyebrow">Briefing em movimento</div><h1>Antes da arte,<br /><em>a ideia.</em></h1><p class="lead">Escolha o caminho que combina com o seu projeto. Vamos transformar suas informações em uma direção visual clara, forte e pronta para criar presença.</p><div class="media-note"><strong>!</strong><span><b>Importante:</b> nenhuma mídia deve ser enviada por este formulário. Fotos, logos, referências e arquivos serão enviados <b>somente após o briefing, pelo WhatsApp.</b></span></div></div>
+        <div class="selector" aria-label="Escolha o tipo de briefing"><div class="selector-head"><span>Selecione uma direção</span><small>01 / 02</small></div><div class="choices"><button class="type-card" type="button" data-briefing-type="business"><span class="type-icon">↗</span><span><h2>Briefing Empresarial</h2><p>Para marcas, empresas, produtos, serviços e materiais gráficos.</p></span><span class="type-arrow">→</span></button><button class="type-card" type="button" data-briefing-type="event"><span class="type-icon">✦</span><span><h2>Briefing para Evento</h2><p>Para festas, shows, eventos corporativos e experiências ao vivo.</p></span><span class="type-arrow">→</span></button></div></div>
+      </section>
+
+      <section class="form-stage" id="businessStage" aria-labelledby="businessTitle"><div class="stage-heading"><h2 id="businessTitle">Briefing <em>empresarial.</em></h2><button class="change-type" type="button">Trocar briefing</button></div><div class="form-layout">
+        <form class="form-panel briefing-form" data-kind="Empresarial"><div class="section-title">Informações do projeto</div><div class="field"><label for="companyName">1. Nome / Empresa</label><input id="companyName" type="text" placeholder="Ex.: Padaria Bom Pão" /></div><div class="group"><div class="group-title">2. Qual material você precisa?</div><div class="choice-grid" data-group="material"></div></div><div class="field"><label for="objective">3. Qual é o objetivo da arte?</label><textarea id="objective" placeholder="Ex.: divulgar evento, promover produto, anunciar serviço, informar clientes etc."></textarea></div><div class="field"><label for="mainText">4. Texto principal da arte</label><textarea id="mainText" placeholder="Informe a frase principal, chamada ou slogan."></textarea></div><div class="field"><label for="requiredInfo">5. Informações obrigatórias</label><textarea id="requiredInfo" placeholder="Datas, horários, endereço, valores, contatos, Instagram ou qualquer informação que precise aparecer."></textarea></div><div class="group"><div class="group-title">6. Qual estilo você prefere?</div><div class="choice-grid" data-group="style"></div></div><div class="group"><div class="group-title">7. Possui identidade visual ou cores definidas?</div><div class="choice-grid" data-group="identity"></div></div><div class="field"><label for="identityDetails">Se sim, descreva brevemente</label><textarea id="identityDetails" placeholder="Descreva cores, fontes, aplicações ou qualquer orientação útil."></textarea></div><div class="group"><div class="group-title">8. Possui referências de estilo?</div><div class="choice-grid" data-group="references"></div></div><div class="field"><label for="deadline">9. Prazo desejado</label><input id="deadline" type="text" placeholder="Ex.: até sexta-feira, urgente, sem pressa..." /></div><div class="field"><label for="notes">10. Alguma observação importante?</label><textarea id="notes" placeholder="Fique à vontade para incluir qualquer detalhe extra."></textarea></div><div class="notice media-alert"><strong>Envio de mídias:</strong> fotos, logos, referências e arquivos serão enviados somente após este briefing, pelo WhatsApp.</div><div class="group"><div class="group-title">Confirmação</div><label class="choice"><input id="confirmData" type="checkbox" /><span>Confirmo que revisei as informações acima e que os dados fornecidos estão corretos.</span></label></div></form>
+        <aside class="summary-panel"><div class="summary-box"><h3>Mensagem final</h3><div class="summary-text" id="businessSummaryText" aria-live="polite"></div><div class="summary-actions"><button class="btn btn-secondary copy-button" type="button">Copiar resumo</button><a class="btn btn-primary whatsapp-link" href="#" target="_blank" rel="noopener noreferrer">Enviar briefing pelo WhatsApp</a></div></div><div class="notice">O WhatsApp abrirá com as perguntas e respostas prontas no ponto de envio. O cliente ainda confirma o envio dentro do aplicativo.</div></aside>
+      </div></section>
+
+      <section class="form-stage" id="eventStage" aria-labelledby="eventTitle"><div class="stage-heading"><h2 id="eventTitle">Briefing para <em>evento.</em></h2><button class="change-type" type="button">Trocar briefing</button></div><div class="form-layout">
+        <form class="form-panel briefing-form" data-kind="Evento"><div class="section-title">Informações do evento</div><div class="field"><label for="eventName">Nome do evento</label><input id="eventName" type="text" placeholder="Nome oficial do evento" /></div><div class="field"><label for="eventDate">Data e horário</label><input id="eventDate" type="text" placeholder="Ex.: 20/12, às 22h" /></div><div class="field"><label for="eventLocation">Local e endereço</label><textarea id="eventLocation" placeholder="Nome do local, endereço e ponto de referência"></textarea></div><div class="field"><label for="eventContact">Instagram e contato oficial</label><input id="eventContact" type="text" placeholder="@instagram, telefone, e-mail ou site" /></div><div class="section-title">Atrações</div><div class="field"><label for="eventAttractions">Nome de todas as atrações</label><textarea id="eventAttractions" placeholder="Liste artistas, bandas, DJs ou outras atrações"></textarea></div><div class="field"><label for="eventAttractionMedia">Fotos e logomarcas das atrações</label><textarea id="eventAttractionMedia" placeholder="Descreva quais materiais serão enviados depois pelo WhatsApp"></textarea></div><div class="section-title">Ingressos</div><div class="field"><label for="eventTickets">Valores e lotes</label><textarea id="eventTickets" placeholder="Valores, viradas de lote e condições"></textarea></div><div class="field"><label for="eventTicketTypes">Tipos de ingresso</label><input id="eventTicketTypes" type="text" placeholder="Pista, VIP, camarote etc." /></div><div class="field"><label for="eventSales">Pontos ou link de venda</label><input id="eventSales" type="text" placeholder="Site, plataforma, endereço ou contato de venda" /></div><div class="field"><label for="eventReservations">Mesas ou reservas</label><textarea id="eventReservations" placeholder="Informe valores, contatos e regras, se houver"></textarea></div><div class="section-title">Material gráfico</div><div class="field"><label for="eventMaterials">Logo, patrocinadores, identidade visual e referências</label><textarea id="eventMaterials" placeholder="Descreva o que existe e será enviado depois pelo WhatsApp"></textarea></div><div class="field"><label for="eventNotes">Alguma observação importante?</label><textarea id="eventNotes" placeholder="Inclua qualquer detalhe extra sobre o evento"></textarea></div><div class="notice media-alert"><strong>Envio de mídias:</strong> fotos originais em alta resolução, logos sem fundo, referências e arquivos serão enviados somente após este briefing, pelo WhatsApp. Evite prints ou imagens retiradas das redes sociais.</div><div class="group"><div class="group-title">Confirmação</div><label class="choice"><input id="eventConfirm" type="checkbox" /><span>Confirmo que revisei as informações acima e que os dados fornecidos estão corretos.</span></label></div></form>
+        <aside class="summary-panel"><div class="summary-box"><h3>Mensagem final</h3><div class="summary-text" id="eventSummaryText" aria-live="polite"></div><div class="summary-actions"><button class="btn btn-secondary copy-button" type="button">Copiar resumo</button><a class="btn btn-primary whatsapp-link" href="#" target="_blank" rel="noopener noreferrer">Enviar briefing pelo WhatsApp</a></div></div><div class="notice">O WhatsApp abrirá com as perguntas e respostas prontas no ponto de envio. As mídias serão enviadas depois, exclusivamente por lá.</div></aside>
+      </div></section>
+      <footer class="footer">Innovae Digital · Design que faz presença<span class="creator-credit">Site produzido por David P. Tomé · Proprietário da Innovae Digital</span></footer>
+    </main>
+    <script>
+      const phone = "5561933004316";
+      let clientName = "";
+      const $ = (selector, root = document) => root.querySelector(selector);
+      const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+      const clean = (value) => String(value || "").trim();
+      const value = (id) => clean($("#" + id)?.value);
+      const escapeHtml = (text) => text.replace(/[&<>"']/g, (character) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;", "'":"&#039;" }[character]));
+      const answer = (label, text) => `🔹 ${label}\n${text || "Não informado."}\n`;
+      const divider = "━━━━━━━━━━━━━━━━━━━━";
+      const businessGroups = { material:{items:["Flyer","Post para Feed","Story","Carrossel","Banner","Material para impressão","Logomarca / Identidade Visual","Outro"],multi:true}, style:{items:["Moderno","Minimalista","Elegante","Impactante","Corporativo","Livre criação do designer"],multi:true}, identity:{items:["Sim","Não"],multi:false}, references:{items:["Sim","Não"],multi:false} };
+      function createChoices(name, config) { return config.items.map((item,index) => `<label class="choice"><input type="${config.multi ? "checkbox" : "radio"}" name="${name}" value="${item}" data-choice="${name}" /><span>${config.multi ? `${index + 1}. ` : ""}${item}</span></label>`).join(""); }
+      Object.entries(businessGroups).forEach(([name,config]) => { $(`[data-group="${name}"]`).innerHTML = createChoices(name,config); });
+      const selected = (name) => $$(`input[data-choice="${name}"]:checked`, $("#businessStage")).map((input) => input.value);
+      const businessMessage = () => ["📋 BRIEFING EMPRESARIAL", "INNOVAE DIGITAL", divider, "👤 IDENTIFICAÇÃO DO CLIENTE", answer("Cliente", clientName), divider, "🎨 PROJETO", answer("Nome / Empresa", value("companyName")), answer("Material solicitado", selected("material").join(", ")), answer("Objetivo da arte", value("objective")), answer("Texto principal", value("mainText")), answer("Informações obrigatórias", value("requiredInfo")), divider, "✨ DIREÇÃO VISUAL", answer("Estilo preferido", selected("style").join(", ")), answer("Possui identidade visual ou cores definidas?", selected("identity").join(", ")), answer("Descrição da identidade visual", value("identityDetails")), answer("Possui referências de estilo?", selected("references").join(", ")), divider, "⏱️ PRAZO E OBSERVAÇÕES", answer("Prazo desejado", value("deadline")), answer("Observações importantes", value("notes")), divider, `✅ INFORMAÇÕES REVISADAS: ${$("#confirmData").checked ? "Sim" : "Não"}`, "", "📎 ENVIO DE MÍDIAS", "Fotos, logomarcas, referências e arquivos serão enviados somente após este briefing, pelo WhatsApp."].join("\n");
+      const eventMessage = () => ["🎤 BRIEFING PARA EVENTO", "INNOVAE DIGITAL", divider, "👤 IDENTIFICAÇÃO DO CLIENTE", answer("Cliente", clientName), divider, "📌 INFORMAÇÕES DO EVENTO", answer("Nome do evento", value("eventName")), answer("Data e horário", value("eventDate")), answer("Local e endereço", value("eventLocation")), answer("Instagram e contato oficial", value("eventContact")), divider, "🎤 ATRAÇÕES", answer("Nome de todas as atrações", value("eventAttractions")), answer("Fotos e logomarcas das atrações", value("eventAttractionMedia")), divider, "🎟️ INGRESSOS", answer("Valores e lotes", value("eventTickets")), answer("Tipos de ingresso", value("eventTicketTypes")), answer("Pontos ou link de venda", value("eventSales")), answer("Mesas ou reservas", value("eventReservations")), divider, "📁 MATERIAL GRÁFICO", answer("Logo, patrocinadores, identidade visual e referências", value("eventMaterials")), answer("Observações", value("eventNotes")), divider, `✅ INFORMAÇÕES REVISADAS: ${$("#eventConfirm").checked ? "Sim" : "Não"}`, "", "⚠️ ENVIO DE MÍDIAS", "Fotos originais em alta resolução, logomarcas sem fundo e referências serão enviadas somente após este briefing, pelo WhatsApp.", "Evite prints ou imagens retiradas das redes sociais."].join("\n");
+      function updateSummary(stageId, summaryId, messageFactory) { const stage = $("#" + stageId); const message = messageFactory(); $("#" + summaryId).textContent = message; $(".whatsapp-link",stage).href = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`; }
+      function bindForm(stageId, summaryId, messageFactory) { const stage = $("#" + stageId), form = $("form",stage); const refresh = () => updateSummary(stageId,summaryId,messageFactory); form.addEventListener("input",refresh); form.addEventListener("change",refresh); form.addEventListener("submit",(event) => event.preventDefault()); refresh(); $(".copy-button",stage).addEventListener("click",async () => { try { await navigator.clipboard.writeText(messageFactory()); const button = $(".copy-button",stage); button.textContent = "Resumo copiado"; setTimeout(() => { button.textContent = "Copiar resumo"; },1500); } catch (error) { alert("Não foi possível copiar automaticamente. Selecione o resumo manualmente."); } }); }
+      function showStage(type) { const stage = $(type === "event" ? "#eventStage" : "#businessStage"), welcome = $("#welcomeScreen"); $("#landing").style.display = "none"; $$('.form-stage').forEach((item) => item.classList.remove("is-visible")); $("#welcomeTitle").innerHTML = `Olá, ${escapeHtml(clientName.split(" ")[0])}<br /><em>vamos começar.</em>`; $("#welcomeText").textContent = type === "event" ? "Seu briefing de evento está pronto para receber as informações." : "Seu briefing empresarial está pronto para receber as informações."; welcome.classList.add("is-visible"); setTimeout(() => { welcome.classList.add("is-leaving"); setTimeout(() => { welcome.classList.remove("is-visible","is-leaving"); stage.classList.add("is-visible"); stage.scrollIntoView({behavior:"smooth",block:"start"}); }, 650); }, 1700); }
+      $("#nameForm").addEventListener("submit", (event) => { event.preventDefault(); const field = $("#clientName"); clientName = clean(field.value); if (!clientName) { field.focus(); field.animate([{transform:"translateX(-7px)"},{transform:"translateX(7px)"},{transform:"translateX(0)"}],{duration:280}); return; } $("#nameGate").classList.add("is-hidden"); $("#landing").classList.remove("is-locked"); setTimeout(() => { $("#nameGate").style.display = "none"; }, 700); });
+      $$('[data-briefing-type]').forEach((button) => button.addEventListener("click", () => { if (clientName) showStage(button.dataset.briefingType); }));
+      $$('.change-type').forEach((button) => button.addEventListener("click",() => { $$('.form-stage').forEach((stage) => stage.classList.remove("is-visible")); $("#landing").style.display = "grid"; $("#landing").scrollIntoView({behavior:"smooth",block:"start"}); }));
+      bindForm("businessStage","businessSummaryText",businessMessage); bindForm("eventStage","eventSummaryText",eventMessage);
+    </script>
+  </body>
+</html>
